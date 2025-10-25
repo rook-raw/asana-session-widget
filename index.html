@@ -487,8 +487,19 @@
   <!-- Widget View -->
   <div id="widget-view" class="view active">
     <div class="widget-header">
-      <h1>📸 Sessions</h1>
-      <div class="widget-subtitle">Upcoming Photography Sessions</div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h1 style="margin: 0;">📸 Sessions</h1>
+        <button class="btn-add" onclick="showAddClient()">+ Client</button>
+      </div>
+    </div>
+    
+    <div class="filter-bar">
+      <select id="widget-filter-phase" class="filter-select" onchange="applyFilters()">
+        <option value="">All Phases</option>
+      </select>
+      <select id="widget-filter-type" class="filter-select" onchange="applyFilters()">
+        <option value="">All Types</option>
+      </select>
     </div>
     <div id="widget-sessions">
       <div class="loading">
@@ -500,28 +511,9 @@
     </div>
   </div>
   
-  <!-- List View -->
-  <div id="list-view" class="view">
-    <div class="list-header">
-      <h2>All Sessions</h2>
-      <button class="btn-add" onclick="showAddClient()">+ Client</button>
-    </div>
-    
-    <div class="filter-bar">
-      <select id="widget-filter-phase" class="filter-select" onchange="applyFilters()">
-        <option value="">All Phases</option>
-      </select>
-      <select id="widget-filter-type" class="filter-select" onchange="applyFilters()">
-        <option value="">All Types</option>
-      </select>
-    </div>
-    
-    <div id="client-list"></div>
-  </div>
-  
   <!-- Detail View -->
   <div id="detail-view" class="view">
-    <button class="back-btn" onclick="backToList()">← Back</button>
+    <button class="back-btn" onclick="showWidget()">← Back</button>
     
     <div class="detail-header">
       <h2 id="detail-client-name">Client Name</h2>
@@ -962,10 +954,7 @@
       showView('widget-view');
     }
     
-    function showList() {
-      showView('list-view');
-      renderClientList();
-    }
+    
     
     function showDetail(gid) {
       currentSession = sessions.find(s => s.gid === gid);
@@ -985,9 +974,7 @@
       renderInquiryNotes();
     }
     
-    function backToList() {
-      showList();
-    }
+    
     
     function backToDetail() {
       showView('detail-view');
@@ -1036,7 +1023,27 @@
     function applyFilters() {
       currentFilters.phase = document.getElementById('widget-filter-phase').value;
       currentFilters.type = document.getElementById('widget-filter-type').value;
-      renderClientList();
+      
+      const container = document.getElementById('widget-sessions');
+      const filteredSessions = getFilteredSessions();
+      
+      if (filteredSessions.length === 0) {
+        container.innerHTML = '<div class="loading"><div>No sessions match filters</div></div>';
+        return;
+      }
+      
+      container.innerHTML = filteredSessions.map(session => `
+        <div class="card" onclick="showDetail('${session.gid}')">
+          <div class="card-header">
+            <div class="card-client">${session.client}</div>
+            <div class="card-countdown" style="background: ${session.countdown.color}; color: var(--bg-primary);">
+              ${session.countdown.text}
+            </div>
+          </div>
+          <div class="card-info">${session.clientType} | ${session.status}</div>
+          <div class="card-date">${formatDate(session.sessionDate)}</div>
+        </div>
+      `).join('');
     }
     
     function getFilteredSessions() {
@@ -1192,7 +1199,8 @@
           return;
         }
         
-        container.innerHTML = sessions.map(session => `
+        const filteredSessions = getFilteredSessions();
+        container.innerHTML = filteredSessions.map(session => `
           <div class="card" onclick="showDetail('${session.gid}')">
             <div class="card-header">
               <div class="card-client">${session.client}</div>
@@ -1407,11 +1415,7 @@
       await renderWidget();
     }
     
-    document.getElementById('widget-sessions').addEventListener('click', (e) => {
-      if (!e.target.closest('.card')) {
-        showList();
-      }
-    });
+    
     
     init();
   </script>
