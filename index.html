@@ -6,7 +6,6 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#D4AF37">
-  <link rel="manifest" href="manifest.json">
   <title>Photography Sessions</title>
   <style>
     * {
@@ -276,6 +275,10 @@
       padding: 12px;
     }
     
+    .info-card.full-width {
+      grid-column: 1 / -1;
+    }
+    
     .info-label {
       font-size: 11px;
       color: var(--text-muted);
@@ -289,10 +292,16 @@
       font-weight: 600;
       color: var(--text-primary);
       cursor: pointer;
+      word-break: break-word;
     }
     
     .info-value:active {
       opacity: 0.7;
+    }
+    
+    .info-value a {
+      color: var(--gold);
+      text-decoration: none;
     }
     
     .section {
@@ -383,7 +392,7 @@
       margin-bottom: 6px;
     }
     
-    .form-input {
+    .form-input, .form-textarea {
       width: 100%;
       background: var(--bg-primary);
       border: 1px solid #333;
@@ -394,7 +403,12 @@
       font-family: inherit;
     }
     
-    .form-input:focus {
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .form-input:focus, .form-textarea:focus {
       outline: none;
       border-color: var(--gold);
     }
@@ -514,20 +528,67 @@
       <div class="date" id="detail-session-date">Session Date</div>
     </div>
     
-    <div class="info-grid">
-      <div class="info-card">
-        <div class="info-label">Phase</div>
-        <div class="info-value" id="detail-phase" onclick="showPhaseSelector()">Phase</div>
-      </div>
-      <div class="info-card">
-        <div class="info-label">Payment</div>
-        <div class="info-value" id="detail-payment" onclick="editPayment()">Status</div>
-      </div>
-      <div class="info-card" style="grid-column: 1 / -1;">
-        <div class="info-label">Session Date</div>
-        <div class="info-value" id="detail-date-edit" onclick="editDate()">Date</div>
+    <div class="section">
+      <div class="section-header">Session Info</div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-label">Phase</div>
+          <div class="info-value" id="detail-phase" onclick="showPhaseSelector()">Phase</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Payment</div>
+          <div class="info-value" id="detail-payment" onclick="editPayment()">Status</div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-label">Session Date</div>
+          <div class="info-value" id="detail-date-edit" onclick="editDate()">Date</div>
+        </div>
       </div>
     </div>
+    
+    <div class="section">
+      <div class="section-header">Client Profile</div>
+      <div class="info-grid">
+        <div class="info-card full-width">
+          <div class="info-label">Email</div>
+          <div class="info-value" id="detail-email" onclick="editTextField('Email', 'email', '1211746957812346')">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Phone</div>
+          <div class="info-value" id="detail-phone" onclick="editTextField('Phone', 'phone', '1211746958112303')">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Instagram</div>
+          <div class="info-value" id="detail-instagram" onclick="editTextField('Instagram', 'instagram', '1211746957812348')">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Age</div>
+          <div class="info-value" id="detail-age" onclick="editNumberField('Age', 'age', '1211746957812352')">-</div>
+        </div>
+        <div class="info-card" id="detail-parent-card" style="display: none;">
+          <div class="info-label">Parent/Guardian</div>
+          <div class="info-value" id="detail-parent" onclick="editTextField('Parent/Guardian', 'parent', '1211746957812350')">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Client Type</div>
+          <div class="info-value" id="detail-client-type">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Session Type</div>
+          <div class="info-value" id="detail-session-type">-</div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-label">Concept Style</div>
+          <div class="info-value" id="detail-concept-style">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Creative Level</div>
+          <div class="info-value" id="detail-creative-level" onclick="editNumberField('Creative Level (1-10)', 'creativeLevel', '1211746958112275')">-</div>
+        </div>
+      </div>
+    </div>
+    
+    <button class="btn-add" style="width: 100%; margin-bottom: 20px;" onclick="showInquiryNotes()">📋 View Inquiry Notes</button>
     
     <div class="section">
       <div class="section-header">To-Do</div>
@@ -537,6 +598,100 @@
     <div class="section">
       <div class="section-header">Completed</div>
       <div id="detail-completed"></div>
+    </div>
+  </div>
+  
+  <!-- Inquiry Notes View -->
+  <div id="inquiry-view" class="view">
+    <button class="back-btn" onclick="backToDetail()">← Back to Client</button>
+    
+    <div class="detail-header">
+      <h2>📋 Inquiry Notes</h2>
+      <div class="date" id="inquiry-client-name">Client Name</div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">Inquiry Details</div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-label">Preferred Date</div>
+          <div class="info-value" id="inquiry-preferred-date" onclick="editTextField('Preferred Date', 'preferredDate', '1211746957812354')">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Preferred City</div>
+          <div class="info-value" id="inquiry-city" onclick="editEnumField('City', 'city', '1211746957812356', [{gid:'1211746957812357',name:'Charleston'},{gid:'1211746957812358',name:'NYC'}])">-</div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-label">Session Location</div>
+          <div class="info-value" id="inquiry-location" onclick="editTextField('Session Location', 'sessionLocation', '1211746958112261')">-</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">Creative Direction</div>
+      <div class="info-grid">
+        <div class="info-card full-width">
+          <div class="info-label">Vision</div>
+          <div class="info-value" id="inquiry-vision" onclick="editLongTextField('Vision', 'vision', '1211746958112273')">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Spicy Level (1-10)</div>
+          <div class="info-value" id="inquiry-spicy" onclick="editNumberField('Spicy Level (1-10)', 'spicyLevel', '1211746958112277')">-</div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-label">Must Have Photos</div>
+          <div class="info-value" id="inquiry-must-have" onclick="editTextField('Must Have Photos', 'mustHave', '1211746958112279')">-</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">Preferences</div>
+      <div class="info-grid">
+        <div class="info-card full-width">
+          <div class="info-label">Location Preference</div>
+          <div class="info-value" id="inquiry-location-pref" onclick="editTextField('Location Preference', 'locationPref', '1211746958112281')">-</div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-label">Lighting Preference</div>
+          <div class="info-value" id="inquiry-lighting-pref" onclick="editTextField('Lighting Preference', 'lightingPref', '1211746958112283')">-</div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-label">How Want to Feel</div>
+          <div class="info-value" id="inquiry-feel" onclick="editTextField('How Want to Feel', 'howFeel', '1211746958112285')">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Confidence Level (1-10)</div>
+          <div class="info-value" id="inquiry-confidence" onclick="editNumberField('Confidence Level (1-10)', 'confidence', '1211746958112287')">-</div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-label">Other Expectations</div>
+          <div class="info-value" id="inquiry-expectations" onclick="editTextField('Other Expectations', 'expectations', '1211746958112289')">-</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">Financial</div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-label">Budget</div>
+          <div class="info-value" id="inquiry-budget" onclick="editTextField('Budget', 'budget', '1211746958112305')">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Package Selected</div>
+          <div class="info-value" id="inquiry-package" onclick="editTextField('Package Selected', 'package', '1211746958112293')">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Interested in Prints</div>
+          <div class="info-value" id="inquiry-prints" onclick="editEnumField('Interested in Prints', 'prints', '1211746958112295', [{gid:'1211746958112296',name:'yes'},{gid:'1211746958112297',name:'no'}])">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Interested in Video</div>
+          <div class="info-value" id="inquiry-video" onclick="editEnumField('Interested in Video', 'video', '1211746958112299', [{gid:'1211746958112300',name:'yes'},{gid:'1211746958112301',name:'no'}])">-</div>
+        </div>
+      </div>
     </div>
   </div>
   
@@ -583,13 +738,40 @@
   <div id="toast" class="toast"></div>
   
   <script>
-    // Configuration
+    // Configuration - Field IDs
     const PROJECT_ID = '1211733193402684';
     const CLIENT_PHASE_FIELD_ID = '1211735634914711';
     const SESSION_DATE_FIELD_ID = '1211732464258476';
     const ACTIVE_STATUS_FIELD_ID = '1211735138096716';
-    const SESSION_TYPE_FIELD_ID = '1211733359641772';
+    const CLIENT_TYPE_FIELD_ID = '1211733359641772'; // Changed from SESSION_TYPE
     const PAYMENT_STATUS_FIELD_ID = '1211733390060955';
+    
+    // All custom field IDs
+    const FIELD_IDS = {
+      email: '1211746957812346',
+      phone: '1211746958112303',
+      instagram: '1211746957812348',
+      parent: '1211746957812350',
+      age: '1211746957812352',
+      sessionType: '1211746958112263',
+      conceptStyle: '1211747518670337',
+      creativeLevel: '1211746958112275',
+      preferredDate: '1211746957812354',
+      city: '1211746957812356',
+      sessionLocation: '1211746958112261',
+      vision: '1211746958112273',
+      spicyLevel: '1211746958112277',
+      mustHave: '1211746958112279',
+      locationPref: '1211746958112281',
+      lightingPref: '1211746958112283',
+      howFeel: '1211746958112285',
+      confidence: '1211746958112287',
+      expectations: '1211746958112289',
+      budget: '1211746958112305',
+      package: '1211746958112293',
+      prints: '1211746958112295',
+      video: '1211746958112299'
+    };
     
     // State
     let asanaToken = localStorage.getItem('asana_token') || '';
@@ -601,10 +783,15 @@
       type: ''
     };
     
+    // Proxy helper
+    function proxyUrl(asanaPath) {
+      return `https://d.rook-bb4.workers.dev?path=${encodeURIComponent(asanaPath)}`;
+    }
+    
     // API Functions
     async function fetchSessions() {
       const response = await fetch(
-        `https://app.asana.com/api/1.0/tasks?project=${PROJECT_ID}&opt_fields=name,custom_fields,gid`,
+        proxyUrl(`/tasks?project=${PROJECT_ID}&opt_fields=name,custom_fields,gid`),
         {
           headers: { 'Authorization': `Bearer ${asanaToken}` }
         }
@@ -614,13 +801,15 @@
       return data.data
         .filter(task => {
           const activeStatus = task.custom_fields.find(f => f.gid === ACTIVE_STATUS_FIELD_ID);
-          return !activeStatus || activeStatus.enum_value?.name !== '🔴 Red (Inactive)';
+          return !activeStatus || activeStatus.enum_value?.name !== '🔴';
         })
         .map(task => {
-          const phaseField = task.custom_fields.find(f => f.gid === CLIENT_PHASE_FIELD_ID);
-          const sessionDateField = task.custom_fields.find(f => f.gid === SESSION_DATE_FIELD_ID);
-          const sessionTypeField = task.custom_fields.find(f => f.gid === SESSION_TYPE_FIELD_ID);
-          const paymentField = task.custom_fields.find(f => f.gid === PAYMENT_STATUS_FIELD_ID);
+          const getField = (id) => task.custom_fields.find(f => f.gid === id);
+          
+          const phaseField = getField(CLIENT_PHASE_FIELD_ID);
+          const sessionDateField = getField(SESSION_DATE_FIELD_ID);
+          const clientTypeField = getField(CLIENT_TYPE_FIELD_ID);
+          const paymentField = getField(PAYMENT_STATUS_FIELD_ID);
           
           const sessionDate = sessionDateField?.date_value?.start || null;
           const daysUntil = sessionDate ? Math.ceil((new Date(sessionDate) - new Date()) / (1000 * 60 * 60 * 24)) : null;
@@ -631,9 +820,34 @@
             status: phaseField?.enum_value?.name || 'No Phase',
             statusGid: phaseField?.enum_value?.gid || '',
             sessionDate: sessionDate,
-            sessionType: sessionTypeField?.multi_enum_values?.[0]?.name || 'Client',
+            clientType: clientTypeField?.multi_enum_values?.[0]?.name || 'Client',
             paymentStatus: paymentField?.enum_value?.name || 'Unpaid',
-            countdown: getCountdown(daysUntil)
+            countdown: getCountdown(daysUntil),
+            // Profile fields
+            email: getField(FIELD_IDS.email)?.text_value || '',
+            phone: getField(FIELD_IDS.phone)?.text_value || '',
+            instagram: getField(FIELD_IDS.instagram)?.text_value || '',
+            parent: getField(FIELD_IDS.parent)?.text_value || '',
+            age: getField(FIELD_IDS.age)?.number_value || null,
+            sessionType: getField(FIELD_IDS.sessionType)?.enum_value?.name || '',
+            conceptStyle: getField(FIELD_IDS.conceptStyle)?.multi_enum_values?.map(v => v.name).join(', ') || '',
+            creativeLevel: getField(FIELD_IDS.creativeLevel)?.number_value || null,
+            // Inquiry fields
+            preferredDate: getField(FIELD_IDS.preferredDate)?.text_value || '',
+            city: getField(FIELD_IDS.city)?.enum_value?.name || '',
+            sessionLocation: getField(FIELD_IDS.sessionLocation)?.text_value || '',
+            vision: getField(FIELD_IDS.vision)?.text_value || '',
+            spicyLevel: getField(FIELD_IDS.spicyLevel)?.number_value || null,
+            mustHave: getField(FIELD_IDS.mustHave)?.text_value || '',
+            locationPref: getField(FIELD_IDS.locationPref)?.text_value || '',
+            lightingPref: getField(FIELD_IDS.lightingPref)?.text_value || '',
+            howFeel: getField(FIELD_IDS.howFeel)?.text_value || '',
+            confidence: getField(FIELD_IDS.confidence)?.number_value || null,
+            expectations: getField(FIELD_IDS.expectations)?.text_value || '',
+            budget: getField(FIELD_IDS.budget)?.text_value || '',
+            package: getField(FIELD_IDS.package)?.text_value || '',
+            prints: getField(FIELD_IDS.prints)?.enum_value?.name || '',
+            video: getField(FIELD_IDS.video)?.enum_value?.name || ''
           };
         })
         .sort((a, b) => {
@@ -654,7 +868,7 @@
     
     async function fetchPhaseOptions() {
       const response = await fetch(
-        `https://app.asana.com/api/1.0/custom_fields/${CLIENT_PHASE_FIELD_ID}`,
+        proxyUrl(`/custom_fields/${CLIENT_PHASE_FIELD_ID}`),
         {
           headers: { 'Authorization': `Bearer ${asanaToken}` }
         }
@@ -665,7 +879,7 @@
     
     async function fetchTodos(parentGid) {
       const response = await fetch(
-        `https://app.asana.com/api/1.0/tasks/${parentGid}/subtasks?opt_fields=name,completed,gid`,
+        proxyUrl(`/tasks/${parentGid}/subtasks?opt_fields=name,completed,gid`),
         {
           headers: { 'Authorization': `Bearer ${asanaToken}` }
         }
@@ -675,7 +889,7 @@
     }
     
     async function completeTask(todoGid) {
-      await fetch(`https://app.asana.com/api/1.0/tasks/${todoGid}`, {
+      await fetch(proxyUrl(`/tasks/${todoGid}`), {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${asanaToken}`,
@@ -686,7 +900,7 @@
     }
     
     async function updateTaskPhase(taskGid, phaseGid) {
-      await fetch(`https://app.asana.com/api/1.0/tasks/${taskGid}`, {
+      await fetch(proxyUrl(`/tasks/${taskGid}`), {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${asanaToken}`,
@@ -702,8 +916,27 @@
       });
     }
     
+    async function updateTaskCustomField(taskGid, fieldGid, value) {
+      const data = {
+        data: {
+          custom_fields: {
+            [fieldGid]: value
+          }
+        }
+      };
+      
+      await fetch(proxyUrl(`/tasks/${taskGid}`), {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${asanaToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+    }
+    
     async function createNewClient(name) {
-      const response = await fetch('https://app.asana.com/api/1.0/tasks', {
+      const response = await fetch(proxyUrl('/tasks'), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${asanaToken}`,
@@ -745,6 +978,11 @@
     function showPhaseSelector() {
       showView('phase-view');
       renderPhaseSelector();
+    }
+    
+    function showInquiryNotes() {
+      showView('inquiry-view');
+      renderInquiryNotes();
     }
     
     function backToList() {
@@ -804,9 +1042,139 @@
     function getFilteredSessions() {
       return sessions.filter(session => {
         const phaseMatch = !currentFilters.phase || session.status === currentFilters.phase;
-        const typeMatch = !currentFilters.type || session.sessionType === currentFilters.type;
+        const typeMatch = !currentFilters.type || session.clientType === currentFilters.type;
         return phaseMatch && typeMatch;
       });
+    }
+    
+    // Edit Functions
+    function editTextField(label, field, fieldId) {
+      if (!currentSession) return;
+      const currentValue = currentSession[field] || '';
+      const inputHTML = `<input type="text" id="edit-input" class="form-input" style="width: 100%; margin: 8px 0;" value="${currentValue}" placeholder="Enter ${label}"><button onclick="saveTextField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
+      document.getElementById(`detail-${field}`).innerHTML = inputHTML;
+      document.getElementById('edit-input').focus();
+    }
+    
+    function editLongTextField(label, field, fieldId) {
+      if (!currentSession) return;
+      const currentValue = currentSession[field] || '';
+      const inputHTML = `<textarea id="edit-input" class="form-textarea" style="width: 100%; margin: 8px 0;" placeholder="Enter ${label}">${currentValue}</textarea><button onclick="saveTextField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
+      document.getElementById(`inquiry-${field}`).innerHTML = inputHTML;
+      document.getElementById('edit-input').focus();
+    }
+    
+    function editNumberField(label, field, fieldId) {
+      if (!currentSession) return;
+      const currentValue = currentSession[field] || '';
+      const inputHTML = `<input type="number" id="edit-input" class="form-input" style="width: 100%; margin: 8px 0;" value="${currentValue}" placeholder="Enter ${label}"><button onclick="saveNumberField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
+      const targetId = document.getElementById(`detail-${field}`) ? `detail-${field}` : `inquiry-${field}`;
+      document.getElementById(targetId).innerHTML = inputHTML;
+      document.getElementById('edit-input').focus();
+    }
+    
+    function editEnumField(label, field, fieldId, options) {
+      if (!currentSession) return;
+      const currentValue = currentSession[field] || '';
+      const selectHTML = '<select id="edit-select" class="filter-select" style="width: 100%; margin: 8px 0;">' +
+        `<option value="">Select ${label}</option>` +
+        options.map(opt => `<option value="${opt.gid}" ${opt.name === currentValue ? 'selected' : ''}>${opt.name}</option>`).join('') +
+        `</select><button onclick="saveEnumField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
+      document.getElementById(`inquiry-${field}`).innerHTML = selectHTML;
+    }
+    
+    async function saveTextField(field, fieldId) {
+      const value = document.getElementById('edit-input').value;
+      await updateTaskCustomField(currentSession.gid, fieldId, value);
+      currentSession[field] = value;
+      showToast('Updated');
+      
+      const targetId = document.getElementById(`detail-${field}`) ? `detail-${field}` : `inquiry-${field}`;
+      document.getElementById(targetId).textContent = value || '-';
+    }
+    
+    async function saveNumberField(field, fieldId) {
+      const value = parseFloat(document.getElementById('edit-input').value) || null;
+      await updateTaskCustomField(currentSession.gid, fieldId, value);
+      currentSession[field] = value;
+      showToast('Updated');
+      
+      const targetId = document.getElementById(`detail-${field}`) ? `detail-${field}` : `inquiry-${field}`;
+      document.getElementById(targetId).textContent = value || '-';
+      
+      // Special handling for age - show/hide parent field
+      if (field === 'age') {
+        const parentCard = document.getElementById('detail-parent-card');
+        if (value && value < 18) {
+          parentCard.style.display = 'block';
+        } else {
+          parentCard.style.display = 'none';
+        }
+      }
+    }
+    
+    async function saveEnumField(field, fieldId) {
+      const select = document.getElementById('edit-select');
+      const gid = select.value;
+      const name = select.options[select.selectedIndex].text;
+      
+      await updateTaskCustomField(currentSession.gid, fieldId, gid);
+      currentSession[field] = name;
+      showToast('Updated');
+      document.getElementById(`inquiry-${field}`).textContent = name || '-';
+    }
+    
+    function editPayment() {
+      if (!currentSession) return;
+      const options = [
+        { gid: '1211733390060958', name: 'Unpaid' },
+        { gid: '1211733390060959', name: 'Partial' },
+        { gid: '1211733390060960', name: 'Paid' }
+      ];
+      const currentValue = document.getElementById('detail-payment').textContent;
+      const selectHTML = '<select id="payment-select" class="filter-select" style="width: 100%; margin: 8px 0;">' +
+        options.map(opt => `<option value="${opt.gid}" ${opt.name === currentValue ? 'selected' : ''}>${opt.name}</option>`).join('') +
+        '</select><button onclick="savePayment()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
+      document.getElementById('detail-payment').innerHTML = selectHTML;
+    }
+    
+    async function savePayment() {
+      const gid = document.getElementById('payment-select').value;
+      const select = document.getElementById('payment-select');
+      const name = select.options[select.selectedIndex].text;
+      await updateTaskCustomField(currentSession.gid, '1211733390060955', gid);
+      currentSession.paymentStatus = name;
+      showToast('Payment updated');
+      document.getElementById('detail-payment').textContent = name;
+    }
+    
+    function editDate() {
+      if (!currentSession) return;
+      const currentDate = currentSession.sessionDate || '';
+      const inputHTML = '<input type="date" id="date-input" class="form-input" style="width: 100%; margin: 8px 0;" value="' + currentDate + '"><button onclick="saveDate()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
+      document.getElementById('detail-date-edit').innerHTML = inputHTML;
+    }
+    
+    async function saveDate() {
+      const newDate = document.getElementById('date-input').value;
+      await updateTaskCustomField(currentSession.gid, '1211732464258476', newDate);
+      currentSession.sessionDate = newDate;
+      showToast('Date updated');
+      document.getElementById('detail-date-edit').textContent = formatDate(newDate);
+      document.getElementById('detail-session-date').textContent = formatDate(newDate);
+    }
+    
+    async function uncompleteTodo(todoGid) {
+      await fetch(`https://d.rook-bb4.workers.dev?path=/tasks/${todoGid}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${asanaToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ data: { completed: false } })
+      });
+      showToast('Task uncompleted');
+      setTimeout(renderClientDetail, 300);
     }
     
     // Render Functions
@@ -833,7 +1201,7 @@
                 ${session.countdown.text}
               </div>
             </div>
-            <div class="card-info">${session.sessionType} | ${session.status}</div>
+            <div class="card-info">${session.clientType} | ${session.status}</div>
             <div class="card-date">${formatDate(session.sessionDate)}</div>
           </div>
         `).join('');
@@ -846,15 +1214,13 @@
     }
     
     function populateFilters() {
-      // Populate phase filter
       const phaseSelect = document.getElementById('widget-filter-phase');
       const uniquePhases = [...new Set(sessions.map(s => s.status))];
       phaseSelect.innerHTML = '<option value="">All Phases</option>' + 
         uniquePhases.map(phase => `<option value="${phase}">${phase}</option>`).join('');
       
-      // Populate type filter  
       const typeSelect = document.getElementById('widget-filter-type');
-      const uniqueTypes = [...new Set(sessions.map(s => s.sessionType))];
+      const uniqueTypes = [...new Set(sessions.map(s => s.clientType))];
       typeSelect.innerHTML = '<option value="">All Types</option>' + 
         uniqueTypes.map(type => `<option value="${type}">${type}</option>`).join('');
     }
@@ -872,7 +1238,7 @@
         <div class="list-item" onclick="showDetail('${session.gid}')">
           <div class="list-item-left">
             <h3>${session.client}</h3>
-            <p>${session.sessionType} | ${session.status}</p>
+            <p>${session.clientType} | ${session.status}</p>
           </div>
           <div class="list-item-right" style="color: ${session.countdown.color}">
             ${session.countdown.text}
@@ -890,6 +1256,36 @@
       document.getElementById('detail-payment').textContent = currentSession.paymentStatus;
       document.getElementById('detail-date-edit').textContent = formatDate(currentSession.sessionDate);
       
+      // Profile fields
+      document.getElementById('detail-email').textContent = currentSession.email || '-';
+      document.getElementById('detail-phone').textContent = currentSession.phone || '-';
+      
+      // Instagram with link
+      const instaEl = document.getElementById('detail-instagram');
+      if (currentSession.instagram) {
+        const handle = currentSession.instagram.replace('@', '');
+        instaEl.innerHTML = `<a href="https://instagram.com/${handle}" target="_blank">@${handle}</a>`;
+      } else {
+        instaEl.textContent = '-';
+      }
+      
+      document.getElementById('detail-age').textContent = currentSession.age || '-';
+      
+      // Show/hide parent field based on age
+      const parentCard = document.getElementById('detail-parent-card');
+      if (currentSession.age && currentSession.age < 18) {
+        parentCard.style.display = 'block';
+        document.getElementById('detail-parent').textContent = currentSession.parent || '-';
+      } else {
+        parentCard.style.display = 'none';
+      }
+      
+      document.getElementById('detail-client-type').textContent = currentSession.clientType || '-';
+      document.getElementById('detail-session-type').textContent = currentSession.sessionType || '-';
+      document.getElementById('detail-concept-style').textContent = currentSession.conceptStyle || '-';
+      document.getElementById('detail-creative-level').textContent = currentSession.creativeLevel || '-';
+      
+      // Todos
       const todosContainer = document.getElementById('detail-todos');
       const completedContainer = document.getElementById('detail-completed');
       todosContainer.innerHTML = '<div class="loading" style="padding: 20px;"><div>Loading...</div></div>';
@@ -918,6 +1314,35 @@
           </div>
         `).join('');
       }
+    }
+    
+    function renderInquiryNotes() {
+      if (!currentSession) return;
+      
+      document.getElementById('inquiry-client-name').textContent = currentSession.client;
+      
+      // Inquiry details
+      document.getElementById('inquiry-preferred-date').textContent = currentSession.preferredDate || '-';
+      document.getElementById('inquiry-city').textContent = currentSession.city || '-';
+      document.getElementById('inquiry-location').textContent = currentSession.sessionLocation || '-';
+      
+      // Creative direction
+      document.getElementById('inquiry-vision').textContent = currentSession.vision || '-';
+      document.getElementById('inquiry-spicy').textContent = currentSession.spicyLevel || '-';
+      document.getElementById('inquiry-must-have').textContent = currentSession.mustHave || '-';
+      
+      // Preferences
+      document.getElementById('inquiry-location-pref').textContent = currentSession.locationPref || '-';
+      document.getElementById('inquiry-lighting-pref').textContent = currentSession.lightingPref || '-';
+      document.getElementById('inquiry-feel').textContent = currentSession.howFeel || '-';
+      document.getElementById('inquiry-confidence').textContent = currentSession.confidence || '-';
+      document.getElementById('inquiry-expectations').textContent = currentSession.expectations || '-';
+      
+      // Financial
+      document.getElementById('inquiry-budget').textContent = currentSession.budget || '-';
+      document.getElementById('inquiry-package').textContent = currentSession.package || '-';
+      document.getElementById('inquiry-prints').textContent = currentSession.prints || '-';
+      document.getElementById('inquiry-video').textContent = currentSession.video || '-';
     }
     
     function renderPhaseSelector() {
@@ -975,130 +1400,13 @@
       document.getElementById('client-name').focus();
     }
     
-    function editPayment() {
-      if (!currentSession) return;
-      
-      const options = [
-        { gid: '1211733390060958', name: 'Unpaid' },
-        { gid: '1211733390060959', name: 'Partial' },
-        { gid: '1211733390060960', name: 'Paid' }
-      ];
-      
-      const currentValue = document.getElementById('detail-payment').textContent;
-      const selectHTML = '<select id="payment-select" class="filter-select" style="width: 100%; margin: 8px 0;">' +
-        options.map(opt => `<option value="${opt.gid}" ${opt.name === currentValue ? 'selected' : ''}>${opt.name}</option>`).join('') +
-        '</select><button onclick="savePayment()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
-      
-      document.getElementById('detail-payment').innerHTML = selectHTML;
-    }
-    
-    async function savePayment() {
-      const gid = document.getElementById('payment-select').value;
-      const select = document.getElementById('payment-select');
-      const name = select.options[select.selectedIndex].text;
-      
-      await updateTaskCustomField(currentSession.gid, '1211733390060955', gid);
-      currentSession.paymentStatus = name;
-      
-      showToast('Payment updated');
-      document.getElementById('detail-payment').textContent = name;
-    }
-    
-    function editDate() {
-      if (!currentSession) return;
-      
-      const currentDate = currentSession.sessionDate || '';
-      const inputHTML = '<input type="date" id="date-input" class="form-input" style="width: 100%; margin: 8px 0;" value="' + currentDate + '"><button onclick="saveDate()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
-      
-      document.getElementById('detail-date-edit').innerHTML = inputHTML;
-    }
-    
-    async function saveDate() {
-      const newDate = document.getElementById('date-input').value;
-      
-      await updateTaskCustomField(currentSession.gid, '1211732464258476', newDate);
-      currentSession.sessionDate = newDate;
-      
-      showToast('Date updated');
-      document.getElementById('detail-date-edit').textContent = formatDate(newDate);
-      document.getElementById('detail-session-date').textContent = formatDate(newDate);
-    }
-    
-    async function updateTaskCustomField(taskGid, fieldGid, value) {
-      const data = {
-        data: {
-          custom_fields: {
-            [fieldGid]: value
-          }
-        }
-      };
-      
-      await fetch(`https://app.asana.com/api/1.0/tasks/${taskGid}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${asanaToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-    }
-    
-    async function uncompleteTodo(todoGid) {
-      await fetch(`https://app.asana.com/api/1.0/tasks/${todoGid}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${asanaToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ data: { completed: false } })
-      });
-      
-      showToast('Task uncompleted');
-      setTimeout(renderClientDetail, 300);
-    }
-    
     async function init() {
-      // Register service worker
-      if ('serviceWorker' in navigator) {
-        try {
-          await navigator.serviceWorker.register('/service-worker.js');
-          console.log('Service worker registered');
-        } catch (error) {
-          console.log('Service worker registration failed:', error);
-        }
-      }
-      
-      // Request notification permission
-      if ('Notification' in window && Notification.permission === 'default') {
-        setTimeout(() => {
-          Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-              showToast('Notifications enabled');
-            }
-          });
-        }, 3000); // Delay to not be intrusive on first load
-      }
-      
       if (!asanaToken) {
         showTokenModal();
         return;
       }
-      
       await renderWidget();
     }
-    
-    // Handle install prompt
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      // Could show custom install button here
-    });
-    
-    window.addEventListener('appinstalled', () => {
-      deferredPrompt = null;
-      showToast('App installed!');
-    });
     
     document.getElementById('widget-sessions').addEventListener('click', (e) => {
       if (!e.target.closest('.card')) {
