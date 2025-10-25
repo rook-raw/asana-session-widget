@@ -267,48 +267,45 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     
     .info-card {
       background: var(--bg-secondary);
       border-radius: 10px;
-      padding: 14px;
-      cursor: pointer;
-      transition: background 0.2s;
+      padding: 12px;
     }
     
-    .info-card:active {
-      background: #333;
-    }
-    
-    .info-card.non-tappable {
-      cursor: default;
-    }
-    
-    .info-card.non-tappable:active {
-      background: var(--bg-secondary);
-    }
-    
-    .info-card-label {
+    .info-label {
       font-size: 11px;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     
-    .info-card-value {
+    .info-value {
       font-size: 15px;
       font-weight: 600;
       color: var(--text-primary);
+      cursor: pointer;
     }
     
-    .section-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--gold);
-      margin-bottom: 12px;
+    .info-value:active {
+      opacity: 0.7;
+    }
+    
+    .section {
+      margin-bottom: 24px;
+    }
+    
+    .section-header {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      font-weight: 600;
     }
     
     .todo-item {
@@ -325,46 +322,9 @@
       background: #333;
     }
     
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 14px;
-      opacity: 0;
-      transition: all 0.3s ease;
-      z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-    
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-    
-    .loading {
-      text-align: center;
-      padding: 40px;
+    .todo-item.completed {
+      text-decoration: line-through;
       color: var(--text-muted);
-    }
-    
-    .spinner {
-      border: 3px solid #333;
-      border-top: 3px solid var(--gold);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 16px;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
     }
     
     .modal {
@@ -372,389 +332,417 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 1000;
       padding: 20px;
+      animation: fadeIn 0.2s;
     }
     
     .modal.active {
       display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     
     .modal-content {
       background: var(--bg-secondary);
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 24px;
-      max-width: 400px;
       width: 100%;
+      max-width: 400px;
+      animation: slideUp 0.3s;
     }
     
-    .modal-content h3 {
-      color: var(--gold);
-      margin-bottom: 12px;
-      font-size: 18px;
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
     
-    .modal-content p {
-      color: var(--text-muted);
+    .modal-header {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
       margin-bottom: 16px;
-      font-size: 14px;
-      line-height: 1.5;
     }
     
-    .modal-content input {
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    
+    .form-input {
       width: 100%;
       background: var(--bg-primary);
       border: 1px solid #333;
       color: var(--text-primary);
       padding: 12px;
       border-radius: 8px;
-      font-size: 14px;
-      margin-bottom: 16px;
+      font-size: 15px;
+      font-family: inherit;
     }
     
-    .modal-content button {
-      width: 100%;
-      background: var(--gold);
-      color: var(--bg-primary);
-      border: none;
+    .form-input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .btn {
+      flex: 1;
       padding: 12px;
+      border: none;
       border-radius: 8px;
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
+      transition: opacity 0.2s;
     }
     
-    .modal-content button:active {
-      opacity: 0.8;
+    .btn:active {
+      opacity: 0.7;
+    }
+    
+    .btn-primary {
+      background: var(--gold);
+      color: var(--bg-primary);
+    }
+    
+    .btn-secondary {
+      background: #333;
+      color: var(--text-primary);
+    }
+    
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      color: var(--text-muted);
+    }
+    
+    .loading div {
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--gold);
+      color: var(--bg-primary);
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 2000;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
   </style>
 </head>
 <body>
-  <div class="toast" id="toast"></div>
-  
-  <div class="modal" id="token-modal">
-    <div class="modal-content">
-      <h3>Enter Asana Token</h3>
-      <p>Token is stored locally and only sent to Asana's API.</p>
-      <input type="password" id="token-input" placeholder="Paste your Asana token">
-      <button onclick="saveToken()">Save Token</button>
+  <!-- Widget View -->
+  <div id="widget-view" class="view active">
+    <div class="widget-header">
+      <h1>📸 Sessions</h1>
+      <div class="widget-subtitle">Upcoming Photography Sessions</div>
     </div>
-  </div>
-  
-  <div class="view active" id="widget-view">
-    <div class="widget-header" style="cursor: pointer;" onclick="showList()">
-      <h1>Photography Sessions</h1>
-      <div class="widget-subtitle">Tap to manage</div>
-    </div>
-    
-    <div class="filter-bar">
-      <select class="filter-select" id="widget-filter-phase" onchange="applyFiltersWidget()">
-        <option value="">All Phases</option>
-      </select>
-      <select class="filter-select" id="widget-filter-type" onchange="applyFiltersWidget()">
-        <option value="">All Types</option>
-      </select>
-      <select class="filter-select" id="widget-filter-payment" onchange="applyFiltersWidget()">
-        <option value="">All Payments</option>
-        <option value="Paid">Paid</option>
-        <option value="Partial">Partial</option>
-        <option value="Unpaid">Unpaid</option>
-      </select>
-    </div>
-    
     <div id="widget-sessions">
       <div class="loading">
-        <div class="spinner"></div>
-        <div>Loading...</div>
+        <div>Loading sessions...</div>
       </div>
     </div>
-    <div class="widget-footer" id="widget-footer">Updated --:--</div>
+    <div class="widget-footer">
+      Tap a session for details
+    </div>
   </div>
   
-  <div class="view" id="list-view">
+  <!-- List View -->
+  <div id="list-view" class="view">
     <div class="list-header">
-      <h2>Photography Sessions</h2>
-      <button class="btn-add" onclick="showAddClient()">+ New</button>
+      <h2>All Sessions</h2>
+      <button class="btn-add" onclick="showAddClient()">+ Client</button>
     </div>
     
     <div class="filter-bar">
-      <select class="filter-select" id="filter-phase" onchange="applyFilters()">
+      <select id="widget-filter-phase" class="filter-select" onchange="applyFilters()">
         <option value="">All Phases</option>
       </select>
-      <select class="filter-select" id="filter-type" onchange="applyFilters()">
+      <select id="widget-filter-type" class="filter-select" onchange="applyFilters()">
         <option value="">All Types</option>
-      </select>
-      <select class="filter-select" id="filter-payment" onchange="applyFilters()">
-        <option value="">All Payments</option>
-        <option value="Paid">Paid</option>
-        <option value="Partial">Partial</option>
-        <option value="Unpaid">Unpaid</option>
       </select>
     </div>
     
     <div id="client-list"></div>
   </div>
   
-  <div class="view" id="detail-view">
+  <!-- Detail View -->
+  <div id="detail-view" class="view">
+    <button class="back-btn" onclick="backToList()">← Back</button>
+    
     <div class="detail-header">
-      <button class="back-btn" onclick="backToList()"><- Back to Clients</button>
-      <h2 id="detail-client-name">Client</h2>
-      <div class="date" id="detail-session-date">Date</div>
+      <h2 id="detail-client-name">Client Name</h2>
+      <div class="date" id="detail-session-date">Session Date</div>
     </div>
     
     <div class="info-grid">
-      <div class="info-card" onclick="showPhaseSelector()">
-        <div class="info-card-label">Current Phase</div>
-        <div class="info-card-value" id="detail-phase">-</div>
+      <div class="info-card">
+        <div class="info-label">Phase</div>
+        <div class="info-value" id="detail-phase" onclick="showPhaseSelector()">Phase</div>
       </div>
-      <div class="info-card" onclick="editPayment()">
-        <div class="info-card-label">Payment</div>
-        <div class="info-card-value" id="detail-payment">-</div>
+      <div class="info-card">
+        <div class="info-label">Payment</div>
+        <div class="info-value" id="detail-payment" onclick="editPayment()">Status</div>
       </div>
-      <div class="info-card" onclick="editDate()">
-        <div class="info-card-label">Session Date</div>
-        <div class="info-card-value" id="detail-date-edit">-</div>
+      <div class="info-card" style="grid-column: 1 / -1;">
+        <div class="info-label">Session Date</div>
+        <div class="info-value" id="detail-date-edit" onclick="editDate()">Date</div>
       </div>
     </div>
     
-    <div class="section-title">To-Do Items</div>
-    <div id="detail-todos"></div>
+    <div class="section">
+      <div class="section-header">To-Do</div>
+      <div id="detail-todos"></div>
+    </div>
     
-    <div class="section-title" style="margin-top: 24px;">Completed</div>
-    <div id="detail-completed"></div>
+    <div class="section">
+      <div class="section-header">Completed</div>
+      <div id="detail-completed"></div>
+    </div>
   </div>
   
-  <div class="view" id="phase-view">
+  <!-- Phase Selector View -->
+  <div id="phase-view" class="view">
+    <button class="back-btn" onclick="backToDetail()">← Back</button>
+    
     <div class="detail-header">
-      <button class="back-btn" onclick="backToDetail()"><- Back</button>
       <h2>Select Phase</h2>
-      <div class="date" id="phase-client-name">Client</div>
+      <div class="date" id="phase-client-name">Client Name</div>
     </div>
+    
     <div id="phase-list"></div>
   </div>
   
+  <!-- Add Client Modal -->
+  <div id="add-client-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">Add New Client</div>
+      <div class="form-group">
+        <label class="form-label">Client Name</label>
+        <input type="text" id="client-name" class="form-input" placeholder="Enter client name">
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="closeAddClient()">Cancel</button>
+        <button class="btn btn-primary" onclick="createClient()">Create</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Token Modal -->
+  <div id="token-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">Asana Token Required</div>
+      <div class="form-group">
+        <label class="form-label">Personal Access Token</label>
+        <input type="password" id="token-input" class="form-input" placeholder="Enter your Asana token">
+      </div>
+      <button class="btn btn-primary" style="width: 100%;" onclick="saveToken()">Save Token</button>
+    </div>
+  </div>
+  
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+  
   <script>
-    const PROJECT_ID = "1211733193402684";
-    const FIELD_IDS = {
-      clientPhase: "1211735634914711",
-      sessionDate: "1211732464258476",
-      activeStatus: "1211735138096716",
-      sessionType: "1211733359641772",
-      paymentStatus: "1211733390060955"
-    };
-    const ACTIVE_GREEN_GID = "1211735138096720";
+    // Configuration
+    const PROJECT_ID = '1211733193402684';
+    const CLIENT_PHASE_FIELD_ID = '1211735634914711';
+    const SESSION_DATE_FIELD_ID = '1211732464258476';
+    const ACTIVE_STATUS_FIELD_ID = '1211735138096716';
+    const SESSION_TYPE_FIELD_ID = '1211733359641772';
+    const PAYMENT_STATUS_FIELD_ID = '1211733390060955';
     
+    // State
+    let asanaToken = localStorage.getItem('asana_token') || '';
     let sessions = [];
-    let currentSession = null;
     let phaseOptions = [];
-    let asanaToken = localStorage.getItem('asanaToken');
-    
-    // Filter state
+    let currentSession = null;
     let currentFilters = {
       phase: '',
-      type: '',
-      payment: ''
+      type: ''
     };
     
-    async function asanaRequest(endpoint, options = {}) {
-      if (!asanaToken) {
-        showTokenModal();
-        return null;
-      }
-      
-      try {
-        const response = await fetch(`https://app.asana.com/api/1.0${endpoint}`, {
-          ...options,
-          headers: {
-            'Authorization': `Bearer ${asanaToken}`,
-            'Content-Type': 'application/json',
-            ...options.headers
-          }
-        });
-        
-        if (!response.ok) {
-          if (response.status === 401) {
-            showToast('Invalid token');
-            showTokenModal();
-            return null;
-          }
-          throw new Error(`API error: ${response.status}`);
-        }
-        
-        return await response.json();
-      } catch (error) {
-        console.error('API Error:', error);
-        showToast('Connection error');
-        return null;
-      }
-    }
-    
+    // API Functions
     async function fetchSessions() {
-      const response = await asanaRequest(
-        `/tasks?project=${PROJECT_ID}&opt_fields=name,completed,gid,custom_fields.gid,custom_fields.date_value,custom_fields.enum_value,custom_fields.multi_enum_values`
+      const response = await fetch(
+        `https://app.asana.com/api/1.0/tasks?project=${PROJECT_ID}&opt_fields=name,custom_fields,gid`,
+        {
+          headers: { 'Authorization': `Bearer ${asanaToken}` }
+        }
       );
+      const data = await response.json();
       
-      if (!response?.data) return [];
-      
-      return response.data
-        .filter(task => !task.completed)
-        .map(parseSession)
-        .filter(s => s.isActive)
+      return data.data
+        .filter(task => {
+          const activeStatus = task.custom_fields.find(f => f.gid === ACTIVE_STATUS_FIELD_ID);
+          return !activeStatus || activeStatus.enum_value?.name !== '🔴 Red (Inactive)';
+        })
+        .map(task => {
+          const phaseField = task.custom_fields.find(f => f.gid === CLIENT_PHASE_FIELD_ID);
+          const sessionDateField = task.custom_fields.find(f => f.gid === SESSION_DATE_FIELD_ID);
+          const sessionTypeField = task.custom_fields.find(f => f.gid === SESSION_TYPE_FIELD_ID);
+          const paymentField = task.custom_fields.find(f => f.gid === PAYMENT_STATUS_FIELD_ID);
+          
+          const sessionDate = sessionDateField?.date_value?.start || null;
+          const daysUntil = sessionDate ? Math.ceil((new Date(sessionDate) - new Date()) / (1000 * 60 * 60 * 24)) : null;
+          
+          return {
+            gid: task.gid,
+            client: task.name,
+            status: phaseField?.enum_value?.name || 'No Phase',
+            statusGid: phaseField?.enum_value?.gid || '',
+            sessionDate: sessionDate,
+            sessionType: sessionTypeField?.multi_enum_values?.[0]?.name || 'Client',
+            paymentStatus: paymentField?.enum_value?.name || 'Unpaid',
+            countdown: getCountdown(daysUntil)
+          };
+        })
         .sort((a, b) => {
           if (!a.sessionDate) return 1;
           if (!b.sessionDate) return -1;
           return new Date(a.sessionDate) - new Date(b.sessionDate);
-        })
-        .slice(0, 8);
+        });
     }
     
-    function parseSession(task) {
-      const session = {
-        gid: task.gid,
-        name: task.name,
-        client: task.name.split(' - ')[0] || task.name,
-        sessionDate: null,
-        sessionType: 'Session',
-        status: 'Unknown',
-        statusGid: null,
-        paymentStatus: 'Unknown',
-        isActive: false,
-        countdown: { text: 'No date', days: 999, color: 'var(--text-muted)' }
-      };
-      
-      if (task.custom_fields) {
-        for (const field of task.custom_fields) {
-          if (field.gid === FIELD_IDS.clientPhase && field.enum_value) {
-            session.status = field.enum_value.name;
-            session.statusGid = field.enum_value.gid;
-          } else if (field.gid === FIELD_IDS.sessionDate) {
-            // Asana date fields can be: field.date_value.date OR field.date_value (string)
-            const dateValue = field.date_value?.date || field.date_value;
-            if (dateValue) {
-              session.sessionDate = dateValue;
-              session.countdown = calculateCountdown(dateValue);
-            }
-          } else if (field.gid === FIELD_IDS.activeStatus && field.enum_value) {
-            session.isActive = field.enum_value.gid === ACTIVE_GREEN_GID;
-          } else if (field.gid === FIELD_IDS.sessionType && field.multi_enum_values) {
-            if (field.multi_enum_values.length > 0) {
-              session.sessionType = field.multi_enum_values.map(v => v.name).join(', ');
-            }
-          } else if (field.gid === FIELD_IDS.paymentStatus && field.enum_value) {
-            session.paymentStatus = field.enum_value.name;
-          }
-        }
-      }
-      
-      return session;
-    }
-    
-    function calculateCountdown(dateString) {
-      if (!dateString) return { text: 'No date', days: 999, color: 'var(--text-muted)' };
-      
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-      const sessionDate = new Date(dateString);
-      
-      // Check for invalid date
-      if (isNaN(sessionDate.getTime())) {
-        return { text: 'Invalid date', days: 999, color: 'var(--text-muted)' };
-      }
-      
-      sessionDate.setHours(0, 0, 0, 0);
-      const days = Math.ceil((sessionDate - now) / (1000 * 60 * 60 * 24));
-      
-      let text, color;
-      
-      if (days < 0) {
-        text = `${Math.abs(days)}d overdue`;
-        color = 'var(--critical)';
-      } else if (days === 0) {
-        text = 'TODAY';
-        color = 'var(--critical)';
-      } else if (days === 1) {
-        text = 'Tomorrow';
-        color = 'var(--critical)';
-      } else if (days <= 7) {
-        text = `${days} days`;
-        color = days <= 2 ? 'var(--critical)' : 'var(--limited)';
-      } else if (days <= 30) {
-        text = `${days} days`;
-        color = 'var(--available)';
-      } else {
-        const months = Math.floor(days / 30);
-        text = `${months}mo`;
-        color = 'var(--available)';
-      }
-      
-      return { text, days, color };
-    }
-    
-    async function fetchTodos(taskGid) {
-      const response = await asanaRequest(
-        `/tasks/${taskGid}/subtasks?opt_fields=name,completed,gid`
-      );
-      return response?.data || [];
+    function getCountdown(days) {
+      if (days === null) return { text: 'No date', color: 'var(--text-muted)' };
+      if (days < 0) return { text: `${Math.abs(days)}d ago`, color: 'var(--text-muted)' };
+      if (days === 0) return { text: 'TODAY', color: 'var(--critical)' };
+      if (days <= 3) return { text: `${days}d`, color: 'var(--critical)' };
+      if (days <= 14) return { text: `${days}d`, color: 'var(--limited)' };
+      return { text: `${days}d`, color: 'var(--available)' };
     }
     
     async function fetchPhaseOptions() {
-      const response = await asanaRequest(
-        `/custom_fields/${FIELD_IDS.clientPhase}`
+      const response = await fetch(
+        `https://app.asana.com/api/1.0/custom_fields/${CLIENT_PHASE_FIELD_ID}`,
+        {
+          headers: { 'Authorization': `Bearer ${asanaToken}` }
+        }
       );
-      return response?.data?.enum_options || [];
+      const data = await response.json();
+      phaseOptions = data.data.enum_options || [];
+    }
+    
+    async function fetchTodos(parentGid) {
+      const response = await fetch(
+        `https://app.asana.com/api/1.0/tasks/${parentGid}/subtasks?opt_fields=name,completed,gid`,
+        {
+          headers: { 'Authorization': `Bearer ${asanaToken}` }
+        }
+      );
+      const data = await response.json();
+      return data.data || [];
+    }
+    
+    async function completeTask(todoGid) {
+      await fetch(`https://app.asana.com/api/1.0/tasks/${todoGid}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${asanaToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ data: { completed: true } })
+      });
     }
     
     async function updateTaskPhase(taskGid, phaseGid) {
-      await asanaRequest(`/tasks/${taskGid}`, {
+      await fetch(`https://app.asana.com/api/1.0/tasks/${taskGid}`, {
         method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${asanaToken}`,
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           data: {
             custom_fields: {
-              [FIELD_IDS.clientPhase]: phaseGid
+              [CLIENT_PHASE_FIELD_ID]: phaseGid
             }
           }
         })
       });
     }
     
-    async function completeTask(taskGid) {
-      await asanaRequest(`/tasks/${taskGid}`, {
-        method: 'PUT',
+    async function createNewClient(name) {
+      const response = await fetch('https://app.asana.com/api/1.0/tasks', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${asanaToken}`,
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
-          data: { completed: true }
+          data: {
+            name: name,
+            projects: [PROJECT_ID]
+          }
         })
       });
+      return await response.json();
     }
     
+    // View Functions
     function showView(viewId) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       document.getElementById(viewId).classList.add('active');
     }
     
+    function showWidget() {
+      showView('widget-view');
+    }
+    
     function showList() {
       showView('list-view');
-      // Small delay to ensure DOM is ready
-      setTimeout(() => {
-        populateFilterDropdowns();
-        renderClientList();
-      }, 50);
+      renderClientList();
     }
     
-    async function showDetail(sessionGid) {
-      currentSession = sessions.find(s => s.gid === sessionGid);
-      showView('detail-view');
-      await renderClientDetail();
-    }
-    
-    async function showPhaseSelector() {
-      if (phaseOptions.length === 0) {
-        phaseOptions = await fetchPhaseOptions();
+    function showDetail(gid) {
+      currentSession = sessions.find(s => s.gid === gid);
+      if (currentSession) {
+        showView('detail-view');
+        renderClientDetail();
       }
+    }
+    
+    function showPhaseSelector() {
       showView('phase-view');
       renderPhaseSelector();
     }
@@ -765,122 +753,99 @@
     
     function backToDetail() {
       showView('detail-view');
-    }
-    
-    function showAddClient() {
-      showToast('Quick add coming in Phase 5');
-    }
-    
-    function showTokenModal() {
-      document.getElementById('token-modal').classList.add('active');
-    }
-    
-    function saveToken() {
-      const token = document.getElementById('token-input').value.trim();
-      if (token) {
-        localStorage.setItem('asanaToken', token);
-        asanaToken = token;
-        document.getElementById('token-modal').classList.remove('active');
-        init();
-      }
+      renderClientDetail();
     }
     
     function showToast(message) {
       const toast = document.getElementById('toast');
       toast.textContent = message;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2000);
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
     }
     
-    async function renderWidget() {
-      const container = document.getElementById('widget-sessions');
-      container.innerHTML = '<div class="loading"><div class="spinner"></div><div>Loading...</div></div>';
-      
-      sessions = await fetchSessions();
-      
-      if (sessions.length === 0) {
-        container.innerHTML = '<div class="loading"><div>No active sessions</div></div>';
-        return;
+    function showTokenModal() {
+      document.getElementById('token-modal').classList.add('active');
+      document.getElementById('token-input').focus();
+    }
+    
+    function saveToken() {
+      const token = document.getElementById('token-input').value.trim();
+      if (token) {
+        asanaToken = token;
+        localStorage.setItem('asana_token', token);
+        document.getElementById('token-modal').classList.remove('active');
+        init();
       }
+    }
+    
+    function closeAddClient() {
+      document.getElementById('add-client-modal').classList.remove('active');
+      document.getElementById('client-name').value = '';
+    }
+    
+    async function createClient() {
+      const name = document.getElementById('client-name').value.trim();
+      if (!name) return;
       
-      // Populate filter dropdowns
-      populateWidgetFilterDropdowns();
-      
-      // Get filtered sessions
-      const filteredSessions = getFilteredSessions();
-      
-      if (filteredSessions.length === 0) {
-        container.innerHTML = '<div class="loading"><div>No sessions match filters</div></div>';
-        return;
-      }
-      
-      container.innerHTML = filteredSessions.map(session => `
-        <div class="card" onclick="showDetail('${session.gid}')">
-          <div class="card-header">
-            <div class="card-client">${session.client}</div>
-            <div class="card-countdown" style="background: ${session.countdown.color}; color: #fff;">
-              ${session.countdown.text}
-            </div>
-          </div>
-          <div class="card-info">${session.sessionType} | ${session.status}</div>
-          <div class="card-date">${formatDate(session.sessionDate)}</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">
-            [${session.countdown.days}] days until Session
-          </div>
-        </div>
-      `).join('');
-      
-      const now = new Date();
-      document.getElementById('widget-footer').textContent = 
-        `Updated ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')} | Tap to manage`;
+      await createNewClient(name);
+      closeAddClient();
+      showToast('Client created');
+      await renderWidget();
     }
     
     function applyFilters() {
-      currentFilters.phase = document.getElementById('filter-phase').value;
-      currentFilters.type = document.getElementById('filter-type').value;
-      currentFilters.payment = document.getElementById('filter-payment').value;
-      
-      renderClientList();
-    }
-    
-    function applyFiltersWidget() {
       currentFilters.phase = document.getElementById('widget-filter-phase').value;
       currentFilters.type = document.getElementById('widget-filter-type').value;
-      currentFilters.payment = document.getElementById('widget-filter-payment').value;
-      
-      renderWidget();
+      renderClientList();
     }
     
     function getFilteredSessions() {
       return sessions.filter(session => {
-        if (currentFilters.phase && session.status !== currentFilters.phase) {
-          return false;
-        }
-        if (currentFilters.type && session.sessionType !== currentFilters.type) {
-          return false;
-        }
-        if (currentFilters.payment && session.paymentStatus !== currentFilters.payment) {
-          return false;
-        }
-        return true;
+        const phaseMatch = !currentFilters.phase || session.status === currentFilters.phase;
+        const typeMatch = !currentFilters.type || session.sessionType === currentFilters.type;
+        return phaseMatch && typeMatch;
       });
     }
     
-    function populateFilterDropdowns() {
-      // Populate phase filter
-      const phaseSelect = document.getElementById('filter-phase');
-      const uniquePhases = [...new Set(sessions.map(s => s.status))];
-      phaseSelect.innerHTML = '<option value="">All Phases</option>' + 
-        uniquePhases.map(phase => `<option value="${phase}">${phase}</option>`).join('');
+    // Render Functions
+    async function renderWidget() {
+      const container = document.getElementById('widget-sessions');
+      container.innerHTML = '<div class="loading"><div>Loading sessions...</div></div>';
       
-      // Populate type filter  
-      const typeSelect = document.getElementById('filter-type');
-      const uniqueTypes = [...new Set(sessions.map(s => s.sessionType))];
-      typeSelect.innerHTML = '<option value="">All Types</option>' + 
-        uniqueTypes.map(type => `<option value="${type}">${type}</option>`).join('');
+      try {
+        sessions = await fetchSessions();
+        await fetchPhaseOptions();
+        
+        const upcoming = sessions.slice(0, 3);
+        
+        if (upcoming.length === 0) {
+          container.innerHTML = '<div class="loading"><div>No upcoming sessions</div></div>';
+          return;
+        }
+        
+        container.innerHTML = upcoming.map(session => `
+          <div class="card" onclick="showDetail('${session.gid}')">
+            <div class="card-header">
+              <div class="card-client">${session.client}</div>
+              <div class="card-countdown" style="background: ${session.countdown.color}; color: var(--bg-primary);">
+                ${session.countdown.text}
+              </div>
+            </div>
+            <div class="card-info">${session.sessionType} | ${session.status}</div>
+            <div class="card-date">${formatDate(session.sessionDate)}</div>
+          </div>
+        `).join('');
+        
+        populateFilters();
+      } catch (error) {
+        container.innerHTML = '<div class="loading"><div>Error loading sessions</div></div>';
+        console.error('Error:', error);
+      }
     }
     
-    function populateWidgetFilterDropdowns() {
+    function populateFilters() {
       // Populate phase filter
       const phaseSelect = document.getElementById('widget-filter-phase');
       const uniquePhases = [...new Set(sessions.map(s => s.status))];
@@ -1005,59 +970,6 @@
       return `${days[date.getDay()]}, ${months[date.getMonth()]} ${date.getDate()}`;
     }
     
-    async function init() {
-      // Register service worker
-      if ('serviceWorker' in navigator) {
-        try {
-          await navigator.serviceWorker.register('/service-worker.js');
-          console.log('Service worker registered');
-        } catch (error) {
-          console.log('Service worker registration failed:', error);
-        }
-      }
-      
-      // Request notification permission
-      if ('Notification' in window && Notification.permission === 'default') {
-        setTimeout(() => {
-          Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-              showToast('Notifications enabled');
-            }
-          });
-        }, 3000); // Delay to not be intrusive on first load
-      }
-      
-      if (!asanaToken) {
-        showTokenModal();
-        return;
-      }
-      
-      await renderWidget();
-    }
-    
-    // Handle install prompt
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      // Could show custom install button here
-    });
-    
-    window.addEventListener('appinstalled', () => {
-      deferredPrompt = null;
-      showToast('App installed!');
-    });
-    
-    document.getElementById('widget-sessions').addEventListener('click', (e) => {
-      if (!e.target.closest('.card')) {
-        showList();
-      }
-    });
-    
-    init();
-  </script>
-</body>
-</html>
     function showAddClient() {
       document.getElementById('add-client-modal').classList.add('active');
       document.getElementById('client-name').focus();
@@ -1145,7 +1057,55 @@
       setTimeout(renderClientDetail, 300);
     }
     
-
+    async function init() {
+      // Register service worker
+      if ('serviceWorker' in navigator) {
+        try {
+          await navigator.serviceWorker.register('/service-worker.js');
+          console.log('Service worker registered');
+        } catch (error) {
+          console.log('Service worker registration failed:', error);
+        }
+      }
+      
+      // Request notification permission
+      if ('Notification' in window && Notification.permission === 'default') {
+        setTimeout(() => {
+          Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              showToast('Notifications enabled');
+            }
+          });
+        }, 3000); // Delay to not be intrusive on first load
+      }
+      
+      if (!asanaToken) {
+        showTokenModal();
+        return;
+      }
+      
+      await renderWidget();
+    }
+    
+    // Handle install prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      // Could show custom install button here
+    });
+    
+    window.addEventListener('appinstalled', () => {
+      deferredPrompt = null;
+      showToast('App installed!');
+    });
+    
+    document.getElementById('widget-sessions').addEventListener('click', (e) => {
+      if (!e.target.closest('.card')) {
+        showList();
+      }
+    });
+    
     init();
   </script>
 </body>
