@@ -767,7 +767,21 @@
     
     // State
     let asanaToken = localStorage.getItem('asana_token') || '';
-    let sessions = [];
+    let sessions = [
+      {
+        gid: 'mock-123',
+        client: 'Sarah Johnson',
+        status: 'Phase IV - Shoot Day',
+        clientType: '💎 Luxury Client',
+        sessionDate: '2025-11-08',
+        paymentStatus: 'Partial',
+        deliverableStatus: 'Pending',
+        countdown: { text: '14 days', color: '#d4af37' },
+        phone: '843-555-0123',
+        eventName: 'Golden Hour Goddess Session',
+        notes: 'Client wants outdoor natural light with flowing fabrics'
+      }
+    ];
     let phaseOptions = [];
     let currentSession = null;
     let currentFilters = {
@@ -1001,7 +1015,7 @@
         asanaToken = token;
         localStorage.setItem('asana_token', token);
         document.getElementById('token-modal').classList.remove('active');
-        init();
+    document.addEventListener('DOMContentLoaded', init);
       }
     }
     
@@ -1190,8 +1204,8 @@
       container.innerHTML = '<div class="loading"><div>Loading sessions...</div></div>';
       
       try {
-        sessions = await fetchSessions();
-        await fetchPhaseOptions();
+        // sessions = await fetchSessions(); // Preview mode - using mock data
+        // await fetchPhaseOptions(); // Preview mode
         
         
         if (sessions.length === 0) {
@@ -1408,13 +1422,13 @@
     }
     
     async function init() {
-      if (!asanaToken) {
-        showTokenModal();
-        return;
-      }
+      // Preview mode - skip token check
+      // if (!asanaToken) {
+      //   showTokenModal();
+      //   return;
+      // }
       await renderWidget();
     }
-    
     
     
     init();
