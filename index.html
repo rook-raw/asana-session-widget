@@ -777,6 +777,9 @@
         return;
       }
       
+      // Populate filter dropdowns now that we have data
+      populateFilterDropdowns();
+      
       container.innerHTML = sessions.map(session => `
         <div class="card" onclick="showDetail('${session.gid}')">
           <div class="card-header">
