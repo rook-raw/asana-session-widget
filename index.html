@@ -1186,14 +1186,13 @@
         sessions = await fetchSessions();
         await fetchPhaseOptions();
         
-        const upcoming = sessions.slice(0, 3);
         
-        if (upcoming.length === 0) {
-          container.innerHTML = '<div class="loading"><div>No upcoming sessions</div></div>';
+        if (sessions.length === 0) {
+          container.innerHTML = '<div class="loading"><div>No sessions</div></div>';
           return;
         }
         
-        container.innerHTML = upcoming.map(session => `
+        container.innerHTML = sessions.map(session => `
           <div class="card" onclick="showDetail('${session.gid}')">
             <div class="card-header">
               <div class="card-client">${session.client}</div>
