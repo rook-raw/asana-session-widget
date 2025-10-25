@@ -447,10 +447,26 @@
   </div>
   
   <div class="view active" id="widget-view">
-    <div class="widget-header">
+    <div class="widget-header" style="cursor: pointer;" onclick="showList()">
       <h1>Photography Sessions</h1>
       <div class="widget-subtitle">Tap to manage</div>
     </div>
+    
+    <div class="filter-bar">
+      <select class="filter-select" id="widget-filter-phase" onchange="applyFiltersWidget()">
+        <option value="">All Phases</option>
+      </select>
+      <select class="filter-select" id="widget-filter-type" onchange="applyFiltersWidget()">
+        <option value="">All Types</option>
+      </select>
+      <select class="filter-select" id="widget-filter-payment" onchange="applyFiltersWidget()">
+        <option value="">All Payments</option>
+        <option value="Paid">Paid</option>
+        <option value="Partial">Partial</option>
+        <option value="Unpaid">Unpaid</option>
+      </select>
+    </div>
+    
     <div id="widget-sessions">
       <div class="loading">
         <div class="spinner"></div>
@@ -780,10 +796,18 @@
         return;
       }
       
-      // Populate filter dropdowns now that we have data
-      populateFilterDropdowns();
+      // Populate filter dropdowns
+      populateWidgetFilterDropdowns();
       
-      container.innerHTML = sessions.map(session => `
+      // Get filtered sessions
+      const filteredSessions = getFilteredSessions();
+      
+      if (filteredSessions.length === 0) {
+        container.innerHTML = '<div class="loading"><div>No sessions match filters</div></div>';
+        return;
+      }
+      
+      container.innerHTML = filteredSessions.map(session => `
         <div class="card" onclick="showDetail('${session.gid}')">
           <div class="card-header">
             <div class="card-client">${session.client}</div>
@@ -812,6 +836,14 @@
       renderClientList();
     }
     
+    function applyFiltersWidget() {
+      currentFilters.phase = document.getElementById('widget-filter-phase').value;
+      currentFilters.type = document.getElementById('widget-filter-type').value;
+      currentFilters.payment = document.getElementById('widget-filter-payment').value;
+      
+      renderWidget();
+    }
+    
     function getFilteredSessions() {
       return sessions.filter(session => {
         if (currentFilters.phase && session.status !== currentFilters.phase) {
@@ -836,6 +868,20 @@
       
       // Populate type filter  
       const typeSelect = document.getElementById('filter-type');
+      const uniqueTypes = [...new Set(sessions.map(s => s.sessionType))];
+      typeSelect.innerHTML = '<option value="">All Types</option>' + 
+        uniqueTypes.map(type => `<option value="${type}">${type}</option>`).join('');
+    }
+    
+    function populateWidgetFilterDropdowns() {
+      // Populate phase filter
+      const phaseSelect = document.getElementById('widget-filter-phase');
+      const uniquePhases = [...new Set(sessions.map(s => s.status))];
+      phaseSelect.innerHTML = '<option value="">All Phases</option>' + 
+        uniquePhases.map(phase => `<option value="${phase}">${phase}</option>`).join('');
+      
+      // Populate type filter  
+      const typeSelect = document.getElementById('widget-filter-type');
       const uniqueTypes = [...new Set(sessions.map(s => s.sessionType))];
       typeSelect.innerHTML = '<option value="">All Types</option>' + 
         uniqueTypes.map(type => `<option value="${type}">${type}</option>`).join('');
