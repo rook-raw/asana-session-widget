@@ -566,9 +566,15 @@
       </div>
     </div>
     
-    <div class="section">
-      <div class="section-header">Client Profile</div>
-      <div class="info-grid">
+    <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('client-profile')">
+      <span>👤 Client Profile</span>
+      <span class="toggle-icon" id="client-profile-toggle">▼</span>
+    </button>
+    
+    <div id="client-profile-section" class="collapsible-section">
+      <div class="section">
+        <div class="section-header">Client Profile</div>
+        <div class="info-grid">
         <div class="info-card full-width">
           <div class="info-label">Email</div>
           <div class="info-value" id="detail-email" onclick="editTextField('Email', 'email', '1211746957812346')">-</div>
@@ -604,6 +610,7 @@
         <div class="info-card">
           <div class="info-label">Creative Level</div>
           <div class="info-value" id="detail-creative-level" onclick="editNumberField('Creative Level (1-10)', 'creativeLevel', '1211746958112275')">-</div>
+        </div>
         </div>
       </div>
     </div>
@@ -700,14 +707,28 @@
       </div>
     </div>
     
-    <div class="section">
-      <div class="section-header">To-Do</div>
-      <div id="detail-todos"></div>
+    <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('todo')">
+      <span>✓ To-Do</span>
+      <span class="toggle-icon" id="todo-toggle">▼</span>
+    </button>
+    
+    <div id="todo-section" class="collapsible-section">
+      <div class="section">
+        <div class="section-header">To-Do</div>
+        <div id="detail-todos"></div>
+      </div>
     </div>
     
-    <div class="section">
-      <div class="section-header">Completed</div>
-      <div id="detail-completed"></div>
+    <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('completed')">
+      <span>✓ Completed</span>
+      <span class="toggle-icon" id="completed-toggle">▼</span>
+    </button>
+    
+    <div id="completed-section" class="collapsible-section">
+      <div class="section">
+        <div class="section-header">Completed</div>
+        <div id="detail-completed"></div>
+      </div>
     </div>
   </div>
   
@@ -1270,11 +1291,15 @@
       document.getElementById('detail-payment').textContent = name;
     }
     
-    function editDate() {
+    function editDate(event) {
+      if (event) event.stopPropagation();
       if (!currentSession) return;
       const currentDate = currentSession.sessionDate || '';
-      const inputHTML = '<input type="date" id="date-input" class="form-input" style="width: 100%; margin: 8px 0;" value="' + currentDate + '"><button onclick="saveDate()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
-      document.getElementById('detail-date-edit').innerHTML = inputHTML;
+      const container = document.getElementById('detail-date-edit');
+      container.onclick = null; // Remove onclick to prevent conflicts
+      const inputHTML = '<input type="date" id="date-input" class="form-input" style="width: 100%; margin: 8px 0;" value="' + currentDate + '" onclick="event.stopPropagation()"><button onclick="saveDate()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
+      container.innerHTML = inputHTML;
+      setTimeout(() => document.getElementById('date-input').focus(), 100);
     }
     
     async function saveDate() {
@@ -1282,7 +1307,9 @@
       await updateTaskCustomField(currentSession.gid, '1211732464258476', newDate);
       currentSession.sessionDate = newDate;
       showToast('Date updated');
-      document.getElementById('detail-date-edit').textContent = formatDate(newDate);
+      const container = document.getElementById('detail-date-edit');
+      container.textContent = formatDate(newDate);
+      container.onclick = editDate; // Restore onclick
       document.getElementById('detail-session-date').textContent = formatDate(newDate);
     }
     
@@ -1526,6 +1553,13 @@
     function toggleInquiryNotes() {
       const section = document.getElementById('inquiry-section');
       const icon = document.getElementById('inquiry-toggle');
+      section.classList.toggle('expanded');
+      icon.classList.toggle('expanded');
+    }
+    
+    function toggleSection(sectionId) {
+      const section = document.getElementById(sectionId + '-section');
+      const icon = document.getElementById(sectionId + '-toggle');
       section.classList.toggle('expanded');
       icon.classList.toggle('expanded');
     }
