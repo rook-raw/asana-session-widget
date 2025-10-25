@@ -573,7 +573,7 @@
     
     async function fetchSessions() {
       const response = await asanaRequest(
-        `/tasks?project=${PROJECT_ID}&opt_fields=name,custom_fields,completed,gid`
+        `/tasks?project=${PROJECT_ID}&opt_fields=name,completed,gid,custom_fields.gid,custom_fields.date_value,custom_fields.enum_value,custom_fields.multi_enum_values`
       );
       
       if (!response?.data) return [];
@@ -609,9 +609,13 @@
           if (field.gid === FIELD_IDS.clientPhase && field.enum_value) {
             session.status = field.enum_value.name;
             session.statusGid = field.enum_value.gid;
-          } else if (field.gid === FIELD_IDS.sessionDate && field.date_value) {
-            session.sessionDate = field.date_value;
-            session.countdown = calculateCountdown(field.date_value);
+          } else if (field.gid === FIELD_IDS.sessionDate) {
+            // Asana date fields can be: field.date_value.date OR field.date_value (string)
+            const dateValue = field.date_value?.date || field.date_value;
+            if (dateValue) {
+              session.sessionDate = dateValue;
+              session.countdown = calculateCountdown(dateValue);
+            }
           } else if (field.gid === FIELD_IDS.activeStatus && field.enum_value) {
             session.isActive = field.enum_value.gid === ACTIVE_GREEN_GID;
           } else if (field.gid === FIELD_IDS.sessionType && field.multi_enum_values) {
