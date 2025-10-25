@@ -159,6 +159,43 @@
       opacity: 0.8;
     }
     
+    .filter-bar {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .filter-bar::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .filter-select {
+      background: var(--bg-primary);
+      border: 1px solid #333;
+      color: var(--text-primary);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    
+    .filter-select option {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+    
     .list-item {
       background: var(--bg-secondary);
       border-radius: 10px;
@@ -428,6 +465,22 @@
       <h2>Photography Sessions</h2>
       <button class="btn-add" onclick="showAddClient()">+ New</button>
     </div>
+    
+    <div class="filter-bar">
+      <select class="filter-select" id="filter-phase" onchange="applyFilters()">
+        <option value="">All Phases</option>
+      </select>
+      <select class="filter-select" id="filter-type" onchange="applyFilters()">
+        <option value="">All Types</option>
+      </select>
+      <select class="filter-select" id="filter-payment" onchange="applyFilters()">
+        <option value="">All Payments</option>
+        <option value="Paid">Paid</option>
+        <option value="Partial">Partial</option>
+        <option value="Unpaid">Unpaid</option>
+      </select>
+    </div>
+    
     <div id="client-list"></div>
   </div>
   
@@ -477,6 +530,13 @@
     let currentSession = null;
     let phaseOptions = [];
     let asanaToken = localStorage.getItem('asanaToken');
+    
+    // Filter state
+    let currentFilters = {
+      phase: '',
+      type: '',
+      payment: ''
+    };
     
     async function asanaRequest(endpoint, options = {}) {
       if (!asanaToken) {
@@ -651,6 +711,7 @@
     
     function showList() {
       showView('list-view');
+      populateFilterDropdowns();
       renderClientList();
     }
     
@@ -733,15 +794,53 @@
         `Updated ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')} | Tap to manage`;
     }
     
+    function applyFilters() {
+      currentFilters.phase = document.getElementById('filter-phase').value;
+      currentFilters.type = document.getElementById('filter-type').value;
+      currentFilters.payment = document.getElementById('filter-payment').value;
+      
+      renderClientList();
+    }
+    
+    function getFilteredSessions() {
+      return sessions.filter(session => {
+        if (currentFilters.phase && session.status !== currentFilters.phase) {
+          return false;
+        }
+        if (currentFilters.type && session.sessionType !== currentFilters.type) {
+          return false;
+        }
+        if (currentFilters.payment && session.paymentStatus !== currentFilters.payment) {
+          return false;
+        }
+        return true;
+      });
+    }
+    
+    function populateFilterDropdowns() {
+      // Populate phase filter
+      const phaseSelect = document.getElementById('filter-phase');
+      const uniquePhases = [...new Set(sessions.map(s => s.status))];
+      phaseSelect.innerHTML = '<option value="">All Phases</option>' + 
+        uniquePhases.map(phase => `<option value="${phase}">${phase}</option>`).join('');
+      
+      // Populate type filter  
+      const typeSelect = document.getElementById('filter-type');
+      const uniqueTypes = [...new Set(sessions.map(s => s.sessionType))];
+      typeSelect.innerHTML = '<option value="">All Types</option>' + 
+        uniqueTypes.map(type => `<option value="${type}">${type}</option>`).join('');
+    }
+    
     function renderClientList() {
       const container = document.getElementById('client-list');
+      const filteredSessions = getFilteredSessions();
       
-      if (sessions.length === 0) {
-        container.innerHTML = '<div class="loading"><div>No active sessions</div></div>';
+      if (filteredSessions.length === 0) {
+        container.innerHTML = '<div class="loading"><div>No sessions match filters</div></div>';
         return;
       }
       
-      container.innerHTML = sessions.map(session => `
+      container.innerHTML = filteredSessions.map(session => `
         <div class="list-item" onclick="showDetail('${session.gid}')">
           <div class="list-item-left">
             <h3>${session.client}</h3>
