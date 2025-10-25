@@ -715,8 +715,11 @@
     
     function showList() {
       showView('list-view');
-      populateFilterDropdowns();
-      renderClientList();
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        populateFilterDropdowns();
+        renderClientList();
+      }, 50);
     }
     
     async function showDetail(sessionGid) {
