@@ -2,7 +2,7 @@
   "name": "Photography Sessions",
   "short_name": "Sessions",
   "description": "Asana photography session manager",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#1a1a1a",
   "theme_color": "#D4AF37",
