@@ -1,10 +1,11 @@
-const CACHE_NAME = 'sessions-v1';
+const CACHE_NAME = 'session-widget-v1';
 const urlsToCache = [
   '/',
-  '/index.html'
+  '/index.html',
+  '/manifest.json'
 ];
 
-// Install - cache assets
+// Install service worker and cache files
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -13,7 +14,7 @@ self.addEventListener('install', event => {
   );
 });
 
-// Activate - clean old caches
+// Activate service worker and clean up old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -28,48 +29,72 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch - network first, cache fallback
+// Fetch strategy: Network first, fall back to cache
 self.addEventListener('fetch', event => {
-  // Skip Asana API requests from caching
-  if (event.request.url.includes('asana.com')) {
+  const { request } = event;
+  
+  // Skip non-GET requests
+  if (request.method !== 'GET') {
     return;
   }
   
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        // Clone response before caching
-        const responseToCache = response.clone();
-        caches.open(CACHE_NAME)
-          .then(cache => cache.put(event.request, responseToCache));
-        return response;
-      })
-      .catch(() => {
-        // If network fails, try cache
-        return caches.match(event.request);
-      })
-  );
-});
-
-// Push notification handler
-self.addEventListener('push', event => {
-  const options = {
-    body: event.data ? event.data.text() : 'Session update',
-    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" fill="%231a1a1a"/><text x="96" y="130" font-size="80" text-anchor="middle" fill="%23D4AF37" font-family="Arial">📸</text></svg>',
-    badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><circle cx="48" cy="48" r="48" fill="%23D4AF37"/></svg>',
-    vibrate: [200, 100, 200],
-    tag: 'session-notification'
-  };
+  // Network first for API calls
+  if (request.url.includes('asana.com/api')) {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          // Clone and cache successful responses
+          if (response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(request, responseClone);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          // Fall back to cache if network fails
+          return caches.match(request);
+        })
+    );
+    return;
+  }
   
-  event.waitUntil(
-    self.registration.showNotification('Photography Sessions', options)
+  // Cache first for app resources
+  event.respondWith(
+    caches.match(request)
+      .then(response => {
+        if (response) {
+          return response;
+        }
+        return fetch(request).then(response => {
+          if (response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(request, responseClone);
+            });
+          }
+          return response;
+        });
+      })
   );
 });
 
-// Notification click handler
-self.addEventListener('notificationclick', event => {
-  event.notification.close();
-  event.waitUntil(
-    clients.openWindow('/')
-  );
+// Handle background sync for offline task creation
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-tasks') {
+    event.waitUntil(syncTasks());
+  }
+});
+
+async function syncTasks() {
+  // Get pending tasks from IndexedDB (future enhancement)
+  console.log('Syncing offline tasks...');
+}
+
+// Listen for messages from the app
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
