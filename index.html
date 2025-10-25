@@ -568,9 +568,17 @@
     }
     
     function calculateCountdown(dateString) {
+      if (!dateString) return { text: 'No date', days: 999, color: 'var(--text-muted)' };
+      
       const now = new Date();
       now.setHours(0, 0, 0, 0);
       const sessionDate = new Date(dateString);
+      
+      // Check for invalid date
+      if (isNaN(sessionDate.getTime())) {
+        return { text: 'Invalid date', days: 999, color: 'var(--text-muted)' };
+      }
+      
       sessionDate.setHours(0, 0, 0, 0);
       const days = Math.ceil((sessionDate - now) / (1000 * 60 * 60 * 24));
       
@@ -669,7 +677,7 @@
     }
     
     function showAddClient() {
-      showToast('Add client coming in Phase 3');
+      showToast('Quick add coming in Phase 5');
     }
     
     function showTokenModal() {
