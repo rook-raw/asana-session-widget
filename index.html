@@ -481,6 +481,34 @@
       transform: translateX(-50%) translateY(0);
       opacity: 1;
     }
+    
+    .collapsible-section {
+      display: none;
+      animation: slideDown 0.3s ease;
+    }
+    
+    .collapsible-section.expanded {
+      display: block;
+    }
+    
+    @keyframes slideDown {
+      from { opacity: 0; max-height: 0; }
+      to { opacity: 1; max-height: 2000px; }
+    }
+    
+    .toggle-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .toggle-icon {
+      transition: transform 0.3s ease;
+    }
+    
+    .toggle-icon.expanded {
+      transform: rotate(180deg);
+    }
   </style>
 </head>
 <body>
@@ -580,7 +608,97 @@
       </div>
     </div>
     
-    <button class="btn-add" style="width: 100%; margin-bottom: 20px;" onclick="showInquiryNotes()">📋 View Inquiry Notes</button>
+    <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 20px;" onclick="toggleInquiryNotes()">
+      <span>📋 Inquiry Notes</span>
+      <span class="toggle-icon" id="inquiry-toggle">▼</span>
+    </button>
+    
+    <div id="inquiry-section" class="collapsible-section">
+      <!-- Inquiry content will be here -->
+      <div class="section">
+        <div class="section-header">Inquiry Details</div>
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-label">Preferred Date</div>
+            <div class="info-value" id="inquiry-preferred-date" onclick="editTextField('Preferred Date', 'preferredDate', '1211746957812354')">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Preferred City</div>
+            <div class="info-value" id="inquiry-city" onclick="editEnumField('City', 'city', '1211746957812356', [{gid:'1211746957812357',name:'Charleston'},{gid:'1211746957812358',name:'NYC'}])">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Session Location</div>
+            <div class="info-value" id="inquiry-location" onclick="editTextField('Session Location', 'sessionLocation', '1211746958112261')">-</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-header">Creative Direction</div>
+        <div class="info-grid">
+          <div class="info-card full-width">
+            <div class="info-label">Vision</div>
+            <div class="info-value" id="inquiry-vision" onclick="editLongTextField('Vision', 'vision', '1211746958112273')">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Spicy Level (1-10)</div>
+            <div class="info-value" id="inquiry-spicy" onclick="editNumberField('Spicy Level (1-10)', 'spicyLevel', '1211746958112277')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Must Have Photos</div>
+            <div class="info-value" id="inquiry-must-have" onclick="editTextField('Must Have Photos', 'mustHave', '1211746958112279')">-</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-header">Preferences</div>
+        <div class="info-grid">
+          <div class="info-card full-width">
+            <div class="info-label">Location Preference</div>
+            <div class="info-value" id="inquiry-location-pref" onclick="editTextField('Location Preference', 'locationPref', '1211746958112281')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Lighting Preference</div>
+            <div class="info-value" id="inquiry-lighting-pref" onclick="editTextField('Lighting Preference', 'lightingPref', '1211746958112283')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">How Want to Feel</div>
+            <div class="info-value" id="inquiry-how-feel" onclick="editTextField('How Want to Feel', 'howFeel', '1211746958112285')">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Confidence Level (1-10)</div>
+            <div class="info-value" id="inquiry-confidence" onclick="editNumberField('Confidence Level (1-10)', 'confidence', '1211746958112287')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Other Expectations</div>
+            <div class="info-value" id="inquiry-expectations" onclick="editTextField('Other Expectations', 'expectations', '1211746958112289')">-</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-header">Financial</div>
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-label">Budget</div>
+            <div class="info-value" id="inquiry-budget" onclick="editNumberField('Budget', 'budget', '1211746958112305')">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Package Interest</div>
+            <div class="info-value" id="inquiry-package" onclick="editTextField('Package Interest', 'package', '1211746958112293')">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Print Interest</div>
+            <div class="info-value" id="inquiry-prints" onclick="editTextField('Print Interest', 'prints', '1211746958112295')">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Video Interest</div>
+            <div class="info-value" id="inquiry-video" onclick="editTextField('Video Interest', 'video', '1211746958112299')">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
     
     <div class="section">
       <div class="section-header">To-Do</div>
@@ -767,21 +885,7 @@
     
     // State
     let asanaToken = localStorage.getItem('asana_token') || '';
-    let sessions = [
-      {
-        gid: 'mock-123',
-        client: 'Sarah Johnson',
-        status: 'Phase IV - Shoot Day',
-        clientType: '💎 Luxury Client',
-        sessionDate: '2025-11-08',
-        paymentStatus: 'Partial',
-        deliverableStatus: 'Pending',
-        countdown: { text: '14 days', color: '#d4af37' },
-        phone: '843-555-0123',
-        eventName: 'Golden Hour Goddess Session',
-        notes: 'Client wants outdoor natural light with flowing fabrics'
-      }
-    ];
+    let sessions = [];
     let phaseOptions = [];
     let currentSession = null;
     let currentFilters = {
@@ -983,10 +1087,7 @@
       renderPhaseSelector();
     }
     
-    function showInquiryNotes() {
-      showView('inquiry-view');
-      renderInquiryNotes();
-    }
+    
     
     
     
@@ -1204,8 +1305,8 @@
       container.innerHTML = '<div class="loading"><div>Loading sessions...</div></div>';
       
       try {
-        // sessions = await fetchSessions(); // Preview mode - using mock data
-        // await fetchPhaseOptions(); // Preview mode
+        sessions = await fetchSessions();
+        await fetchPhaseOptions();
         
         
         if (sessions.length === 0) {
@@ -1421,12 +1522,19 @@
       document.getElementById('client-name').focus();
     }
     
+    
+    function toggleInquiryNotes() {
+      const section = document.getElementById('inquiry-section');
+      const icon = document.getElementById('inquiry-toggle');
+      section.classList.toggle('expanded');
+      icon.classList.toggle('expanded');
+    }
+    
     async function init() {
-      // Preview mode - skip token check
-      // if (!asanaToken) {
-      //   showTokenModal();
-      //   return;
-      // }
+      if (!asanaToken) {
+        showTokenModal();
+        return;
+      }
       await renderWidget();
     }
     
