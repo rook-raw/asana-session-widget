@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Photography Sessions</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    :root {
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #2a2a2a;
+      --text-primary: #F5F5DC;
+      --gold: #D4AF37;
+      --text-muted: #999999;
+      --critical: #FF4444;
+      --limited: #FF8C00;
+      --available: #7CB342;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+    
+    /* ============ VIEWS ============ */
+    .view {
+      display: none;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    
+    .view.active {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    /* ============ WIDGET VIEW ============ */
+    #widget-view {
+      padding: 20px 16px;
+    }
+    
+    .widget-header {
+      margin-bottom: 16px;
+    }
+    
+    .widget-header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    
+    .widget-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    #widget-sessions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .card {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+    
+    .card:active {
+      transform: scale(0.98);
+      background: #333;
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+    
+    .card-client {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .card-countdown {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    
+    .card-info {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    
+    .card-date {
+      font-size: 14px;
+      color: var(--gold);
+      font-weight: 500;
+    }
+    
+    .widget-footer {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    
+    /* ============ LIST VIEW ============ */
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #333;
+    }
+    
+    .list-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    
+    .btn-add {
+      background: var(--gold);
+      color: var(--bg-primary);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .btn-add:active {
+      opacity: 0.8;
+    }
+    
+    .list-item {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .list-item:active {
+      background: #333;
+    }
+    
+    .list-item-left h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    
+    .list-item-left p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    .list-item-right {
+      text-align: right;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    /* ============ DETAIL VIEW ============ */
+    .detail-header {
+      margin-bottom: 20px;
+    }
+    
+    .back-btn {
+      background: transparent;
+      border: none;
+      color: var(--gold);
+      font-size: 15px;
+      padding: 8px 0;
+      margin-bottom: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .back-btn:active {
+      opacity: 0.7;
+    }
+    
+    .detail-header h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    
+    .detail-header .date {
+      font-size: 14px;
+      color: var(--gold);
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .info-card {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .info-card:active {
+      background: #333;
+    }
+    
+    .info-card.non-tappable {
+      cursor: default;
+    }
+    
+    .info-card.non-tappable:active {
+      background: var(--bg-secondary);
+    }
+    
+    .info-card-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    
+    .info-card-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    
+    .todo-item {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .todo-item:active {
+      background: #333;
+    }
+    
+    /* ============ TOAST ============ */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    
+    /* ============ LOADING ============ */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+    }
+    
+    .spinner {
+      border: 3px solid #333;
+      border-top: 3px solid var(--gold);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- ============ TOAST ============ -->
+  <div class="toast" id="toast"></div>
+  
+  <!-- ============ WIDGET VIEW ============ -->
+  <div class="view active" id="widget-view">
+    <div class="widget-header">
+      <h1>Photography Sessions</h1>
+      <div class="widget-subtitle">Tap to manage</div>
+    </div>
+    <div id="widget-sessions">
+      <div class="loading">
+        <div class="spinner"></div>
+        <div>Loading sessions...</div>
+      </div>
+    </div>
+    <div class="widget-footer" id="widget-footer">
+      Updated --:--
+    </div>
+  </div>
+  
+  <!-- ============ LIST VIEW ============ -->
+  <div class="view" id="list-view">
+    <div class="list-header">
+      <h2>Photography Sessions</h2>
+      <button class="btn-add" onclick="showAddClient()">+ New</button>
+    </div>
+    <div id="client-list"></div>
+  </div>
+  
+  <!-- ============ DETAIL VIEW ============ -->
+  <div class="view" id="detail-view">
+    <div class="detail-header">
+      <button class="back-btn" onclick="backToList()"><- Back to Clients</button>
+      <h2 id="detail-client-name">Client Name</h2>
+      <div class="date" id="detail-session-date">Session Date</div>
+    </div>
+    
+    <div class="info-grid">
+      <div class="info-card" onclick="showPhaseSelector()">
+        <div class="info-card-label">Current Phase</div>
+        <div class="info-card-value" id="detail-phase">Phase</div>
+      </div>
+      <div class="info-card non-tappable">
+        <div class="info-card-label">Payment Status</div>
+        <div class="info-card-value" id="detail-payment">Status</div>
+      </div>
+    </div>
+    
+    <div class="section-title">To-Do Items</div>
+    <div id="detail-todos"></div>
+  </div>
+  
+  <!-- ============ PHASE SELECTOR VIEW ============ -->
+  <div class="view" id="phase-view">
+    <div class="detail-header">
+      <button class="back-btn" onclick="backToDetail()"><- Back</button>
+      <h2>Select Phase</h2>
+      <div class="date" id="phase-client-name">Client Name</div>
+    </div>
+    <div id="phase-list"></div>
+  </div>
+  
+  <script>
+    // ============ CONSTANTS ============
+    const ASANA_TOKEN = "YOUR_TOKEN_HERE"; // Replace with your token
+    const PROJECT_ID = "1211733193402684";
+    
+    const FIELD_IDS = {
+      clientPhase: "1211735634914711",
+      sessionDate: "1211732464258476",
+      activeStatus: "1211735138096716",
+      sessionType: "1211733359641772",
+      paymentStatus: "1211733390060955"
+    };
+    
+    const ACTIVE_GREEN_GID = "1211735138096720";
+    
+    // ============ STATE ============
+    let sessions = [];
+    let currentSession = null;
+    
+    // ============ NAVIGATION ============
+    function showView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
+    }
+    
+    function showList() {
+      showView('list-view');
+      renderClientList();
+    }
+    
+    function showDetail(sessionGid) {
+      currentSession = sessions.find(s => s.gid === sessionGid);
+      showView('detail-view');
+      renderClientDetail();
+    }
+    
+    function showPhaseSelector() {
+      showView('phase-view');
+      renderPhaseSelector();
+    }
+    
+    function backToList() {
+      showList();
+    }
+    
+    function backToDetail() {
+      showView('detail-view');
+    }
+    
+    function showAddClient() {
+      showToast('Add client feature coming in Phase 3');
+    }
+    
+    // ============ TOAST ============
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+    
+    // ============ RENDER FUNCTIONS ============
+    function renderWidget() {
+      // Mock data for Phase 1
+      const mockSessions = [
+        {
+          gid: '1',
+          client: 'Sarah Johnson',
+          sessionType: 'Goddess Session',
+          sessionDate: '2025-10-27',
+          status: 'Phase IV - Shoot Day',
+          countdown: { text: '2 days', color: 'var(--critical)', days: 2 }
+        },
+        {
+          gid: '2',
+          client: 'Emma Williams',
+          sessionType: 'Editorial Fashion',
+          sessionDate: '2025-11-03',
+          status: 'Phase III - Planning',
+          countdown: { text: '9 days', color: 'var(--available)', days: 9 }
+        },
+        {
+          gid: '3',
+          client: 'Olivia Davis',
+          sessionType: 'Beauty Photography',
+          sessionDate: '2025-10-30',
+          status: 'Phase III - Planning',
+          countdown: { text: '5 days', color: 'var(--limited)', days: 5 }
+        }
+      ];
+      
+      sessions = mockSessions;
+      
+      const container = document.getElementById('widget-sessions');
+      container.innerHTML = mockSessions.map(session => `
+        <div class="card" onclick="showDetail('${session.gid}')">
+          <div class="card-header">
+            <div class="card-client">${session.client}</div>
+            <div class="card-countdown" style="background: ${session.countdown.color}; color: #fff;">
+              ${session.countdown.text}
+            </div>
+          </div>
+          <div class="card-info">${session.sessionType} | ${session.status}</div>
+          <div class="card-date">${formatDate(session.sessionDate)}</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">
+            [${session.countdown.days}] days until Session
+          </div>
+        </div>
+      `).join('');
+      
+      const now = new Date();
+      document.getElementById('widget-footer').textContent = 
+        `Updated ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')} | Tap to manage`;
+    }
+    
+    function renderClientList() {
+      const container = document.getElementById('client-list');
+      container.innerHTML = sessions.map(session => `
+        <div class="list-item" onclick="showDetail('${session.gid}')">
+          <div class="list-item-left">
+            <h3>${session.client}</h3>
+            <p>${session.sessionType} | ${session.status}</p>
+          </div>
+          <div class="list-item-right" style="color: ${session.countdown.color}">
+            ${session.countdown.text}
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function renderClientDetail() {
+      if (!currentSession) return;
+      
+      document.getElementById('detail-client-name').textContent = currentSession.client;
+      document.getElementById('detail-session-date').textContent = formatDate(currentSession.sessionDate);
+      document.getElementById('detail-phase').textContent = currentSession.status;
+      document.getElementById('detail-payment').textContent = 'Paid'; // Mock data
+      
+      // Mock todos
+      const mockTodos = [
+        'Send welcome email',
+        'Schedule pre-session call',
+        'Create shot list',
+        'Prepare equipment'
+      ];
+      
+      const todosContainer = document.getElementById('detail-todos');
+      todosContainer.innerHTML = mockTodos.map(todo => `
+        <div class="todo-item" onclick="completeTodo('${todo}')">
+          [ ] ${todo}
+        </div>
+      `).join('');
+    }
+    
+    function renderPhaseSelector() {
+      const mockPhases = [
+        'Phase I - Inquiry',
+        'Phase II - Discovery',
+        'Phase III - Planning',
+        'Phase IV - Shoot Day',
+        'Phase V - Post-Production',
+        'Phase VI - Archiving'
+      ];
+      
+      const container = document.getElementById('phase-list');
+      document.getElementById('phase-client-name').textContent = currentSession?.client || 'Client';
+      
+      const currentPhase = currentSession?.status || '';
+      
+      container.innerHTML = mockPhases.map(phase => {
+        const isCurrent = phase === currentPhase;
+        return `
+          <div class="list-item" onclick="updatePhase('${phase}')">
+            <div class="list-item-left">
+              <h3 style="color: ${isCurrent ? 'var(--gold)' : 'var(--text-primary)'}">
+                ${isCurrent ? '[*] ' : ''}${phase}
+              </h3>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function completeTodo(todoName) {
+      showToast(`Completed: ${todoName}`);
+      setTimeout(renderClientDetail, 300);
+    }
+    
+    function updatePhase(phase) {
+      if (currentSession) {
+        currentSession.status = phase;
+        showToast(`Updated phase to: ${phase}`);
+        setTimeout(backToDetail, 300);
+      }
+    }
+    
+    // ============ UTILITIES ============
+    function formatDate(dateString) {
+      if (!dateString) return 'No date set';
+      const date = new Date(dateString);
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return `${days[date.getDay()]}, ${months[date.getMonth()]} ${date.getDate()}`;
+    }
+    
+    // ============ INIT ============
+    // Make widget cards clickable to show list
+    document.getElementById('widget-sessions').addEventListener('click', (e) => {
+      if (!e.target.closest('.card')) {
+        showList();
+      }
+    });
+    
+    // Initial render
+    renderWidget();
+  </script>
+</body>
+</html>
