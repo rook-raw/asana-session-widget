@@ -1493,6 +1493,11 @@ const dateInput = document.getElementById('discovery-date-input').value;
       const hours = document.getElementById('discovery-duration-hours').value;
 const minutes = document.getElementById('discovery-duration-minutes').value;
 const duration = `${hours}h ${minutes}m`;
+      const timeOnly = dateInput.split('T')[1];
+const [hrs, mins] = timeOnly.split(':');
+const hour12 = hrs % 12 || 12;
+const ampm = hrs >= 12 ? 'PM' : 'AM';
+const formattedTime = `${hour12}:${mins} ${ampm}`;
       if (!dateInput) {
         showToast('Please select a date and time');
         return;
@@ -1500,7 +1505,7 @@ const duration = `${hours}h ${minutes}m`;
       
       // Convert datetime-local format (YYYY-MM-DDTHH:MM) to just date (YYYY-MM-DD)
       // Asana date fields only accept YYYY-MM-DD format
-const dateOnly = new Date(dateInput).toISOString();      
+const dateOnly = dateInput.split('T')[0];
       console.log('Discovery Call - Converting datetime:', {
         originalInput: dateInput,
         convertedDate: dateOnly
@@ -1510,7 +1515,8 @@ const dateOnly = new Date(dateInput).toISOString();
       // Field ID: 1211733488948188 (from your IDs doc)
       try {
         await updateTaskCustomField(currentSession.gid, '1211733488948188', dateOnly);
-await updateTaskCustomField(currentSession.gid, '1211733488948188', {date_time: isoDateTime});
+await updateTaskCustomField(currentSession.gid, '1211748802050313', duration);
+await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTime);
         showToast('Discovery call scheduled! Calendar sync via Zapier.');
         closeDiscoveryCallModal();
         setTimeout(renderClientDetail, 300);
