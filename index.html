@@ -1347,8 +1347,7 @@
       // Fallback to ENUM_OPTIONS if options not provided
       const opts = options || ENUM_OPTIONS[fieldId] || [];
       
-      const selectHTML = '<select id="edit-select" class="filter-select" style="width: 100%; margin: 8px 0;">' +
-        `<option value="">Select ${label}</option>` +
+const selectHTML = '<select id="edit-select" class="filter-select" style="width: 100%; margin: 8px 0;" onclick="event.stopPropagation()">' +        `<option value="">Select ${label}</option>` +
         opts.map(opt => `<option value="${opt.gid}" ${opt.name === currentValue ? 'selected' : ''}>${opt.name}</option>`).join('') +
         `</select><button onclick="saveEnumField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
       const targetEl = document.getElementById(`detail-${field}`) || document.getElementById(`inquiry-${field}`);
