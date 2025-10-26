@@ -552,7 +552,7 @@
   
   <!-- Detail View -->
   <div id="detail-view" class="view">
-    <button class="back-btn" onclick="showWidget()">← Back</button>
+    <button class="back-btn" onclick="showWidget()">â† Back</button>
     
     <div class="detail-header">
       <h2 id="detail-client-name">Client Name</h2>
@@ -580,12 +580,12 @@
     
     <div id="discovery-call-container" style="display: none; margin-bottom: 12px;">
       <button class="btn-add" style="width: 100%;" onclick="scheduleDiscoveryCall()">
-        📞 Schedule Discovery Call
+        ðŸ“ž Schedule Discovery Call
       </button>
     </div>
     <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('client-profile')">
-      <span>👤 Client Profile</span>
-      <span class="toggle-icon" id="client-profile-toggle">▼</span>
+      <span>ðŸ‘¤ Client Profile</span>
+      <span class="toggle-icon" id="client-profile-toggle">â–¼</span>
     </button>
     
     <div id="client-profile-section" class="collapsible-content">
@@ -633,8 +633,8 @@
     </div>
     
     <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 20px;" onclick="toggleInquiryNotes()">
-      <span>📋 Inquiry Notes</span>
-      <span class="toggle-icon" id="inquiry-toggle">▼</span>
+      <span>ðŸ“‹ Inquiry Notes</span>
+      <span class="toggle-icon" id="inquiry-toggle">â–¼</span>
     </button>
     
     <div id="inquiry-section" class="collapsible-content">
@@ -725,8 +725,8 @@
     </div>
     
     <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('todo')">
-      <span>✓ To-Do</span>
-      <span class="toggle-icon" id="todo-toggle">▼</span>
+      <span>âœ“ To-Do</span>
+      <span class="toggle-icon" id="todo-toggle">â–¼</span>
     </button>
     
     <div id="todo-section" class="collapsible-content">
@@ -737,8 +737,8 @@
     </div>
     
     <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('completed')">
-      <span>✓ Completed</span>
-      <span class="toggle-icon" id="completed-toggle">▼</span>
+      <span>âœ“ Completed</span>
+      <span class="toggle-icon" id="completed-toggle">â–¼</span>
     </button>
     
     <div id="completed-section" class="collapsible-content">
@@ -751,10 +751,10 @@
   
   <!-- Inquiry Notes View -->
   <div id="inquiry-view" class="view">
-    <button class="back-btn" onclick="backToDetail()">← Back to Client</button>
+    <button class="back-btn" onclick="backToDetail()">â† Back to Client</button>
     
     <div class="detail-header">
-      <h2>📋 Inquiry Notes</h2>
+      <h2>ðŸ“‹ Inquiry Notes</h2>
       <div class="date" id="inquiry-client-name">Client Name</div>
     </div>
     
@@ -845,7 +845,7 @@
   
   <!-- Phase Selector View -->
   <div id="phase-view" class="view">
-    <button class="back-btn" onclick="backToDetail()">← Back</button>
+    <button class="back-btn" onclick="backToDetail()">â† Back</button>
     
     <div class="detail-header">
       <h2>Select Phase</h2>
@@ -949,7 +949,7 @@
       return data.data
         .filter(task => {
           const activeStatus = task.custom_fields.find(f => f.gid === ACTIVE_STATUS_FIELD_ID);
-          return !activeStatus || activeStatus.enum_value?.name !== '🔴';
+          return !activeStatus || activeStatus.enum_value?.name !== 'ðŸ”´';
         })
         .map(task => {
           const getField = (id) => task.custom_fields.find(f => f.gid === id);
@@ -1112,7 +1112,6 @@
         showToast('Error: ' + error.message);
         throw error;
       }
-    }
     }
     
     async function createNewClient(name) {
@@ -1569,7 +1568,7 @@
       } else {
         completedContainer.innerHTML = completedTodos.map(todo => `
           <div class="todo-item completed" style="opacity: 0.6;" onclick="uncompleteTodo('${todo.gid}')">
-            [✓] ${todo.name}
+            [âœ“] ${todo.name}
           </div>
         `).join('');
       }
