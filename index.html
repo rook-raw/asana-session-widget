@@ -947,7 +947,35 @@
       prints: '1211746958112295',
       video: '1211746958112299'
     };
-    
+    // Enum field options
+    const ENUM_OPTIONS = {
+      '1211747518670337': [ // Concept Style
+        {gid: '1211747518670340', name: 'Anything really, I give you full creative control'},
+        {gid: '1211747518670341', name: 'Goddess [healing, empowering, flowy, usually at the beach]'},
+        {gid: '1211747518670342', name: 'Swim - Vintage Glam Editorials'},
+        {gid: '1211747518670343', name: 'The Celestials [Mystical angel theme]'},
+        {gid: '1211747518670344', name: 'Wanderlust [nostalgic, cinematic, warm, naturey]'},
+        {gid: '1211747518670345', name: 'Dreamland [editorial, surreal & dreamy, usually with use of props]'},
+        {gid: '1211747518670346', name: 'Siren [Underwater]'},
+        {gid: '1211747518670347', name: 'Lethal Woman Energy [night-out fashion, in-your-face]'},
+        {gid: '1211747518670348', name: 'Lofi [low light, grainy, rich colors]'},
+        {gid: '1211747518670349', name: 'Fairycore [fairy fashion]'},
+        {gid: '1211747518670350', name: 'Earth Angels [editorial angel theme]'},
+        {gid: '1211747518670351', name: 'Street [LA/NYC street fashion]'},
+        {gid: '1211747518670352', name: 'Neo Punk [Futuristic]'}
+      ]
+      ,
+      '1211746958112263': [ // Session Type
+        {gid: '1211746958112264', name: 'A Personal Photoshoot'},
+        {gid: '1211746958112265', name: 'Model Test Shoot'},
+        {gid: '1211746958112266', name: 'Vintage Glam Swimwear Session'},
+        {gid: '1211746958112267', name: 'Commercial Photos for my business or brand'},
+        {gid: '1211746958112268', name: 'Senior Photos'},
+        {gid: '1211746958112269', name: 'Maternity'},
+        {gid: '1211746958112270', name: 'Headshots'},
+        {gid: '1211746958112271', name: "Couple's Session"}
+      ]
+    };
     // State
     let asanaToken = localStorage.getItem('asana_token') || '';
     let sessions = [];
@@ -1312,15 +1340,19 @@
       document.getElementById('edit-input').focus();
     }
     
-    function editEnumField(label, field, fieldId, options) {
+   function editEnumField(label, field, fieldId, options) {
       if (!currentSession) return;
       const currentValue = currentSession[field] || '';
+      
+      // Fallback to ENUM_OPTIONS if options not provided
+      const opts = options || ENUM_OPTIONS[fieldId] || [];
+      
       const selectHTML = '<select id="edit-select" class="filter-select" style="width: 100%; margin: 8px 0;">' +
         `<option value="">Select ${label}</option>` +
-        options.map(opt => `<option value="${opt.gid}" ${opt.name === currentValue ? 'selected' : ''}>${opt.name}</option>`).join('') +
+        opts.map(opt => `<option value="${opt.gid}" ${opt.name === currentValue ? 'selected' : ''}>${opt.name}</option>`).join('') +
         `</select><button onclick="saveEnumField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
-const targetEl = document.getElementById(`detail-${field}`) || document.getElementById(`inquiry-${field}`);
-if (targetEl) targetEl.innerHTML = selectHTML;    
+      const targetEl = document.getElementById(`detail-${field}`) || document.getElementById(`inquiry-${field}`);
+      if (targetEl) targetEl.innerHTML = selectHTML;
     }
     
     async function saveTextField(field, fieldId) {
