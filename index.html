@@ -647,12 +647,10 @@
         </div>
         <div class="info-card">
           <div class="info-label">Session Type</div>
-          <div class="info-value" id="detail-sessionType">-</div>
-        </div>
+<div class="info-value" id="detail-sessionType" onclick="editTextField('Session Type', 'sessionType', '1211746958112263')">-</div>        </div>
         <div class="info-card full-width">
           <div class="info-label">Concept Style</div>
-          <div class="info-value" id="detail-conceptStyle">-</div>
-        </div>
+<div class="info-value" id="detail-conceptStyle" onclick="editEnumField('Concept Style', 'conceptStyle', '1211747518670337')">-</div>        </div>
         <div class="info-card">
           <div class="info-label">Creative Level</div>
           <div class="info-value" id="detail-creativeLevel" onclick="editNumberField('Creative Level (1-10)', 'creativeLevel', '1211746958112275')">-</div>
@@ -1321,7 +1319,8 @@
         `<option value="">Select ${label}</option>` +
         options.map(opt => `<option value="${opt.gid}" ${opt.name === currentValue ? 'selected' : ''}>${opt.name}</option>`).join('') +
         `</select><button onclick="saveEnumField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
-      document.getElementById(`inquiry-${field}`).innerHTML = selectHTML;
+const targetEl = document.getElementById(`detail-${field}`) || document.getElementById(`inquiry-${field}`);
+if (targetEl) targetEl.innerHTML = selectHTML;    
     }
     
     async function saveTextField(field, fieldId) {
@@ -1602,7 +1601,7 @@
       }
       
       document.getElementById('detail-client-type').textContent = currentSession.clientType || '-';
-      document.getElementById('detail-session-type').textContent = currentSession.sessionType || '-';
+      document.getElementById('detail-sessionType').textContent = currentSession.sessionType || '-';
       document.getElementById('detail-concept-style').textContent = currentSession.conceptStyle || '-';
       document.getElementById('detail-creative-level').textContent = currentSession.creativeLevel || '-';
       
