@@ -327,6 +327,16 @@
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
     
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    
+    .full-width {
+      grid-column: 1 / -1;
+    }
+    
     .info-label {
       font-size: 9px;
       color: var(--text-secondary);
@@ -414,6 +424,25 @@
       border-radius: 2px;
       font-size: 13px;
       font-family: inherit;
+    }
+    
+    .form-textarea {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 12px;
+      border-radius: 2px;
+      font-size: 13px;
+      font-family: inherit;
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .toggle-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     
     .toast {
@@ -706,7 +735,7 @@
         <div class="info-grid">
           <div class="info-card">
             <div class="info-label">Budget</div>
-            <div class="info-value" id="inquiry-budget" onclick="editNumberField('Budget', 'budget', '1211746958112305')">-</div>
+            <div class="info-value" id="inquiry-budget" onclick="editTextField('Budget', 'budget', '1211746958112305')">-</div>
           </div>
           <div class="info-card">
             <div class="info-label">Package Interest</div>
@@ -1007,12 +1036,12 @@
     }
     
     function getCountdown(days) {
-      if (days === null) return { text: 'No date', color: 'var(--text-muted)' };
-      if (days < 0) return { text: `${Math.abs(days)}d ago`, color: 'var(--text-muted)' };
-      if (days === 0) return { text: 'TODAY', color: 'var(--critical)' };
-      if (days <= 3) return { text: `${days}d`, color: 'var(--critical)' };
-      if (days <= 14) return { text: `${days}d`, color: 'var(--limited)' };
-      return { text: `${days}d`, color: 'var(--available)' };
+      if (days === null) return { text: 'No date', color: 'var(--text-secondary)', bg: 'transparent' };
+      if (days < 0) return { text: `${Math.abs(days)}d ago`, color: 'var(--text-secondary)', bg: 'transparent' };
+      if (days === 0) return { text: 'TODAY', color: '#fff', bg: 'var(--critical)' };
+      if (days <= 3) return { text: `${days}d`, color: '#fff', bg: 'var(--critical)' };
+      if (days <= 14) return { text: `${days}d`, color: '#000', bg: 'var(--limited)' };
+      return { text: `${days}d`, color: '#000', bg: 'var(--available)' };
     }
     
     async function fetchPhaseOptions() {
@@ -1352,7 +1381,8 @@
     
     async function saveDate() {
       const newDate = document.getElementById('date-input').value;
-      await updateTaskCustomField(currentSession.gid, '1211732464258476', newDate);
+      // Asana expects date fields in object format: {"date": "YYYY-MM-DD"}
+      await updateTaskCustomField(currentSession.gid, '1211732464258476', newDate ? { date: newDate } : null);
       currentSession.sessionDate = newDate;
       showToast('Date updated');
       const container = document.getElementById('detail-date-edit');
