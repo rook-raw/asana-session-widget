@@ -1500,8 +1500,7 @@ const duration = `${hours}h ${minutes}m`;
       
       // Convert datetime-local format (YYYY-MM-DDTHH:MM) to just date (YYYY-MM-DD)
       // Asana date fields only accept YYYY-MM-DD format
-      const dateOnly = dateInput.split('T')[0];
-      
+const dateOnly = new Date(dateInput).toISOString();      
       console.log('Discovery Call - Converting datetime:', {
         originalInput: dateInput,
         convertedDate: dateOnly
