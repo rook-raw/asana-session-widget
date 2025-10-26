@@ -598,7 +598,7 @@
         </div>
         <div class="info-card">
           <div class="info-label">Phone</div>
-          <div class="info-value" id="detail-phone" onclick="editTextField('Phone', 'phone', '1211746958112303')">-</div>
+          <div class="info-value" id="detail-phone" onclick="editTextField('Phone', 'phone', '1211735850304067')">-</div>
         </div>
         <div class="info-card">
           <div class="info-label">Instagram</div>
@@ -1074,14 +1074,33 @@
         }
       };
       
-      await fetch(proxyUrl(`/tasks/${taskGid}`), {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${asanaToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
+      console.log('📤 Updating Asana field:', { taskGid, fieldGid, value, data });
+      
+      try {
+        const response = await fetch(proxyUrl(`/tasks/${taskGid}`), {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${asanaToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+          console.error('❌ Asana API Error:', response.status, result);
+          showToast(`Error: ${result.errors?.[0]?.message || 'Update failed'}`);
+          throw new Error(`API Error: ${response.status}`);
+        }
+        
+        console.log('✅ Asana update successful:', result);
+        return result;
+      } catch (error) {
+        console.error('❌ Update failed:', error);
+        showToast('Update failed - check console for details');
+        throw error;
+      }
     }
     
     async function createNewClient(name) {
