@@ -598,7 +598,7 @@
         </div>
         <div class="info-card">
           <div class="info-label">Phone</div>
-          <div class="info-value" id="detail-phone" onclick="editTextField('Phone', 'phone', '1211735850304067')">-</div>
+          <div class="info-value" id="detail-phone" onclick="editTextField('Phone', 'phone', '1211746958112303')">-</div>
         </div>
         <div class="info-card">
           <div class="info-label">Instagram</div>
@@ -1074,7 +1074,12 @@
         }
       };
       
-      console.log('📤 Updating Asana field:', { taskGid, fieldGid, value, data });
+      console.log('Updating Asana field:', {
+        taskGid,
+        fieldGid,
+        value,
+        requestBody: JSON.stringify(data, null, 2)
+      });
       
       try {
         const response = await fetch(proxyUrl(`/tasks/${taskGid}`), {
@@ -1086,21 +1091,28 @@
           body: JSON.stringify(data)
         });
         
-        const result = await response.json();
-        
         if (!response.ok) {
-          console.error('❌ Asana API Error:', response.status, result);
-          showToast(`Error: ${result.errors?.[0]?.message || 'Update failed'}`);
-          throw new Error(`API Error: ${response.status}`);
+          const errorText = await response.text();
+          console.error('Asana API Error:', response.status, errorText);
+          let errorObj;
+          try {
+            errorObj = JSON.parse(errorText);
+            console.error('Parsed error:', JSON.stringify(errorObj, null, 2));
+          } catch (e) {
+            console.error('Raw error:', errorText);
+          }
+          throw new Error(`API Error: ${response.status} - ${errorText}`);
         }
         
-        console.log('✅ Asana update successful:', result);
+        const result = await response.json();
+        console.log('Update successful:', result);
         return result;
       } catch (error) {
-        console.error('❌ Update failed:', error);
-        showToast('Update failed - check console for details');
+        console.error('Update failed:', error);
+        showToast('Error: ' + error.message);
         throw error;
       }
+    }
     }
     
     async function createNewClient(name) {
@@ -1375,13 +1387,25 @@
         return;
       }
       
+      // Convert datetime-local format (YYYY-MM-DDTHH:MM) to just date (YYYY-MM-DD)
+      // Asana date fields only accept YYYY-MM-DD format
+      const dateOnly = dateInput.split('T')[0];
+      
+      console.log('Discovery Call - Converting datetime:', {
+        originalInput: dateInput,
+        convertedDate: dateOnly
+      });
+      
       // Update Discovery Call Date custom field in Asana
       // Field ID: 1211733488948188 (from your IDs doc)
-      await updateTaskCustomField(currentSession.gid, '1211733488948188', dateInput);
-      
-      showToast('Discovery call scheduled! Calendar sync via Zapier.');
-      closeDiscoveryCallModal();
-      setTimeout(renderClientDetail, 300);
+      try {
+        await updateTaskCustomField(currentSession.gid, '1211733488948188', dateOnly);
+        showToast('Discovery call scheduled! Calendar sync via Zapier.');
+        closeDiscoveryCallModal();
+        setTimeout(renderClientDetail, 300);
+      } catch (error) {
+        console.error('Failed to save discovery call:', error);
+      }
     }
     
     function closeDiscoveryCallModal() {
