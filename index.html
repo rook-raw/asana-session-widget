@@ -577,12 +577,18 @@
       </div>
     </div>
     
+    
+    <div id="discovery-call-container" style="display: none; margin-bottom: 12px;">
+      <button class="btn-add" style="width: 100%;" onclick="scheduleDiscoveryCall()">
+        📞 Schedule Discovery Call
+      </button>
+    </div>
     <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('client-profile')">
       <span>👤 Client Profile</span>
       <span class="toggle-icon" id="client-profile-toggle">▼</span>
     </button>
     
-    <div id="client-profile-section" class="collapsible-section">
+    <div id="client-profile-section" class="collapsible-content">
       <div class="section">
         <div class="section-header">Client Profile</div>
         <div class="info-grid">
@@ -631,7 +637,7 @@
       <span class="toggle-icon" id="inquiry-toggle">▼</span>
     </button>
     
-    <div id="inquiry-section" class="collapsible-section">
+    <div id="inquiry-section" class="collapsible-content">
       <!-- Inquiry content will be here -->
       <div class="section">
         <div class="section-header">Inquiry Details</div>
@@ -723,7 +729,7 @@
       <span class="toggle-icon" id="todo-toggle">▼</span>
     </button>
     
-    <div id="todo-section" class="collapsible-section">
+    <div id="todo-section" class="collapsible-content">
       <div class="section">
         <div class="section-header">To-Do</div>
         <div id="detail-todos"></div>
@@ -735,7 +741,7 @@
       <span class="toggle-icon" id="completed-toggle">▼</span>
     </button>
     
-    <div id="completed-section" class="collapsible-section">
+    <div id="completed-section" class="collapsible-content">
       <div class="section">
         <div class="section-header">Completed</div>
         <div id="detail-completed"></div>
@@ -1149,7 +1155,7 @@
         asanaToken = token;
         localStorage.setItem('asana_token', token);
         document.getElementById('token-modal').classList.remove('active');
-    document.addEventListener('DOMContentLoaded', init);
+        init();
       }
     }
     
@@ -1324,6 +1330,46 @@
       container.onclick = editDate; // Restore onclick
       document.getElementById('detail-session-date').textContent = formatDate(newDate);
     }
+
+    async function scheduleDiscoveryCall() {
+      if (!currentSession) return;
+      const currentDate = '';
+      const container = document.createElement('div');
+      container.innerHTML = `
+        <div style="padding: 20px; background: var(--bg-card); border-radius: 8px; margin-bottom: 12px;">
+          <h3 style="color: var(--gold); margin-bottom: 12px;">Schedule Discovery Call</h3>
+          <input type="datetime-local" id="discovery-date-input" class="form-input" style="width: 100%; margin-bottom: 12px;" value="${currentDate}">
+          <button onclick="saveDiscoveryCall()" class="btn-add" style="width: 100%; margin-bottom: 8px;">Save & Add to Calendar</button>
+          <button onclick="closeDiscoveryCallModal()" class="btn-add" style="width: 100%; background: transparent; border: 1px solid var(--border);">Cancel</button>
+          <p style="color: var(--text-secondary); font-size: 12px; margin-top: 12px;">Note: Calendar integration via Zapier (auto-syncs to Google Calendar)</p>
+        </div>
+      `;
+      const discoveryContainer = document.getElementById('discovery-call-container');
+      discoveryContainer.insertAdjacentElement('afterend', container);
+      container.id = 'discovery-modal-temp';
+    }
+    
+    async function saveDiscoveryCall() {
+      const dateInput = document.getElementById('discovery-date-input').value;
+      if (!dateInput) {
+        showToast('Please select a date and time');
+        return;
+      }
+      
+      // Update Discovery Call Date custom field in Asana
+      // Field ID: 1211733488948188 (from your IDs doc)
+      await updateTaskCustomField(currentSession.gid, '1211733488948188', dateInput);
+      
+      showToast('Discovery call scheduled! Calendar sync via Zapier.');
+      closeDiscoveryCallModal();
+      setTimeout(renderClientDetail, 300);
+    }
+    
+    function closeDiscoveryCallModal() {
+      const modal = document.getElementById('discovery-modal-temp');
+      if (modal) modal.remove();
+    }
+
     
     async function uncompleteTodo(todoGid) {
       await fetch(`https://d.rook-bb4.workers.dev?path=/tasks/${todoGid}`, {
@@ -1416,6 +1462,15 @@
       document.getElementById('detail-phase').textContent = currentSession.status;
       document.getElementById('detail-payment').textContent = currentSession.paymentStatus;
       document.getElementById('detail-date-edit').textContent = formatDate(currentSession.sessionDate);
+      
+      // Show/hide Discovery Call button (only for Phase I & II)
+      const discoveryContainer = document.getElementById('discovery-call-container');
+      const phaseText = currentSession.status || '';
+      if (phaseText.includes('Phase I') || phaseText.includes('Phase II')) {
+        discoveryContainer.style.display = 'block';
+      } else {
+        discoveryContainer.style.display = 'none';
+      }
       
       // Profile fields
       document.getElementById('detail-email').textContent = currentSession.email || '-';
