@@ -1463,6 +1463,21 @@ if (targetEl) targetEl.textContent = name || '-';
         <div style="padding: 20px; background: var(--bg-card); border-radius: 8px; margin-bottom: 12px;">
           <h3 style="color: var(--gold); margin-bottom: 12px;">Schedule Discovery Call</h3>
           <input type="datetime-local" id="discovery-date-input" class="form-input" style="width: 100%; margin-bottom: 12px;" value="${currentDate}">
+          <div style="margin-top: 12px;">
+  <label style="color: var(--gold); display: block; margin-bottom: 6px;">Duration</label>
+  <select id="discovery-duration-hours" style="width: 80px; margin-right: 8px;">
+    <option>0</option>
+    <option selected>1</option>
+    <option>2</option>
+    <option>3</option>
+  </select> hrs
+  <select id="discovery-duration-minutes" style="width: 80px; margin-left: 12px;">
+    <option selected>0</option>
+    <option>15</option>
+    <option>30</option>
+    <option>45</option>
+  </select> min
+</div>
           <button onclick="saveDiscoveryCall()" class="btn-add" style="width: 100%; margin-bottom: 8px;">Save & Add to Calendar</button>
           <button onclick="closeDiscoveryCallModal()" class="btn-add" style="width: 100%; background: transparent; border: 1px solid var(--border);">Cancel</button>
           <p style="color: var(--text-secondary); font-size: 12px; margin-top: 12px;">Note: Calendar integration via Zapier (auto-syncs to Google Calendar)</p>
@@ -1474,7 +1489,10 @@ if (targetEl) targetEl.textContent = name || '-';
     }
     
     async function saveDiscoveryCall() {
-      const dateInput = document.getElementById('discovery-date-input').value;
+const dateInput = document.getElementById('discovery-date-input').value;
+      const hours = document.getElementById('discovery-duration-hours').value;
+const minutes = document.getElementById('discovery-duration-minutes').value;
+const duration = `${hours}h ${minutes}m`;
       if (!dateInput) {
         showToast('Please select a date and time');
         return;
@@ -1493,6 +1511,7 @@ if (targetEl) targetEl.textContent = name || '-';
       // Field ID: 1211733488948188 (from your IDs doc)
       try {
         await updateTaskCustomField(currentSession.gid, '1211733488948188', dateOnly);
+        await updateTaskCustomField(currentSession.gid, '1211748802050313', duration);
         showToast('Discovery call scheduled! Calendar sync via Zapier.');
         closeDiscoveryCallModal();
         setTimeout(renderClientDetail, 300);
