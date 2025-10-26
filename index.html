@@ -1272,8 +1272,18 @@
       if (!currentSession) return;
       const currentValue = currentSession[field] || '';
       const inputHTML = `<input type="text" id="edit-input" class="form-input" style="width: 100%; margin: 8px 0;" value="${currentValue}" placeholder="Enter ${label}"><button onclick="saveTextField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
-      const targetId = document.getElementById(`detail-${field}`) ? `detail-${field}` : `inquiry-${field}`;
-      document.getElementById(targetId).innerHTML = inputHTML;
+      
+      // Check which element exists (detail vs inquiry)
+      const detailEl = document.getElementById(`detail-${field}`);
+      const inquiryEl = document.getElementById(`inquiry-${field}`);
+      const targetEl = detailEl || inquiryEl;
+      
+      if (!targetEl) {
+        console.error(`Neither detail-${field} nor inquiry-${field} element found`);
+        return;
+      }
+      
+      targetEl.innerHTML = inputHTML;
       document.getElementById('edit-input').focus();
     }
     
@@ -1289,8 +1299,18 @@
       if (!currentSession) return;
       const currentValue = currentSession[field] || '';
       const inputHTML = `<input type="number" id="edit-input" class="form-input" style="width: 100%; margin: 8px 0;" value="${currentValue}" placeholder="Enter ${label}"><button onclick="saveNumberField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
-      const targetId = document.getElementById(`detail-${field}`) ? `detail-${field}` : `inquiry-${field}`;
-      document.getElementById(targetId).innerHTML = inputHTML;
+      
+      // Check which element exists (detail vs inquiry)
+      const detailEl = document.getElementById(`detail-${field}`);
+      const inquiryEl = document.getElementById(`inquiry-${field}`);
+      const targetEl = detailEl || inquiryEl;
+      
+      if (!targetEl) {
+        console.error(`Neither detail-${field} nor inquiry-${field} element found`);
+        return;
+      }
+      
+      targetEl.innerHTML = inputHTML;
       document.getElementById('edit-input').focus();
     }
     
@@ -1310,8 +1330,14 @@
       currentSession[field] = value;
       showToast('Updated');
       
-      const targetId = document.getElementById(`detail-${field}`) ? `detail-${field}` : `inquiry-${field}`;
-      document.getElementById(targetId).textContent = value || '-';
+      // Check which element exists (detail vs inquiry)
+      const detailEl = document.getElementById(`detail-${field}`);
+      const inquiryEl = document.getElementById(`inquiry-${field}`);
+      const targetEl = detailEl || inquiryEl;
+      
+      if (targetEl) {
+        targetEl.textContent = value || '-';
+      }
     }
     
     async function saveNumberField(field, fieldId) {
@@ -1320,8 +1346,14 @@
       currentSession[field] = value;
       showToast('Updated');
       
-      const targetId = document.getElementById(`detail-${field}`) ? `detail-${field}` : `inquiry-${field}`;
-      document.getElementById(targetId).textContent = value || '-';
+      // Check which element exists (detail vs inquiry)
+      const detailEl = document.getElementById(`detail-${field}`);
+      const inquiryEl = document.getElementById(`inquiry-${field}`);
+      const targetEl = detailEl || inquiryEl;
+      
+      if (targetEl) {
+        targetEl.textContent = value || '-';
+      }
       
       // Special handling for age - show/hide parent field
       if (field === 'age') {
