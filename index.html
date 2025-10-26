@@ -1405,7 +1405,8 @@
       await updateTaskCustomField(currentSession.gid, fieldId, gid);
       currentSession[field] = name;
       showToast('Updated');
-      document.getElementById(`inquiry-${field}`).textContent = name || '-';
+const targetEl = document.getElementById(`detail-${field}`) || document.getElementById(`inquiry-${field}`);
+if (targetEl) targetEl.textContent = name || '-';    
     }
     
     function editPayment() {
