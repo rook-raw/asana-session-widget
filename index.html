@@ -709,15 +709,15 @@
         <div class="info-grid">
           <div class="info-card full-width">
             <div class="info-label">Location Preference</div>
-            <div class="info-value" id="inquiry-location-pref" onclick="editTextField('Location Preference', 'locationPref', '1211746958112281')">-</div>
+            <div class="info-value" id="inquiry-locationPref" onclick="editTextField('Location Preference', 'locationPref', '1211746958112281')">-</div>
           </div>
           <div class="info-card full-width">
             <div class="info-label">Lighting Preference</div>
-            <div class="info-value" id="inquiry-lighting-pref" onclick="editTextField('Lighting Preference', 'lightingPref', '1211746958112283')">-</div>
+            <div class="info-value" id="inquiry-lightingPref" onclick="editTextField('Lighting Preference', 'lightingPref', '1211746958112283')">-</div>
           </div>
           <div class="info-card full-width">
             <div class="info-label">How Want to Feel</div>
-            <div class="info-value" id="inquiry-how-feel" onclick="editTextField('How Want to Feel', 'howFeel', '1211746958112285')">-</div>
+            <div class="info-value" id="inquiry-howFeel" onclick="editTextField('How Want to Feel', 'howFeel', '1211746958112285')">-</div>
           </div>
           <div class="info-card">
             <div class="info-label">Confidence Level (1-10)</div>
@@ -828,15 +828,15 @@
       <div class="info-grid">
         <div class="info-card full-width">
           <div class="info-label">Location Preference</div>
-          <div class="info-value" id="inquiry-location-pref" onclick="editTextField('Location Preference', 'locationPref', '1211746958112281')">-</div>
+          <div class="info-value" id="inquiry-locationPref" onclick="editTextField('Location Preference', 'locationPref', '1211746958112281')">-</div>
         </div>
         <div class="info-card full-width">
           <div class="info-label">Lighting Preference</div>
-          <div class="info-value" id="inquiry-lighting-pref" onclick="editTextField('Lighting Preference', 'lightingPref', '1211746958112283')">-</div>
+          <div class="info-value" id="inquiry-lightingPref" onclick="editTextField('Lighting Preference', 'lightingPref', '1211746958112283')">-</div>
         </div>
         <div class="info-card full-width">
           <div class="info-label">How Want to Feel</div>
-          <div class="info-value" id="inquiry-feel" onclick="editTextField('How Want to Feel', 'howFeel', '1211746958112285')">-</div>
+          <div class="info-value" id="inquiry-howFeel" onclick="editTextField('How Want to Feel', 'howFeel', '1211746958112285')">-</div>
         </div>
         <div class="info-card">
           <div class="info-label">Confidence Level (1-10)</div>
@@ -1653,9 +1653,9 @@
       document.getElementById('inquiry-must-have').textContent = currentSession.mustHave || '-';
       
       // Preferences
-      document.getElementById('inquiry-location-pref').textContent = currentSession.locationPref || '-';
-      document.getElementById('inquiry-lighting-pref').textContent = currentSession.lightingPref || '-';
-      document.getElementById('inquiry-feel').textContent = currentSession.howFeel || '-';
+      document.getElementById('inquiry-locationPref').textContent = currentSession.locationPref || '-';
+      document.getElementById('inquiry-lightingPref').textContent = currentSession.lightingPref || '-';
+      document.getElementById('inquiry-howFeel').textContent = currentSession.howFeel || '-';
       document.getElementById('inquiry-confidence').textContent = currentSession.confidence || '-';
       document.getElementById('inquiry-expectations').textContent = currentSession.expectations || '-';
       
