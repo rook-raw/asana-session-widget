@@ -1272,7 +1272,8 @@
       if (!currentSession) return;
       const currentValue = currentSession[field] || '';
       const inputHTML = `<input type="text" id="edit-input" class="form-input" style="width: 100%; margin: 8px 0;" value="${currentValue}" placeholder="Enter ${label}"><button onclick="saveTextField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
-      document.getElementById(`detail-${field}`).innerHTML = inputHTML;
+      const targetId = document.getElementById(`detail-${field}`) ? `detail-${field}` : `inquiry-${field}`;
+      document.getElementById(targetId).innerHTML = inputHTML;
       document.getElementById('edit-input').focus();
     }
     
