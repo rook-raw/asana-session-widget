@@ -883,8 +883,8 @@
   </div>
   
   <!-- Add Client Modal -->
-  <div id="add-client-modal" class="modal">
-    <div class="modal-content">
+<div id="add-client-modal" class="modal" onclick="if(event.target === this) closeAddClient()">
+  <div class="modal-content">
       <div class="modal-header">Add New Client</div>
       <div class="form-group">
         <label class="form-label">Client Name</label>
