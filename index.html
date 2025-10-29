@@ -628,7 +628,7 @@
       <div class="info-grid">
         <div class="info-card" style="width: 20%;">
           <div class="info-label">Status</div>
-          <div class="info-value" id="detail-project-status" onclick="editProjectStatus()">Status</div>
+          <div class="info-value" id="detail-project-status" onclick="editProjectStatus(event)">Status</div>
         </div>
         <div class="info-card" style="width: 45%;">
           <div class="info-label">Phase</div>
@@ -1481,7 +1481,8 @@ if (targetEl) targetEl.textContent = name || '-';
       document.getElementById('detail-payment').textContent = name;
     }
     
-    function editProjectStatus() {
+    function editProjectStatus(event) {
+      if (event) event.stopPropagation();
       if (!currentSession) return;
       const options = [
         { gid: '1211735138096719', name: '🔴' },
