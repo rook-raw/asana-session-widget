@@ -823,6 +823,56 @@
         <div id="detail-completed"></div>
       </div>
     </div>
+    
+    <!-- Deliverables Section -->
+    <button class="btn-add toggle-btn" id="deliverables-toggle-btn" style="width: 100%; margin-bottom: 12px; display: none;" onclick="toggleSection('deliverables')">
+      <span>📦Deliverables📦</span>
+      <span class="toggle-icon" id="deliverables-toggle">⬇️</span>
+    </button>
+    
+    <div id="deliverables-section" class="collapsible-content">
+      <div class="section">
+        <div class="section-header">Deliverables</div>
+        <div class="info-grid">
+          <div class="info-card full-width">
+            <div class="info-label">Gallery Stage</div>
+            <div class="info-value" id="detail-gallery-stage" onclick="editGalleryStage()">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label"># Mastered Images</div>
+            <div class="info-value" id="detail-mastered-images" onclick="editTextField('# Mastered Images', 'masteredImages', '1211776219912336')">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label"># High-End Retouches</div>
+            <div class="info-value" id="detail-heri-images" onclick="editTextField('# High-End Retouches', 'heriImages', '1211776219912338')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Photo Notes</div>
+            <div class="info-value" id="detail-photo-notes" onclick="editLongTextField('Photo Notes', 'photoNotes', '1211776219912352')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Video Notes</div>
+            <div class="info-value" id="detail-video-notes" onclick="editLongTextField('Video Notes', 'videoNotes', '1211776219912354')">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Client Selection Date</div>
+            <div class="info-value" id="detail-client-selection-date" onclick="editClientSelectionDate()">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Notes/Requests?</div>
+            <div class="info-value" id="detail-notes-requests" onclick="editNotesRequests()">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">🔗 Proofs Gallery</div>
+            <div class="info-value" id="detail-proofs-gallery" onclick="editTextField('Proofs Gallery Link', 'proofsGallery', '1211776219912360')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">🔗 Final Gallery</div>
+            <div class="info-value" id="detail-final-gallery" onclick="editTextField('Final Gallery Link', 'finalGallery', '1211776219912362')">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   
   <!-- Inquiry Notes View -->
@@ -1018,7 +1068,17 @@
       budget: '1211746958112305',
       package: '1211746958112293',
       prints: '1211746958112295',
-      video: '1211746958112299'
+      video: '1211746958112299',
+      // Deliverables fields
+      galleryStage: '1211732453385482',
+      masteredImages: '1211776219912336',
+      heriImages: '1211776219912338',
+      photoNotes: '1211776219912352',
+      videoNotes: '1211776219912354',
+      clientSelectionDate: '1211776219912350',
+      notesRequests: '1211776219912356',
+      proofsGallery: '1211776219912360',
+      finalGallery: '1211776219912362'
     };
     // Enum field options
     const ENUM_OPTIONS = {
@@ -1047,6 +1107,21 @@
         {gid: '1211746958112269', name: 'Maternity'},
         {gid: '1211746958112270', name: 'Headshots'},
         {gid: '1211746958112271', name: "Couple's Session"}
+      ],
+      '1211732453385482': [ // Gallery Stage
+        {gid: '1211776180833019', name: 'Not Yet Created'},
+        {gid: '1211732453385485', name: '📁 Untouched RAWs'},
+        {gid: '1211732453385486', name: '🔍 Culling - Internal Selects'},
+        {gid: '1211732453385487', name: '👥 Culling - Client Proofs'},
+        {gid: '1211732453385488', name: '⭐ Culling - Final Photographer Selections'},
+        {gid: '1211732453385489', name: '⚙️ Processing'},
+        {gid: '1211732453385490', name: '📦 Delivery'},
+        {gid: '1211732453385491', name: '📱 Plan Social Posts'},
+        {gid: '1211732453385492', name: '🗄️ Archive'}
+      ],
+      '1211776219912356': [ // Notes or Requests
+        {gid: '1211776219912357', name: 'Yes'},
+        {gid: '1211776219912358', name: 'No'}
       ]
     };
     // State
@@ -1124,7 +1199,17 @@
             budget: getField(FIELD_IDS.budget)?.text_value || '',
             package: getField(FIELD_IDS.package)?.text_value || '',
             prints: getField(FIELD_IDS.prints)?.enum_value?.name || '',
-            video: getField(FIELD_IDS.video)?.enum_value?.name || ''
+            video: getField(FIELD_IDS.video)?.enum_value?.name || '',
+            // Deliverables fields
+            galleryStage: getField(FIELD_IDS.galleryStage)?.enum_value?.name || '',
+            masteredImages: getField(FIELD_IDS.masteredImages)?.text_value || '',
+            heriImages: getField(FIELD_IDS.heriImages)?.text_value || '',
+            photoNotes: getField(FIELD_IDS.photoNotes)?.text_value || '',
+            videoNotes: getField(FIELD_IDS.videoNotes)?.text_value || '',
+            clientSelectionDate: getField(FIELD_IDS.clientSelectionDate)?.date_value?.date || getField(FIELD_IDS.clientSelectionDate)?.date_value || null,
+            notesRequests: getField(FIELD_IDS.notesRequests)?.enum_value?.name || '',
+            proofsGallery: getField(FIELD_IDS.proofsGallery)?.text_value || '',
+            finalGallery: getField(FIELD_IDS.finalGallery)?.text_value || ''
           };
         })
         .sort((a, b) => {
@@ -1769,6 +1854,25 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
         discoveryContainer.style.display = 'block';
       } else {
         discoveryContainer.style.display = 'none';
+      }
+      
+      // Show/hide Deliverables section (only for Phase III+)
+      const deliverablesToggleBtn = document.getElementById('deliverables-toggle-btn');
+      if (phaseText.includes('Phase III') || phaseText.includes('Phase IV') || phaseText.includes('Phase V') || phaseText.includes('Phase VI')) {
+        deliverablesToggleBtn.style.display = 'block';
+        
+        // Populate deliverables fields
+        document.getElementById('detail-gallery-stage').textContent = currentSession.galleryStage || '-';
+        document.getElementById('detail-mastered-images').textContent = currentSession.masteredImages || '-';
+        document.getElementById('detail-heri-images').textContent = currentSession.heriImages || '-';
+        document.getElementById('detail-photo-notes').textContent = currentSession.photoNotes || '-';
+        document.getElementById('detail-video-notes').textContent = currentSession.videoNotes || '-';
+        document.getElementById('detail-client-selection-date').textContent = formatDate(currentSession.clientSelectionDate);
+        document.getElementById('detail-notes-requests').textContent = currentSession.notesRequests || '-';
+        document.getElementById('detail-proofs-gallery').textContent = currentSession.proofsGallery || '-';
+        document.getElementById('detail-final-gallery').textContent = currentSession.finalGallery || '-';
+      } else {
+        deliverablesToggleBtn.style.display = 'none';
       }
       
       // Profile fields
