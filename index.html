@@ -1683,6 +1683,7 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
             console.log('Todos fetched:', allTodos);
       const incompleteTodos = allTodos.filter(t => !t.completed);
       const completedTodos = allTodos.filter(t => t.completed);
+      console.log('Incomplete:', incompleteTodos.length, 'Completed:', completedTodos.length);
       
 if (completedTodos.length === 0) {
   completedContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted);">No completed tasks</div>';
