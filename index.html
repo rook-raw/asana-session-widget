@@ -1,4 +1,4 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -663,26 +663,28 @@
   
   <!-- Deliverables List View -->
   <div id="deliverables-list-view" class="view">
-    <div class="widget-header">
-      <h1>Deliverables</h1>
-    </div>
-    
-    <div class="filter-bar">
-      <select id="deliverables-filter-section" class="filter-select" onchange="applyDeliverablesFilters()">
-        <option value="">All Sections</option>
-        <option value="1211766418071086">I. Culling & Proofing</option>
-        <option value="1211766418071089">II. In Edit</option>
-        <option value="1211766418071095">III. Prep & Deliver</option>
-        <option value="1211766418071098">IV. Draft Socials</option>
-        <option value="1211729769144319">Collab Priority Deliverables</option>
-        <option value="1211729769144315">Future Sessions to Edit</option>
-        <option value="1211730157186104">Archive</option>
-      </select>
-    </div>
-    
-    <div id="deliverables-list">
-      <div class="loading">
-        <div>Loading deliverables...</div>
+    <div id="deliverables-widget-container" style="padding: 40px 20px; max-width: 600px; margin: 0 auto;">
+      <div class="widget-header">
+        <h1>Deliverables</h1>
+      </div>
+      
+      <div class="filter-bar">
+        <select id="deliverables-filter-section" class="filter-select" onchange="applyDeliverablesFilters()">
+          <option value="">All Sections</option>
+          <option value="1211766418071086">I. Culling & Proofing</option>
+          <option value="1211766418071089">II. In Edit</option>
+          <option value="1211766418071095">III. Prep & Deliver</option>
+          <option value="1211766418071098">IV. Draft Socials</option>
+          <option value="1211729769144319">Collab Priority Deliverables</option>
+          <option value="1211729769144315">Future Sessions to Edit</option>
+          <option value="1211730157186104">Archive</option>
+        </select>
+      </div>
+      
+      <div id="deliverables-list">
+        <div class="loading">
+          <div>Loading deliverables...</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1549,11 +1551,19 @@
         
         const sectionName = task.memberships?.[0]?.section?.name || 'No Section';
         
+        // Calculate countdown from Client Selection Date
+        const clientSelectionDateField = task.custom_fields?.find(f => f.gid === FIELD_IDS.CLIENT_SELECTION_DATE);
+        const clientSelectionDate = clientSelectionDateField?.date_value?.date || clientSelectionDateField?.date_value || null;
+        const daysUntil = clientSelectionDate ? Math.ceil((new Date(clientSelectionDate) - new Date()) / (1000 * 60 * 60 * 24)) : null;
+        const countdown = getCountdown(daysUntil);
+        
         return `
           <div class="card" onclick='showDeliverableDetail(${JSON.stringify(task).replace(/'/g, "&apos;")})'>
             <div class="card-header">
               <div class="card-client">${task.name}</div>
-              <div style="font-size: 20px;">${galleryStage.split(' ')[0]}</div>
+              <div class="card-countdown" style="background: ${countdown.bg}; color: ${countdown.color};">
+                ${countdown.text}
+              </div>
             </div>
             <div class="card-info">${sectionName}</div>
             <div class="card-info">M: ${masteredImages} | HER: ${heriImages}</div>
