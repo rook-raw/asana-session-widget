@@ -1676,6 +1676,8 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
       const todosContainer = document.getElementById('detail-todos');
       const completedContainer = document.getElementById('detail-completed');
       todosContainer.innerHTML = '<div class="loading" style="padding: 20px;"><div>Loading...</div></div>';
+      console.log('Fetching todos for:', currentSession.gid);
+      console.log('Todos fetched:', allTodos);
       completedContainer.innerHTML = '<div class="loading" style="padding: 20px;"><div>Loading...</div></div>';
       
       const allTodos = await fetchTodos(currentSession.gid);
