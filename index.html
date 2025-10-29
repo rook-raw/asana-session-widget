@@ -1685,6 +1685,15 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
       const completedTodos = allTodos.filter(t => t.completed);
       console.log('Containers:', todosContainer, completedContainer);
       console.log('Incomplete:', incompleteTodos.length, 'Completed:', completedTodos.length);
+if (incompleteTodos.length === 0) {
+  todosContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted);">No to-do items</div>';
+} else {
+  todosContainer.innerHTML = incompleteTodos.map(todo => `
+    <div class="todo-item" onclick="completeTodo('${todo.gid}')">
+      [ ] ${todo.name}
+    </div>
+  `).join('');
+}
       
 if (completedTodos.length === 0) {
   completedContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted);">No completed tasks</div>';
