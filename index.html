@@ -1459,36 +1459,30 @@
     
     // Deliverables Edit Functions
     async function editGalleryStage() {
+      if (!currentSession) return;
       const currentStage = currentSession.galleryStage || 'Not Yet Created';
-      const container = document.querySelector('.detail-container');
-      
       const options = ENUM_OPTIONS['1211732453385482'];
       
-      container.innerHTML = '<div class="view-header"><h2>Select Gallery Stage</h2></div><div class="list-container">' +
-        options.map(option => {
-          const isCurrent = option.name === currentStage;
-          return `<div class="list-item" onclick="updateGalleryStage('${option.gid}', '${option.name}')">
-            <div class="list-item-left">
-              <h3 style="color: ${isCurrent ? 'var(--gold)' : 'var(--text-primary)'}">${isCurrent ? '[*] ' : ''}${option.name}</h3>
-            </div>
-          </div>`;
-        }).join('') +
-        '</div>';
+      const selectHTML = '<select id="edit-select" class="filter-select" style="width: 100%; margin: 8px 0;" onclick="event.stopPropagation()">' +
+        '<option value="">Select Gallery Stage</option>' +
+        options.map(opt => `<option value="${opt.gid}" ${opt.name === currentStage ? 'selected' : ''}>${opt.name}</option>`).join('') +
+        '</select><button onclick="saveGalleryStage()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
+      
+      const targetEl = document.getElementById('detail-gallery-stage');
+      if (targetEl) targetEl.innerHTML = selectHTML;
     }
 
-    async function updateGalleryStage(stageGid, stageName) {
-      if (currentSession) {
-        await updateTaskCustomField(currentSession.gid, FIELD_IDS.galleryStage, stageGid);
-        currentSession.galleryStage = stageName;
-        showToast(`Gallery Stage: ${stageName}`);
-        
-        const index = sessions.findIndex(s => s.gid === currentSession.gid);
-        if (index !== -1) {
-          sessions[index] = currentSession;
-        }
-        
-        setTimeout(backToDetail, 300);
-      }
+    async function saveGalleryStage() {
+      const select = document.getElementById('edit-select');
+      const gid = select.value;
+      const name = select.options[select.selectedIndex].text;
+      
+      await updateTaskCustomField(currentSession.gid, FIELD_IDS.galleryStage, gid);
+      currentSession.galleryStage = name;
+      showToast('Gallery Stage updated');
+      
+      const targetEl = document.getElementById('detail-gallery-stage');
+      if (targetEl) targetEl.textContent = name || '-';
     }
 
     async function editMasteredImages() {
@@ -1547,36 +1541,30 @@
     }
 
     async function editNotesRequests() {
+      if (!currentSession) return;
       const current = currentSession.notesRequests || 'No';
-      const container = document.querySelector('.detail-container');
-      
       const options = ENUM_OPTIONS['1211776219912356'];
       
-      container.innerHTML = '<div class="view-header"><h2>Notes or Requests?</h2></div><div class="list-container">' +
-        options.map(option => {
-          const isCurrent = option.name === current;
-          return `<div class="list-item" onclick="updateNotesRequests('${option.gid}', '${option.name}')">
-            <div class="list-item-left">
-              <h3 style="color: ${isCurrent ? 'var(--gold)' : 'var(--text-primary)'}">${isCurrent ? '[*] ' : ''}${option.name}</h3>
-            </div>
-          </div>`;
-        }).join('') +
-        '</div>';
+      const selectHTML = '<select id="edit-select" class="filter-select" style="width: 100%; margin: 8px 0;" onclick="event.stopPropagation()">' +
+        '<option value="">Select Notes/Requests</option>' +
+        options.map(opt => `<option value="${opt.gid}" ${opt.name === current ? 'selected' : ''}>${opt.name}</option>`).join('') +
+        '</select><button onclick="saveNotesRequests()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
+      
+      const targetEl = document.getElementById('detail-notes-requests');
+      if (targetEl) targetEl.innerHTML = selectHTML;
     }
 
-    async function updateNotesRequests(requestGid, requestName) {
-      if (currentSession) {
-        await updateTaskCustomField(currentSession.gid, FIELD_IDS.notesRequests, requestGid);
-        currentSession.notesRequests = requestName;
-        showToast(`Notes/Requests: ${requestName}`);
-        
-        const index = sessions.findIndex(s => s.gid === currentSession.gid);
-        if (index !== -1) {
-          sessions[index] = currentSession;
-        }
-        
-        setTimeout(backToDetail, 300);
-      }
+    async function saveNotesRequests() {
+      const select = document.getElementById('edit-select');
+      const gid = select.value;
+      const name = select.options[select.selectedIndex].text;
+      
+      await updateTaskCustomField(currentSession.gid, FIELD_IDS.notesRequests, gid);
+      currentSession.notesRequests = name;
+      showToast('Notes/Requests updated');
+      
+      const targetEl = document.getElementById('detail-notes-requests');
+      if (targetEl) targetEl.textContent = name || '-';
     }
 
     async function editProofsGallery() {
