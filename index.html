@@ -1984,9 +1984,10 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
         discoveryContainer.style.display = 'none';
       }
       
-      // Show/hide Deliverables section (only for Phase III+)
+      // Show/hide Deliverables section (only for Phase III+ or Project Status = ✅)
       const deliverablesToggleBtn = document.getElementById('deliverables-toggle-btn');
-      if (phaseText.includes('Phase III') || phaseText.includes('Phase IV') || phaseText.includes('Phase V') || phaseText.includes('Phase VI')) {
+      const projectStatus = currentSession.projectStatus || '';
+      if (phaseText.includes('Phase III') || phaseText.includes('Phase IV') || phaseText.includes('Phase V') || phaseText.includes('Phase VI') || projectStatus.includes('✅')) {
         deliverablesToggleBtn.style.display = 'block';
         
         // Populate deliverables fields
