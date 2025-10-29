@@ -583,9 +583,50 @@
     .btn:active {
       transform: scale(0.98);
     }
+    
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      background: rgba(232, 213, 183, 0.02);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .nav-tab {
+      flex: 1;
+      padding: 20px;
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.3s;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .nav-tab.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+    
+    .nav-tab:hover {
+      color: var(--text-primary);
+    }
   </style>
 </head>
 <body>
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showSessionsTab()">Sessions</div>
+    <div class="nav-tab" onclick="showDeliverablesTab()">Deliverables</div>
+  </div>
+
   <!-- Widget View -->
   <div id="widget-view" class="view active">
     <div class="widget-header">
@@ -611,6 +652,84 @@
     </div>
     <div class="widget-footer">
       Tap a session for details
+    </div>
+  </div>
+  
+  <!-- Deliverables List View -->
+  <div id="deliverables-list-view" class="view">
+    <div class="widget-header">
+      <h1>Deliverables</h1>
+    </div>
+    
+    <div class="filter-bar">
+      <select id="deliverables-filter-section" class="filter-select" onchange="applyDeliverablesFilters()">
+        <option value="">All Sections</option>
+        <option value="1211766418071086">I. Culling & Proofing</option>
+        <option value="1211766418071089">II. In Edit</option>
+        <option value="1211766418071095">III. Prep & Deliver</option>
+        <option value="1211766418071098">IV. Draft Socials</option>
+        <option value="1211729769144319">Collab Priority Deliverables</option>
+        <option value="1211729769144315">Future Sessions to Edit</option>
+        <option value="1211730157186104">Archive</option>
+      </select>
+    </div>
+    
+    <div id="deliverables-list">
+      <div class="loading">
+        <div>Loading deliverables...</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Deliverable Detail View -->
+  <div id="deliverable-detail-view" class="view">
+    <button class="back-btn" onclick="showDeliverablesTab()">← Back</button>
+    
+    <div class="detail-header">
+      <h2 id="deliverable-client-name">Client Name</h2>
+      <div class="date" id="deliverable-session-date">Session Date</div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">Deliverables Info</div>
+      <div class="info-grid">
+        <div class="info-card full-width">
+          <div class="info-label">Gallery Stage</div>
+          <div class="info-value" id="deliverable-gallery-stage" onclick="editDeliverableGalleryStage()">Stage</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Mastered Images</div>
+          <div class="info-value" id="deliverable-mastered-images" onclick="editDeliverableMasteredImages()">0</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">HERI Images</div>
+          <div class="info-value" id="deliverable-heri-images" onclick="editDeliverableHeriImages()">0</div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-label">Photo Notes</div>
+          <div class="info-value" id="deliverable-photo-notes" onclick="editDeliverablePhotoNotes()">Notes</div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-label">Video Notes</div>
+          <div class="info-value" id="deliverable-video-notes" onclick="editDeliverableVideoNotes()">Notes</div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-label">Client Selection Date</div>
+          <div class="info-value" id="deliverable-client-selection-date" onclick="editDeliverableClientSelectionDate()">Date</div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-label">Notes/Requests</div>
+          <div class="info-value" id="deliverable-notes-requests" onclick="editDeliverableNotesRequests()">Notes</div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-label">Proofs Gallery Link</div>
+          <div class="info-value" id="deliverable-proofs-gallery" onclick="editDeliverableProofsGallery()">Link</div>
+        </div>
+        <div class="info-card full-width">
+          <div class="info-label">Final Gallery Link</div>
+          <div class="info-value" id="deliverable-final-gallery" onclick="editDeliverableFinalGallery()">Link</div>
+        </div>
+      </div>
     </div>
   </div>
   
@@ -1038,6 +1157,7 @@
   <script>
     // Configuration - Field IDs
     const PROJECT_ID = '1211733193402684';
+    const DELIVERABLES_PROJECT_ID = '1211729769144238';
     const CLIENT_PHASE_FIELD_ID = '1211735634914711';
     const SESSION_DATE_FIELD_ID = '1211732464258476';
     const ACTIVE_STATUS_FIELD_ID = '1211735138096716';
@@ -1353,6 +1473,20 @@
     function showWidget() {
       showView('widget-view');
     }
+
+    // Tab Navigation
+    function showSessionsTab() {
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-tab')[0].classList.add('active');
+      showView('widget-view');
+    }
+
+    function showDeliverablesTab() {
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-tab')[1].classList.add('active');
+      showView('deliverables-list-view');
+      loadDeliverables();
+    }
     
     
     
@@ -1367,6 +1501,477 @@
     function showPhaseSelector() {
       showView('phase-view');
       renderPhaseSelector();
+    }
+
+    // Deliverables Functions
+    let allDeliverables = [];
+    let currentDeliverableTask = null;
+
+    async function loadDeliverables() {
+      const container = document.getElementById('deliverables-list');
+      container.innerHTML = '<div class="loading"><div>Loading deliverables...</div></div>';
+      
+      try {
+        const response = await fetch(
+          proxyUrl(`/projects/${DELIVERABLES_PROJECT_ID}/tasks?opt_fields=gid,name,custom_fields,memberships.section.name,completed`),
+          {
+            headers: { 'Authorization': `Bearer ${asanaToken}` }
+          }
+        );
+        
+        const data = await response.json();
+        allDeliverables = data.data || [];
+        renderDeliverablesList(allDeliverables);
+      } catch (error) {
+        console.error('Error loading deliverables:', error);
+        container.innerHTML = '<div class="loading"><div>Error loading deliverables</div></div>';
+      }
+    }
+
+    function renderDeliverablesList(deliverables) {
+      const container = document.getElementById('deliverables-list');
+      
+      if (!deliverables || deliverables.length === 0) {
+        container.innerHTML = '<div class="loading"><div>No deliverables found</div></div>';
+        return;
+      }
+      
+      container.innerHTML = deliverables.map(task => {
+        const galleryStage = task.custom_fields?.find(f => f.gid === FIELD_IDS.GALLERY_STAGE)?.enum_value?.name || '🔍 Not Yet Created';
+        const masteredImages = task.custom_fields?.find(f => f.gid === FIELD_IDS.MASTERED_IMAGES)?.text_value || '0';
+        const heriImages = task.custom_fields?.find(f => f.gid === FIELD_IDS.HERI_IMAGES)?.text_value || '0';
+        
+        const sectionName = task.memberships?.[0]?.section?.name || 'No Section';
+        
+        return `
+          <div class="session-card" onclick='showDeliverableDetail(${JSON.stringify(task).replace(/'/g, "&apos;")})'>
+            <div class="session-header">
+              <div class="session-name">${task.name}</div>
+              <div class="session-emoji">${galleryStage.split(' ')[0]}</div>
+            </div>
+            <div class="session-info">
+              <div class="session-date">${sectionName}</div>
+              <div class="session-type">M: ${masteredImages} | HER: ${heriImages}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function applyDeliverablesFilters() {
+      const sectionFilter = document.getElementById('deliverables-filter-section').value;
+      
+      let filtered = allDeliverables;
+      
+      if (sectionFilter) {
+        filtered = filtered.filter(task => 
+          task.memberships?.[0]?.section?.gid === sectionFilter
+        );
+      }
+      
+      renderDeliverablesList(filtered);
+    }
+
+    function showDeliverableDetail(task) {
+      currentDeliverableTask = task;
+      showView('deliverable-detail-view');
+      
+      // Populate fields
+      document.getElementById('deliverable-client-name').textContent = task.name;
+      
+      const sessionDate = task.custom_fields?.find(f => f.gid === FIELD_IDS.SESSION_DATE)?.date_value?.date || 'Not set';
+      document.getElementById('deliverable-session-date').textContent = sessionDate;
+      
+      const galleryStage = task.custom_fields?.find(f => f.gid === FIELD_IDS.GALLERY_STAGE)?.enum_value?.name || 'Not set';
+      document.getElementById('deliverable-gallery-stage').textContent = galleryStage;
+      
+      const masteredImages = task.custom_fields?.find(f => f.gid === FIELD_IDS.MASTERED_IMAGES)?.text_value || '0';
+      document.getElementById('deliverable-mastered-images').textContent = masteredImages;
+      
+      const heriImages = task.custom_fields?.find(f => f.gid === FIELD_IDS.HERI_IMAGES)?.text_value || '0';
+      document.getElementById('deliverable-heri-images').textContent = heriImages;
+      
+      const photoNotes = task.custom_fields?.find(f => f.gid === FIELD_IDS.PHOTO_NOTES)?.text_value || 'No notes';
+      document.getElementById('deliverable-photo-notes').textContent = photoNotes;
+      
+      const videoNotes = task.custom_fields?.find(f => f.gid === FIELD_IDS.VIDEO_NOTES)?.text_value || 'No notes';
+      document.getElementById('deliverable-video-notes').textContent = videoNotes;
+      
+      const clientSelectionDate = task.custom_fields?.find(f => f.gid === FIELD_IDS.CLIENT_SELECTION_DATE)?.date_value?.date || 'Not set';
+      document.getElementById('deliverable-client-selection-date').textContent = clientSelectionDate;
+      
+      const notesRequests = task.custom_fields?.find(f => f.gid === FIELD_IDS.NOTES_REQUESTS)?.text_value || 'No notes';
+      document.getElementById('deliverable-notes-requests').textContent = notesRequests;
+      
+      const proofsGallery = task.custom_fields?.find(f => f.gid === FIELD_IDS.PROOFS_GALLERY)?.text_value || 'No link';
+      document.getElementById('deliverable-proofs-gallery').textContent = proofsGallery;
+      
+      const finalGallery = task.custom_fields?.find(f => f.gid === FIELD_IDS.FINAL_GALLERY)?.text_value || 'No link';
+      document.getElementById('deliverable-final-gallery').textContent = finalGallery;
+    }
+
+    // Deliverable Edit Functions
+    function editDeliverableGalleryStage() {
+      const currentStage = document.getElementById('deliverable-gallery-stage').textContent;
+      
+      const stages = [
+        { gid: '1211733501733078', name: '🔍 Not Yet Created' },
+        { gid: '1211733501733079', name: '👥 Culling & Selecting' },
+        { gid: '1211733501733080', name: '⚙️ In Edit' },
+        { gid: '1211733501733081', name: '📦 In Delivery Prep' },
+        { gid: '1211733501733082', name: '📧 Proofs Sent' },
+        { gid: '1211733501733083', name: '🎨 Client Selections In' },
+        { gid: '1211733501733084', name: '🖼️ Masters In Edit' },
+        { gid: '1211733501733085', name: '✅ Delivered' },
+        { gid: '1211733501733086', name: '🗄️ Archive' }
+      ];
+      
+      const dropdown = `
+        <select id="temp-gallery-stage-select" onchange="saveDeliverableGalleryStage()" style="width: 100%; padding: 10px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); border-radius: 2px; font-size: 14px;">
+          ${stages.map(s => `<option value="${s.gid}" ${s.name === currentStage ? 'selected' : ''}>${s.name}</option>`).join('')}
+        </select>
+      `;
+      
+      document.getElementById('deliverable-gallery-stage').innerHTML = dropdown;
+    }
+
+    async function saveDeliverableGalleryStage() {
+      const select = document.getElementById('temp-gallery-stage-select');
+      const selectedGid = select.value;
+      const selectedName = select.options[select.selectedIndex].text;
+      
+      try {
+        await fetch(proxyUrl(`/tasks/${currentDeliverableTask.gid}`), {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${asanaToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            data: {
+              custom_fields: {
+                [FIELD_IDS.GALLERY_STAGE]: selectedGid
+              }
+            }
+          })
+        });
+        
+        document.getElementById('deliverable-gallery-stage').textContent = selectedName;
+        
+        // Update current task
+        const field = currentDeliverableTask.custom_fields.find(f => f.gid === FIELD_IDS.GALLERY_STAGE);
+        if (field) field.enum_value = { gid: selectedGid, name: selectedName };
+        
+      } catch (error) {
+        console.error('Error saving gallery stage:', error);
+        alert('Error saving gallery stage');
+      }
+    }
+
+    function editDeliverableMasteredImages() {
+      const current = document.getElementById('deliverable-mastered-images').textContent;
+      document.getElementById('deliverable-mastered-images').innerHTML = `
+        <input type="text" id="temp-mastered-input" value="${current}" onblur="saveDeliverableMasteredImages()" style="width: 100%; padding: 8px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); border-radius: 2px;">
+      `;
+      document.getElementById('temp-mastered-input').focus();
+    }
+
+    async function saveDeliverableMasteredImages() {
+      const newValue = document.getElementById('temp-mastered-input').value;
+      
+      try {
+        await fetch(proxyUrl(`/tasks/${currentDeliverableTask.gid}`), {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${asanaToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            data: {
+              custom_fields: {
+                [FIELD_IDS.MASTERED_IMAGES]: newValue
+              }
+            }
+          })
+        });
+        
+        document.getElementById('deliverable-mastered-images').textContent = newValue;
+        
+        const field = currentDeliverableTask.custom_fields.find(f => f.gid === FIELD_IDS.MASTERED_IMAGES);
+        if (field) field.text_value = newValue;
+        
+      } catch (error) {
+        console.error('Error saving mastered images:', error);
+        alert('Error saving mastered images');
+      }
+    }
+
+    function editDeliverableHeriImages() {
+      const current = document.getElementById('deliverable-heri-images').textContent;
+      document.getElementById('deliverable-heri-images').innerHTML = `
+        <input type="text" id="temp-heri-input" value="${current}" onblur="saveDeliverableHeriImages()" style="width: 100%; padding: 8px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); border-radius: 2px;">
+      `;
+      document.getElementById('temp-heri-input').focus();
+    }
+
+    async function saveDeliverableHeriImages() {
+      const newValue = document.getElementById('temp-heri-input').value;
+      
+      try {
+        await fetch(proxyUrl(`/tasks/${currentDeliverableTask.gid}`), {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${asanaToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            data: {
+              custom_fields: {
+                [FIELD_IDS.HERI_IMAGES]: newValue
+              }
+            }
+          })
+        });
+        
+        document.getElementById('deliverable-heri-images').textContent = newValue;
+        
+        const field = currentDeliverableTask.custom_fields.find(f => f.gid === FIELD_IDS.HERI_IMAGES);
+        if (field) field.text_value = newValue;
+        
+      } catch (error) {
+        console.error('Error saving HERI images:', error);
+        alert('Error saving HERI images');
+      }
+    }
+
+    function editDeliverablePhotoNotes() {
+      const current = document.getElementById('deliverable-photo-notes').textContent;
+      document.getElementById('deliverable-photo-notes').innerHTML = `
+        <textarea id="temp-photo-notes-input" onblur="saveDeliverablePhotoNotes()" style="width: 100%; padding: 8px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); border-radius: 2px; min-height: 100px; font-family: inherit;">${current === 'No notes' ? '' : current}</textarea>
+      `;
+      document.getElementById('temp-photo-notes-input').focus();
+    }
+
+    async function saveDeliverablePhotoNotes() {
+      const newValue = document.getElementById('temp-photo-notes-input').value;
+      
+      try {
+        await fetch(proxyUrl(`/tasks/${currentDeliverableTask.gid}`), {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${asanaToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            data: {
+              custom_fields: {
+                [FIELD_IDS.PHOTO_NOTES]: newValue
+              }
+            }
+          })
+        });
+        
+        document.getElementById('deliverable-photo-notes').textContent = newValue || 'No notes';
+        
+        const field = currentDeliverableTask.custom_fields.find(f => f.gid === FIELD_IDS.PHOTO_NOTES);
+        if (field) field.text_value = newValue;
+        
+      } catch (error) {
+        console.error('Error saving photo notes:', error);
+        alert('Error saving photo notes');
+      }
+    }
+
+    function editDeliverableVideoNotes() {
+      const current = document.getElementById('deliverable-video-notes').textContent;
+      document.getElementById('deliverable-video-notes').innerHTML = `
+        <textarea id="temp-video-notes-input" onblur="saveDeliverableVideoNotes()" style="width: 100%; padding: 8px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); border-radius: 2px; min-height: 100px; font-family: inherit;">${current === 'No notes' ? '' : current}</textarea>
+      `;
+      document.getElementById('temp-video-notes-input').focus();
+    }
+
+    async function saveDeliverableVideoNotes() {
+      const newValue = document.getElementById('temp-video-notes-input').value;
+      
+      try {
+        await fetch(proxyUrl(`/tasks/${currentDeliverableTask.gid}`), {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${asanaToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            data: {
+              custom_fields: {
+                [FIELD_IDS.VIDEO_NOTES]: newValue
+              }
+            }
+          })
+        });
+        
+        document.getElementById('deliverable-video-notes').textContent = newValue || 'No notes';
+        
+        const field = currentDeliverableTask.custom_fields.find(f => f.gid === FIELD_IDS.VIDEO_NOTES);
+        if (field) field.text_value = newValue;
+        
+      } catch (error) {
+        console.error('Error saving video notes:', error);
+        alert('Error saving video notes');
+      }
+    }
+
+    function editDeliverableClientSelectionDate() {
+      const current = document.getElementById('deliverable-client-selection-date').textContent;
+      const dateValue = current === 'Not set' ? '' : current;
+      
+      document.getElementById('deliverable-client-selection-date').innerHTML = `
+        <input type="date" id="temp-client-selection-date-input" value="${dateValue}" onchange="saveDeliverableClientSelectionDate()" style="width: 100%; padding: 8px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); border-radius: 2px;">
+      `;
+      document.getElementById('temp-client-selection-date-input').focus();
+    }
+
+    async function saveDeliverableClientSelectionDate() {
+      const newValue = document.getElementById('temp-client-selection-date-input').value;
+      
+      try {
+        await fetch(proxyUrl(`/tasks/${currentDeliverableTask.gid}`), {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${asanaToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            data: {
+              custom_fields: {
+                [FIELD_IDS.CLIENT_SELECTION_DATE]: newValue
+              }
+            }
+          })
+        });
+        
+        document.getElementById('deliverable-client-selection-date').textContent = newValue || 'Not set';
+        
+        const field = currentDeliverableTask.custom_fields.find(f => f.gid === FIELD_IDS.CLIENT_SELECTION_DATE);
+        if (field) field.date_value = { date: newValue };
+        
+      } catch (error) {
+        console.error('Error saving client selection date:', error);
+        alert('Error saving client selection date');
+      }
+    }
+
+    function editDeliverableNotesRequests() {
+      const current = document.getElementById('deliverable-notes-requests').textContent;
+      document.getElementById('deliverable-notes-requests').innerHTML = `
+        <textarea id="temp-notes-requests-input" onblur="saveDeliverableNotesRequests()" style="width: 100%; padding: 8px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); border-radius: 2px; min-height: 100px; font-family: inherit;">${current === 'No notes' ? '' : current}</textarea>
+      `;
+      document.getElementById('temp-notes-requests-input').focus();
+    }
+
+    async function saveDeliverableNotesRequests() {
+      const newValue = document.getElementById('temp-notes-requests-input').value;
+      
+      try {
+        await fetch(proxyUrl(`/tasks/${currentDeliverableTask.gid}`), {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${asanaToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            data: {
+              custom_fields: {
+                [FIELD_IDS.NOTES_REQUESTS]: newValue
+              }
+            }
+          })
+        });
+        
+        document.getElementById('deliverable-notes-requests').textContent = newValue || 'No notes';
+        
+        const field = currentDeliverableTask.custom_fields.find(f => f.gid === FIELD_IDS.NOTES_REQUESTS);
+        if (field) field.text_value = newValue;
+        
+      } catch (error) {
+        console.error('Error saving notes/requests:', error);
+        alert('Error saving notes/requests');
+      }
+    }
+
+    function editDeliverableProofsGallery() {
+      const current = document.getElementById('deliverable-proofs-gallery').textContent;
+      document.getElementById('deliverable-proofs-gallery').innerHTML = `
+        <input type="url" id="temp-proofs-gallery-input" value="${current === 'No link' ? '' : current}" placeholder="https://" onblur="saveDeliverableProofsGallery()" style="width: 100%; padding: 8px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); border-radius: 2px;">
+      `;
+      document.getElementById('temp-proofs-gallery-input').focus();
+    }
+
+    async function saveDeliverableProofsGallery() {
+      const newValue = document.getElementById('temp-proofs-gallery-input').value;
+      
+      try {
+        await fetch(proxyUrl(`/tasks/${currentDeliverableTask.gid}`), {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${asanaToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            data: {
+              custom_fields: {
+                [FIELD_IDS.PROOFS_GALLERY]: newValue
+              }
+            }
+          })
+        });
+        
+        document.getElementById('deliverable-proofs-gallery').textContent = newValue || 'No link';
+        
+        const field = currentDeliverableTask.custom_fields.find(f => f.gid === FIELD_IDS.PROOFS_GALLERY);
+        if (field) field.text_value = newValue;
+        
+      } catch (error) {
+        console.error('Error saving proofs gallery link:', error);
+        alert('Error saving proofs gallery link');
+      }
+    }
+
+    function editDeliverableFinalGallery() {
+      const current = document.getElementById('deliverable-final-gallery').textContent;
+      document.getElementById('deliverable-final-gallery').innerHTML = `
+        <input type="url" id="temp-final-gallery-input" value="${current === 'No link' ? '' : current}" placeholder="https://" onblur="saveDeliverableFinalGallery()" style="width: 100%; padding: 8px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); border-radius: 2px;">
+      `;
+      document.getElementById('temp-final-gallery-input').focus();
+    }
+
+    async function saveDeliverableFinalGallery() {
+      const newValue = document.getElementById('temp-final-gallery-input').value;
+      
+      try {
+        await fetch(proxyUrl(`/tasks/${currentDeliverableTask.gid}`), {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${asanaToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            data: {
+              custom_fields: {
+                [FIELD_IDS.FINAL_GALLERY]: newValue
+              }
+            }
+          })
+        });
+        
+        document.getElementById('deliverable-final-gallery').textContent = newValue || 'No link';
+        
+        const field = currentDeliverableTask.custom_fields.find(f => f.gid === FIELD_IDS.FINAL_GALLERY);
+        if (field) field.text_value = newValue;
+        
+      } catch (error) {
+        console.error('Error saving final gallery link:', error);
+        alert('Error saving final gallery link');
+      }
     }
     
     function showProjectStatusSelector() {
@@ -1463,10 +2068,10 @@
       const currentStage = currentSession.galleryStage || 'Not Yet Created';
       const options = ENUM_OPTIONS['1211732453385482'];
       
-      const selectHTML = '<select id="edit-select" class="filter-select" style="width: 100%; margin: 8px 0;" onclick="event.stopPropagation()">' +
+      const selectHTML = '<select id="edit-select" onchange="saveGalleryStage()" class="filter-select" style="width: 100%; margin: 8px 0;" onclick="event.stopPropagation()">' +
         '<option value="">Select Gallery Stage</option>' +
         options.map(opt => `<option value="${opt.gid}" ${opt.name === currentStage ? 'selected' : ''}>${opt.name}</option>`).join('') +
-        '</select><button onclick="saveGalleryStage()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
+        '</select>';
       
       const targetEl = document.getElementById('detail-gallery-stage');
       if (targetEl) targetEl.innerHTML = selectHTML;
@@ -1812,7 +2417,7 @@ if (targetEl) targetEl.textContent = name || '-';
       container.innerHTML = `
         <div style="padding: 20px; background: var(--bg-card); border-radius: 8px; margin-bottom: 12px;">
           <h3 style="color: var(--gold); margin-bottom: 12px;">Schedule Discovery Call</h3>
-          <input type="datetime-local" id="discovery-date-input" class="form-input" style="width: 100%; margin-bottom: 12px;" value="${currentDate}">
+          <input type="datetime-local" id="discovery-date-input" class="form-input" onchange="saveDiscoveryCall()" style="width: 100%; margin-bottom: 12px;" value="${currentDate}">
           <div style="margin-top: 12px;">
   <label style="color: var(--gold); display: block; margin-bottom: 6px;">Duration</label>
   <select id="discovery-duration-hours" style="width: 80px; margin-right: 8px;">
@@ -1828,8 +2433,7 @@ if (targetEl) targetEl.textContent = name || '-';
     <option>45</option>
   </select> min
 </div>
-          <button onclick="saveDiscoveryCall()" class="btn-add" style="width: 100%; margin-bottom: 8px;">Save & Add to Calendar</button>
-          <button onclick="closeDiscoveryCallModal()" class="btn-add" style="width: 100%; background: transparent; border: 1px solid var(--border);">Cancel</button>
+          <button onclick="closeDiscoveryCallModal()" class="btn-add" style="width: 100%; background: transparent; border: 1px solid var(--border); margin-top: 12px;">Cancel</button>
           <p style="color: var(--text-secondary); font-size: 12px; margin-top: 12px;">Note: Calendar integration via Zapier (auto-syncs to Google Calendar)</p>
         </div>
       `;
