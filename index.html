@@ -840,19 +840,19 @@
           </div>
           <div class="info-card">
             <div class="info-label"># Mastered Images</div>
-            <div class="info-value" id="detail-mastered-images" onclick="editTextField('# Mastered Images', 'masteredImages', '1211776219912336')">-</div>
+            <div class="info-value" id="detail-mastered-images" onclick="editMasteredImages()">-</div>
           </div>
           <div class="info-card">
             <div class="info-label"># High-End Retouches</div>
-            <div class="info-value" id="detail-heri-images" onclick="editTextField('# High-End Retouches', 'heriImages', '1211776219912338')">-</div>
+            <div class="info-value" id="detail-heri-images" onclick="editHeriImages()">-</div>
           </div>
           <div class="info-card full-width">
             <div class="info-label">Photo Notes</div>
-            <div class="info-value" id="detail-photo-notes" onclick="editLongTextField('Photo Notes', 'photoNotes', '1211776219912352')">-</div>
+            <div class="info-value" id="detail-photo-notes" onclick="editPhotoNotes()">-</div>
           </div>
           <div class="info-card full-width">
             <div class="info-label">Video Notes</div>
-            <div class="info-value" id="detail-video-notes" onclick="editLongTextField('Video Notes', 'videoNotes', '1211776219912354')">-</div>
+            <div class="info-value" id="detail-video-notes" onclick="editVideoNotes()">-</div>
           </div>
           <div class="info-card">
             <div class="info-label">Client Selection Date</div>
@@ -864,11 +864,11 @@
           </div>
           <div class="info-card full-width">
             <div class="info-label">🔗 Proofs Gallery</div>
-            <div class="info-value" id="detail-proofs-gallery" onclick="editTextField('Proofs Gallery Link', 'proofsGallery', '1211776219912360')">-</div>
+            <div class="info-value" id="detail-proofs-gallery" onclick="editProofsGallery()">-</div>
           </div>
           <div class="info-card full-width">
             <div class="info-label">🔗 Final Gallery</div>
-            <div class="info-value" id="detail-final-gallery" onclick="editTextField('Final Gallery Link', 'finalGallery', '1211776219912362')">-</div>
+            <div class="info-value" id="detail-final-gallery" onclick="editFinalGallery()">-</div>
           </div>
         </div>
       </div>
@@ -1457,9 +1457,149 @@
       }
     }
     
-    
-    
-    
+    // Deliverables Edit Functions
+    async function editGalleryStage() {
+      const currentStage = currentSession.galleryStage || 'Not Yet Created';
+      const container = document.querySelector('.detail-container');
+      
+      const options = ENUM_OPTIONS['1211732453385482'];
+      
+      container.innerHTML = '<div class="view-header"><h2>Select Gallery Stage</h2></div><div class="list-container">' +
+        options.map(option => {
+          const isCurrent = option.name === currentStage;
+          return `<div class="list-item" onclick="updateGalleryStage('${option.gid}', '${option.name}')">
+            <div class="list-item-left">
+              <h3 style="color: ${isCurrent ? 'var(--gold)' : 'var(--text-primary)'}">${isCurrent ? '[*] ' : ''}${option.name}</h3>
+            </div>
+          </div>`;
+        }).join('') +
+        '</div>';
+    }
+
+    async function updateGalleryStage(stageGid, stageName) {
+      if (currentSession) {
+        await updateTaskCustomField(currentSession.gid, FIELD_IDS.galleryStage, stageGid);
+        currentSession.galleryStage = stageName;
+        showToast(`Gallery Stage: ${stageName}`);
+        
+        const index = sessions.findIndex(s => s.gid === currentSession.gid);
+        if (index !== -1) {
+          sessions[index] = currentSession;
+        }
+        
+        setTimeout(backToDetail, 300);
+      }
+    }
+
+    async function editMasteredImages() {
+      const current = currentSession.masteredImages || '';
+      const newValue = prompt('Enter number of mastered images:', current);
+      if (newValue !== null) {
+        await updateTaskCustomField(currentSession.gid, FIELD_IDS.masteredImages, newValue);
+        currentSession.masteredImages = newValue;
+        document.getElementById('detail-mastered-images').textContent = newValue || '-';
+        showToast('Mastered Images updated');
+      }
+    }
+
+    async function editHeriImages() {
+      const current = currentSession.heriImages || '';
+      const newValue = prompt('Enter number of HERI images:', current);
+      if (newValue !== null) {
+        await updateTaskCustomField(currentSession.gid, FIELD_IDS.heriImages, newValue);
+        currentSession.heriImages = newValue;
+        document.getElementById('detail-heri-images').textContent = newValue || '-';
+        showToast('HERI Images updated');
+      }
+    }
+
+    async function editPhotoNotes() {
+      const current = currentSession.photoNotes || '';
+      const newValue = prompt('Enter photo notes:', current);
+      if (newValue !== null) {
+        await updateTaskCustomField(currentSession.gid, FIELD_IDS.photoNotes, newValue);
+        currentSession.photoNotes = newValue;
+        document.getElementById('detail-photo-notes').textContent = newValue || '-';
+        showToast('Photo Notes updated');
+      }
+    }
+
+    async function editVideoNotes() {
+      const current = currentSession.videoNotes || '';
+      const newValue = prompt('Enter video notes:', current);
+      if (newValue !== null) {
+        await updateTaskCustomField(currentSession.gid, FIELD_IDS.videoNotes, newValue);
+        currentSession.videoNotes = newValue;
+        document.getElementById('detail-video-notes').textContent = newValue || '-';
+        showToast('Video Notes updated');
+      }
+    }
+
+    async function editClientSelectionDate() {
+      const current = currentSession.clientSelectionDate || '';
+      const newValue = prompt('Enter client selection date (YYYY-MM-DD):', current);
+      if (newValue !== null) {
+        await updateTaskCustomField(currentSession.gid, FIELD_IDS.clientSelectionDate, { date_value: newValue });
+        currentSession.clientSelectionDate = newValue;
+        document.getElementById('detail-client-selection-date').textContent = formatDate(newValue);
+        showToast('Client Selection Date updated');
+      }
+    }
+
+    async function editNotesRequests() {
+      const current = currentSession.notesRequests || 'No';
+      const container = document.querySelector('.detail-container');
+      
+      const options = ENUM_OPTIONS['1211776219912356'];
+      
+      container.innerHTML = '<div class="view-header"><h2>Notes or Requests?</h2></div><div class="list-container">' +
+        options.map(option => {
+          const isCurrent = option.name === current;
+          return `<div class="list-item" onclick="updateNotesRequests('${option.gid}', '${option.name}')">
+            <div class="list-item-left">
+              <h3 style="color: ${isCurrent ? 'var(--gold)' : 'var(--text-primary)'}">${isCurrent ? '[*] ' : ''}${option.name}</h3>
+            </div>
+          </div>`;
+        }).join('') +
+        '</div>';
+    }
+
+    async function updateNotesRequests(requestGid, requestName) {
+      if (currentSession) {
+        await updateTaskCustomField(currentSession.gid, FIELD_IDS.notesRequests, requestGid);
+        currentSession.notesRequests = requestName;
+        showToast(`Notes/Requests: ${requestName}`);
+        
+        const index = sessions.findIndex(s => s.gid === currentSession.gid);
+        if (index !== -1) {
+          sessions[index] = currentSession;
+        }
+        
+        setTimeout(backToDetail, 300);
+      }
+    }
+
+    async function editProofsGallery() {
+      const current = currentSession.proofsGallery || '';
+      const newValue = prompt('Enter proofs gallery link:', current);
+      if (newValue !== null) {
+        await updateTaskCustomField(currentSession.gid, FIELD_IDS.proofsGallery, newValue);
+        currentSession.proofsGallery = newValue;
+        document.getElementById('detail-proofs-gallery').textContent = newValue || '-';
+        showToast('Proofs Gallery updated');
+      }
+    }
+
+    async function editFinalGallery() {
+      const current = currentSession.finalGallery || '';
+      const newValue = prompt('Enter final gallery link:', current);
+      if (newValue !== null) {
+        await updateTaskCustomField(currentSession.gid, FIELD_IDS.finalGallery, newValue);
+        currentSession.finalGallery = newValue;
+        document.getElementById('detail-final-gallery').textContent = newValue || '-';
+        showToast('Final Gallery updated');
+      }
+    }
     
     function backToDetail() {
       showView('detail-view');
