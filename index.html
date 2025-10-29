@@ -626,15 +626,15 @@
     <div class="section">
       <div class="section-header">Session Info</div>
       <div class="info-grid">
-        <div class="info-card">
-          <div class="info-label">Project Status</div>
+        <div class="info-card" style="width: 20%;">
+          <div class="info-label">Status</div>
           <div class="info-value" id="detail-project-status" onclick="editProjectStatus()">Status</div>
         </div>
-        <div class="info-card">
+        <div class="info-card" style="width: 45%;">
           <div class="info-label">Phase</div>
           <div class="info-value" id="detail-phase" onclick="showPhaseSelector()">Phase</div>
         </div>
-        <div class="info-card half-width">
+        <div class="info-card" style="width: 30%;">
           <div class="info-label">Payment</div>
           <div class="info-value" id="detail-payment" onclick="editPayment()">Status</div>
         </div>
@@ -1484,10 +1484,10 @@ if (targetEl) targetEl.textContent = name || '-';
     function editProjectStatus() {
       if (!currentSession) return;
       const options = [
-        { gid: '1211735138096719', name: '🔴 - Not Booked' },
-        { gid: '1211735138096720', name: '🟢 - Booked' },
-        { gid: '1211776526581111', name: '⚠️ - Reschedule' },
-        { gid: '1211776526581112', name: '✅ - Session Complete' }
+        { gid: '1211735138096719', name: '🔴' },
+        { gid: '1211735138096720', name: '🟢' },
+        { gid: '1211776526581111', name: '⚠️' },
+        { gid: '1211776526581112', name: '✅' }
       ];
       const currentValue = document.getElementById('detail-project-status').textContent;
       const selectHTML = '<select id="project-status-select" class="filter-select" style="width: 100%; margin: 8px 0;">' +
