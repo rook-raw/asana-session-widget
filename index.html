@@ -337,6 +337,11 @@
       grid-column: 1 / -1;
     }
     
+    .half-width {
+      flex: 0 0 calc(50% - 6px);
+      max-width: calc(50% - 6px);
+    }
+    
     .info-label {
       font-size: 9px;
       color: var(--text-secondary);
@@ -622,10 +627,14 @@
       <div class="section-header">Session Info</div>
       <div class="info-grid">
         <div class="info-card">
+          <div class="info-label">Project Status</div>
+          <div class="info-value" id="detail-project-status" onclick="editProjectStatus()">Status</div>
+        </div>
+        <div class="info-card">
           <div class="info-label">Phase</div>
           <div class="info-value" id="detail-phase" onclick="showPhaseSelector()">Phase</div>
         </div>
-        <div class="info-card">
+        <div class="info-card half-width">
           <div class="info-label">Payment</div>
           <div class="info-value" id="detail-payment" onclick="editPayment()">Status</div>
         </div>
@@ -1472,6 +1481,31 @@ if (targetEl) targetEl.textContent = name || '-';
       document.getElementById('detail-payment').textContent = name;
     }
     
+    function editProjectStatus() {
+      if (!currentSession) return;
+      const options = [
+        { gid: '1211735138096719', name: '🔴 - Not Booked' },
+        { gid: '1211735138096720', name: '🟢 - Booked' },
+        { gid: '1211776526581111', name: '⚠️ - Reschedule' },
+        { gid: '1211776526581112', name: '✅ - Session Complete' }
+      ];
+      const currentValue = document.getElementById('detail-project-status').textContent;
+      const selectHTML = '<select id="project-status-select" class="filter-select" style="width: 100%; margin: 8px 0;">' +
+        options.map(opt => `<option value="${opt.gid}" ${opt.name === currentValue ? 'selected' : ''}>${opt.name}</option>`).join('') +
+        '</select><button onclick="saveProjectStatus()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
+      document.getElementById('detail-project-status').innerHTML = selectHTML;
+    }
+    
+    async function saveProjectStatus() {
+      const gid = document.getElementById('project-status-select').value;
+      const select = document.getElementById('project-status-select');
+      const name = select.options[select.selectedIndex].text;
+      await updateTaskCustomField(currentSession.gid, '1211735138096716', gid);
+      currentSession.projectStatus = name;
+      showToast('Project Status updated');
+      document.getElementById('detail-project-status').textContent = name;
+    }
+    
     function editDate(event) {
       if (event) event.stopPropagation();
       if (!currentSession) return;
@@ -1660,6 +1694,7 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
       
       document.getElementById('detail-client-name').textContent = currentSession.client;
       document.getElementById('detail-session-date').textContent = formatDate(currentSession.sessionDate);
+      document.getElementById('detail-project-status').textContent = currentSession.projectStatus || 'Status';
       document.getElementById('detail-phase').textContent = currentSession.status;
       document.getElementById('detail-payment').textContent = currentSession.paymentStatus;
       document.getElementById('detail-date-edit').textContent = formatDate(currentSession.sessionDate);
