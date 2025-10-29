@@ -365,16 +365,46 @@
       opacity: 0.7;
     }
     
-    .todo-item {
-      background: var(--bg-card);
-      padding: 14px 18px;
-      border-radius: 4px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all 0.2s;
-      letter-spacing: 0.03em;
-    }
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-card);
+  padding: 14px 18px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+}
+
+.todo-text {
+  flex: 1;
+}
+
+.hide-btn {
+  background: rgba(232, 213, 183, 0.08);
+  color: var(--gold);
+  border: none;
+  padding: 6px 10px;
+  border-radius: 2px;
+  font-size: 9px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.hide-btn:hover {
+  opacity: 1;
+  background: rgba(232, 213, 183, 0.15);
+  transform: translateX(-2px);
+}
     
     .todo-item:active {
       transform: scale(0.98);
@@ -1689,9 +1719,9 @@ if (incompleteTodos.length === 0) {
   todosContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted);">No to-do items</div>';
 } else {
   todosContainer.innerHTML = incompleteTodos.map(todo => `
-  <div class="todo-item" onclick="completeTodo('${todo.gid}')">
-  [ ] ${todo.name}
-  <button onclick="event.stopPropagation(); archiveAndHideSubtask('${todo.gid}', '${todo.name.replace(/'/g, "\\'")}')">Hide</button>
+<div class="todo-item" onclick="completeTodo('${todo.gid}')">
+  <span class="todo-text">[ ] ${todo.name}</span>
+  <button class="hide-btn" onclick="event.stopPropagation(); archiveAndHideSubtask('${todo.gid}', '${todo.name.replace(/'/g, "\\'")}')">Hide</button>
 </div>
     <div class="todo-item" onclick="completeTodo('${todo.gid}')">
       [ ] ${todo.name}
@@ -1703,9 +1733,9 @@ if (completedTodos.length === 0) {
   completedContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted);">No completed tasks</div>';
 } else {
   completedContainer.innerHTML = completedTodos.map(todo => `
-  <div class="todo-item" onclick="completeTodo('${todo.gid}')">
-  [ ] ${todo.name}
-  <button onclick="event.stopPropagation(); archiveAndHideSubtask('${todo.gid}', '${todo.name.replace(/'/g, "\\'")}')">Hide</button>
+<div class="todo-item" onclick="completeTodo('${todo.gid}')">
+  <span class="todo-text">[ ] ${todo.name}</span>
+  <button class="hide-btn" onclick="event.stopPropagation(); archiveAndHideSubtask('${todo.gid}', '${todo.name.replace(/'/g, "\\'")}')">Hide</button>
 </div>
     <div class="todo-item completed" style="opacity: 0.6; display: flex; justify-content: space-between; align-items: center;">
       <span onclick="uncompleteTodo('${todo.gid}')" style="flex: 1; cursor: pointer;">[✓] ${todo.name}</span>
