@@ -1723,9 +1723,6 @@ if (incompleteTodos.length === 0) {
   <span class="todo-text">[ ] ${todo.name}</span>
   <button class="hide-btn" onclick="event.stopPropagation(); archiveAndHideSubtask('${todo.gid}', '${todo.name.replace(/'/g, "\\'")}')">Hide</button>
 </div>
-    <div class="todo-item" onclick="completeTodo('${todo.gid}')">
-      [ ] ${todo.name}
-    </div>
   `).join('');
 }
       
@@ -1737,10 +1734,6 @@ if (completedTodos.length === 0) {
   <span class="todo-text">[ ] ${todo.name}</span>
   <button class="hide-btn" onclick="event.stopPropagation(); archiveAndHideSubtask('${todo.gid}', '${todo.name.replace(/'/g, "\\'")}')">Hide</button>
 </div>
-    <div class="todo-item completed" style="opacity: 0.6; display: flex; justify-content: space-between; align-items: center;">
-      <span onclick="uncompleteTodo('${todo.gid}')" style="flex: 1; cursor: pointer;">[✓] ${todo.name}</span>
-      <button onclick="event.stopPropagation(); archiveAndHideSubtask('${todo.gid}', '${todo.name.replace(/'/g, "\\'")}');" style="background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 4px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">Hide</button>
-    </div>
   `).join('');
 }
       
