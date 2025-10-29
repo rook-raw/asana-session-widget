@@ -756,12 +756,22 @@
       <span class="toggle-icon" id="todo-toggle">⬇️</span>
     </button>
     
-    <div id="todo-section" class="collapsible-content">
-      <div class="section">
-        <div class="section-header">☑️To-Do☑️</div>
-        <div id="detail-todos"></div>
+<div id="todo-section" class="collapsible-content">
+  <div class="section">
+    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+      <span>☑️To-Do☑️</span>
+      <button onclick="showAddSubtask()" style="background: var(--gold); color: #000; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer;">+</button>
+    </div>
+    <div id="add-subtask-container" style="display: none; margin-bottom: 16px;">
+      <input type="text" id="subtask-name-input" class="form-input" placeholder="Enter sub-task name..." style="width: 100%; margin-bottom: 8px;">
+      <div style="display: flex; gap: 8px;">
+        <button onclick="createNewSubtask()" class="btn-add" style="flex: 1;">Create</button>
+        <button onclick="cancelAddSubtask()" class="btn-add" style="flex: 1; background: transparent; border: 1px solid var(--border);">Cancel</button>
       </div>
     </div>
+    <div id="detail-todos"></div>
+  </div>
+</div>
     
     <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('completed')">
       <span>✅Completed✅</span>
@@ -1672,15 +1682,16 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
       const incompleteTodos = allTodos.filter(t => !t.completed);
       const completedTodos = allTodos.filter(t => t.completed);
       
-      if (incompleteTodos.length === 0) {
-        todosContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted);">No to-do items</div>';
-      } else {
-        todosContainer.innerHTML = incompleteTodos.map(todo => `
-          <div class="todo-item" onclick="completeTodo('${todo.gid}')">
-            [ ] ${todo.name}
-          </div>
-        `).join('');
-      }
+if (completedTodos.length === 0) {
+  completedContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted);">No completed tasks</div>';
+} else {
+  completedContainer.innerHTML = completedTodos.map(todo => `
+    <div class="todo-item completed" style="opacity: 0.6; display: flex; justify-content: space-between; align-items: center;">
+      <span onclick="uncompleteTodo('${todo.gid}')" style="flex: 1; cursor: pointer;">[✓] ${todo.name}</span>
+      <button onclick="event.stopPropagation(); archiveAndHideSubtask('${todo.gid}', '${todo.name.replace(/'/g, "\\'")}');" style="background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 4px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">Hide</button>
+    </div>
+  `).join('');
+}
       
       if (completedTodos.length === 0) {
         completedContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted);">No completed tasks</div>';
@@ -1763,6 +1774,99 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
         setTimeout(backToDetail, 300);
       }
     }
+
+    function showAddSubtask() {
+  const container = document.getElementById('add-subtask-container');
+  const input = document.getElementById('subtask-name-input');
+  container.style.display = 'block';
+  input.value = '';
+  input.focus();
+}
+
+function cancelAddSubtask() {
+  const container = document.getElementById('add-subtask-container');
+  container.style.display = 'none';
+}
+
+async function createNewSubtask() {
+  const input = document.getElementById('subtask-name-input');
+  const name = input.value.trim();
+  
+  if (!name) {
+    showToast('Please enter a task name');
+    return;
+  }
+  
+  try {
+    await fetch(`https://d.rook-bb4.workers.dev?path=/tasks/${currentSession.gid}/subtasks`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${asanaToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        data: {
+          name: name,
+          completed: false
+        }
+      })
+    });
+    
+    showToast('Sub-task created!');
+    cancelAddSubtask();
+    setTimeout(renderClientDetail, 300);
+  } catch (error) {
+    console.error('Failed to create sub-task:', error);
+    showToast('Failed to create sub-task');
+  }
+}
+
+async function archiveAndHideSubtask(subtaskGid, subtaskName) {
+  if (!confirm(`Archive and hide: "${subtaskName}"?`)) return;
+  
+  try {
+    // Create timestamp
+    const now = new Date();
+    const timestamp = now.toLocaleString('en-US', { 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+    
+    // Add comment to parent task with archived sub-task info
+    const archiveNote = `✓ Completed & Archived: ${subtaskName} (${timestamp})`;
+    
+    await fetch(`https://d.rook-bb4.workers.dev?path=/tasks/${currentSession.gid}/stories`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${asanaToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        data: {
+          text: archiveNote
+        }
+      })
+    });
+    
+    // Delete the sub-task from Asana
+    await fetch(`https://d.rook-bb4.workers.dev?path=/tasks/${subtaskGid}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${asanaToken}`
+      }
+    });
+    
+    showToast('Sub-task archived!');
+    setTimeout(renderClientDetail, 300);
+  } catch (error) {
+    console.error('Failed to archive sub-task:', error);
+    showToast('Failed to archive sub-task');
+  }
+}
     
     function formatDate(dateString) {
       if (!dateString) return 'No date set';
