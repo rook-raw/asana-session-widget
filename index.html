@@ -628,7 +628,7 @@
       <div class="info-grid">
         <div class="info-card" style="width: 20%;">
           <div class="info-label">Status</div>
-          <div class="info-value" id="detail-project-status" onclick="editProjectStatus(event)">Status</div>
+          <div class="info-value" id="detail-project-status" onclick="showProjectStatusSelector()">Status</div>
         </div>
         <div class="info-card" style="width: 45%;">
           <div class="info-label">Phase</div>
@@ -636,7 +636,7 @@
         </div>
         <div class="info-card" style="width: 30%;">
           <div class="info-label">Payment</div>
-          <div class="info-value" id="detail-payment" onclick="editPayment()">Status</div>
+          <div class="info-value" id="detail-payment" onclick="showPaymentSelector()">Status</div>
         </div>
         <div class="info-card full-width">
           <div class="info-label">Session Date</div>
@@ -929,6 +929,30 @@
     </div>
     
     <div id="phase-list"></div>
+  </div>
+  
+  <!-- Project Status Selector View -->
+  <div id="project-status-view" class="view">
+    <button class="back-btn" onclick="backToDetail()">← Back</button>
+    
+    <div class="detail-header">
+      <h2>Select Project Status</h2>
+      <div class="date" id="project-status-client-name">Client Name</div>
+    </div>
+    
+    <div id="project-status-list"></div>
+  </div>
+  
+  <!-- Payment Status Selector View -->
+  <div id="payment-view" class="view">
+    <button class="back-btn" onclick="backToDetail()">← Back</button>
+    
+    <div class="detail-header">
+      <h2>Select Payment Status</h2>
+      <div class="date" id="payment-client-name">Client Name</div>
+    </div>
+    
+    <div id="payment-list"></div>
   </div>
   
   <!-- Add Client Modal -->
@@ -1260,6 +1284,94 @@
       renderPhaseSelector();
     }
     
+    function showProjectStatusSelector() {
+      showView('project-status-view');
+      renderProjectStatusSelector();
+    }
+
+    function showPaymentSelector() {
+      showView('payment-view');
+      renderPaymentSelector();
+    }
+
+    function renderProjectStatusSelector() {
+      const container = document.getElementById('project-status-list');
+      document.getElementById('project-status-client-name').textContent = currentSession?.client || 'Client';
+      
+      const options = [
+        { gid: '1211735138096719', name: '🔴' },
+        { gid: '1211735138096720', name: '🟢' },
+        { gid: '1211776526581111', name: '⚠️' },
+        { gid: '1211776526581112', name: '✅' }
+      ];
+      
+      const currentProjectStatus = document.getElementById('detail-project-status').textContent;
+      
+      container.innerHTML = options.map(option => {
+        const isCurrent = option.name === currentProjectStatus;
+        return `
+          <div class="list-item" onclick="updateProjectStatus('${option.gid}', '${option.name}')">
+            <div class="list-item-left">
+              <h3 style="color: ${isCurrent ? 'var(--gold)' : 'var(--text-primary)'}">
+                ${isCurrent ? '[*] ' : ''}${option.name}
+              </h3>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderPaymentSelector() {
+      const container = document.getElementById('payment-list');
+      document.getElementById('payment-client-name').textContent = currentSession?.client || 'Client';
+      
+      const options = [
+        { gid: '1211733390060958', name: 'Unpaid' },
+        { gid: '1211733390060959', name: 'Partial' },
+        { gid: '1211733390060960', name: 'Paid' }
+      ];
+      
+      const currentPayment = currentSession?.paymentStatus || 'Unpaid';
+      
+      container.innerHTML = options.map(option => {
+        const isCurrent = option.name === currentPayment;
+        return `
+          <div class="list-item" onclick="updatePayment('${option.gid}', '${option.name}')">
+            <div class="list-item-left">
+              <h3 style="color: ${isCurrent ? 'var(--gold)' : 'var(--text-primary)'}">
+                ${isCurrent ? '[*] ' : ''}${option.name}
+              </h3>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function updateProjectStatus(statusGid, statusName) {
+      if (currentSession) {
+        await updateTaskCustomField(currentSession.gid, ACTIVE_STATUS_FIELD_ID, statusGid);
+        currentSession.projectStatus = statusName;
+        showToast(`Project Status: ${statusName}`);
+        
+        setTimeout(backToDetail, 300);
+      }
+    }
+
+    async function updatePayment(paymentGid, paymentName) {
+      if (currentSession) {
+        await updateTaskCustomField(currentSession.gid, PAYMENT_STATUS_FIELD_ID, paymentGid);
+        currentSession.paymentStatus = paymentName;
+        showToast(`Payment: ${paymentName}`);
+        
+        const index = sessions.findIndex(s => s.gid === currentSession.gid);
+        if (index !== -1) {
+          sessions[index] = currentSession;
+        }
+        
+        setTimeout(backToDetail, 300);
+      }
+    }
+    
     
     
     
@@ -1455,56 +1567,6 @@ const selectHTML = '<select id="edit-select" class="filter-select" style="width:
       showToast('Updated');
 const targetEl = document.getElementById(`detail-${field}`) || document.getElementById(`inquiry-${field}`);
 if (targetEl) targetEl.textContent = name || '-';    
-    }
-    
-    function editPayment() {
-      if (!currentSession) return;
-      const options = [
-        { gid: '1211733390060958', name: 'Unpaid' },
-        { gid: '1211733390060959', name: 'Partial' },
-        { gid: '1211733390060960', name: 'Paid' }
-      ];
-      const currentValue = document.getElementById('detail-payment').textContent;
-      const selectHTML = '<select id="payment-select" class="filter-select" style="width: 100%; margin: 8px 0;">' +
-        options.map(opt => `<option value="${opt.gid}" ${opt.name === currentValue ? 'selected' : ''}>${opt.name}</option>`).join('') +
-        '</select><button onclick="savePayment()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
-      document.getElementById('detail-payment').innerHTML = selectHTML;
-    }
-    
-    async function savePayment() {
-      const gid = document.getElementById('payment-select').value;
-      const select = document.getElementById('payment-select');
-      const name = select.options[select.selectedIndex].text;
-      await updateTaskCustomField(currentSession.gid, '1211733390060955', gid);
-      currentSession.paymentStatus = name;
-      showToast('Payment updated');
-      document.getElementById('detail-payment').textContent = name;
-    }
-    
-    function editProjectStatus(event) {
-      if (event) event.stopPropagation();
-      if (!currentSession) return;
-      const options = [
-        { gid: '1211735138096719', name: '🔴' },
-        { gid: '1211735138096720', name: '🟢' },
-        { gid: '1211776526581111', name: '⚠️' },
-        { gid: '1211776526581112', name: '✅' }
-      ];
-      const currentValue = document.getElementById('detail-project-status').textContent;
-      const selectHTML = '<select id="project-status-select" class="filter-select" style="width: 100%; margin: 8px 0;">' +
-        options.map(opt => `<option value="${opt.gid}" ${opt.name === currentValue ? 'selected' : ''}>${opt.name}</option>`).join('') +
-        '</select><button onclick="saveProjectStatus()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
-      document.getElementById('detail-project-status').innerHTML = selectHTML;
-    }
-    
-    async function saveProjectStatus() {
-      const gid = document.getElementById('project-status-select').value;
-      const select = document.getElementById('project-status-select');
-      const name = select.options[select.selectedIndex].text;
-      await updateTaskCustomField(currentSession.gid, '1211735138096716', gid);
-      currentSession.projectStatus = name;
-      showToast('Project Status updated');
-      document.getElementById('detail-project-status').textContent = name;
     }
     
     function editDate(event) {
