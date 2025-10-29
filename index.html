@@ -650,6 +650,11 @@
       <select id="widget-filter-type" class="filter-select" onchange="applyFilters()">
         <option value="">All Types</option>
       </select>
+      <button class="filter-select" onclick="toggleShowArchived()" 
+              id="show-archived-btn" 
+              style="max-width: 150px; cursor: pointer;">
+        Show Archived
+      </button>
     </div>
     <div id="widget-sessions">
       <div class="loading">
@@ -778,6 +783,12 @@
         📞Schedule Discovery Call📞
       </button>
     </div>
+    
+    <button class="btn-add" onclick="archiveSession()" 
+            style="width: 100%; margin-bottom: 12px; background: var(--critical);">
+      🗄️ Archive Session
+    </button>
+    
     <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('client-profile')">
       <span>📝Client Profile📝</span>
       <span class="toggle-icon" id="client-profile-toggle">⬇️</span>
@@ -890,6 +901,10 @@
           <div class="info-card full-width">
             <div class="info-label">Other Expectations</div>
             <div class="info-value" id="inquiry-expectations" onclick="editTextField('Other Expectations', 'expectations', '1211746958112289')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Brainstorm Notes</div>
+            <div class="info-value" id="inquiry-brainstormNotes" onclick="editLongTextField('Brainstorm Notes', 'brainstormNotes', '1211779092162524')">-</div>
           </div>
         </div>
       </div>
@@ -1206,7 +1221,8 @@
       clientSelectionDate: '1211776219912350',
       notesRequests: '1211776219912356',
       proofsGallery: '1211776219912360',
-      finalGallery: '1211776219912362'
+      finalGallery: '1211776219912362',
+      brainstormNotes: '1211779092162524'
     };
     // Enum field options
     const ENUM_OPTIONS = {
@@ -1257,6 +1273,7 @@
     let sessions = [];
     let phaseOptions = [];
     let currentSession = null;
+    let showArchivedSessions = false;
     let currentFilters = {
       phase: '',
       type: ''
@@ -1270,7 +1287,7 @@
     // API Functions
     async function fetchSessions() {
       const response = await fetch(
-        proxyUrl(`/tasks?project=${PROJECT_ID}&opt_fields=name,custom_fields,gid`),
+        proxyUrl(`/tasks?project=${PROJECT_ID}&opt_fields=name,custom_fields,gid,memberships,memberships.section,memberships.section.name`),
         {
           headers: { 'Authorization': `Bearer ${asanaToken}` }
         }
@@ -1337,7 +1354,10 @@
             clientSelectionDate: getField(FIELD_IDS.clientSelectionDate)?.date_value?.date || getField(FIELD_IDS.clientSelectionDate)?.date_value || null,
             notesRequests: getField(FIELD_IDS.notesRequests)?.enum_value?.name || '',
             proofsGallery: getField(FIELD_IDS.proofsGallery)?.text_value || '',
-            finalGallery: getField(FIELD_IDS.finalGallery)?.text_value || ''
+            finalGallery: getField(FIELD_IDS.finalGallery)?.text_value || '',
+            brainstormNotes: getField(FIELD_IDS.brainstormNotes)?.text_value || '',
+            // Archive detection
+            isArchived: task.memberships?.some(m => m.section?.gid === '1211779092162521' || m.section?.name === 'Archive') || false
           };
         })
         .sort((a, b) => {
@@ -2278,8 +2298,18 @@
       `).join('');
     }
     
+    function toggleShowArchived() {
+      showArchivedSessions = !showArchivedSessions;
+      document.getElementById('show-archived-btn').textContent = 
+        showArchivedSessions ? 'Hide Archived' : 'Show Archived';
+      applyFilters();
+    }
+    
     function getFilteredSessions() {
       return sessions.filter(session => {
+        // Filter out archived unless showing archived
+        if (session.isArchived && !showArchivedSessions) return false;
+        
         const phaseMatch = !currentFilters.phase || session.status === currentFilters.phase;
         const typeMatch = !currentFilters.type || session.clientType === currentFilters.type;
         return phaseMatch && typeMatch;
@@ -2497,6 +2527,41 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
     function closeDiscoveryCallModal() {
       const modal = document.getElementById('discovery-modal-temp');
       if (modal) modal.remove();
+    }
+    
+    async function archiveSession() {
+      if (!currentSession) return;
+      
+      // Confirm action
+      if (!confirm(`Archive ${currentSession.client}? This will hide them from the main view.`)) {
+        return;
+      }
+      
+      try {
+        // Move to Archive section
+        const ARCHIVE_SECTION_GID = '1211779092162521';
+        
+        await fetch(proxyUrl(`/tasks/${currentSession.gid}/addProject`), {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${asanaToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            data: {
+              project: PROJECT_ID,
+              section: ARCHIVE_SECTION_GID
+            }
+          })
+        });
+        
+        showToast('Session archived');
+        showWidget(); // Return to main view
+        renderWidget(); // Refresh list
+      } catch (error) {
+        console.error('Archive error:', error);
+        showToast('Archive failed');
+      }
     }
 
     
@@ -2718,6 +2783,7 @@ if (completedTodos.length === 0) {
       document.getElementById('inquiry-howFeel').textContent = currentSession.howFeel || '-';
       document.getElementById('inquiry-confidence').textContent = currentSession.confidence || '-';
       document.getElementById('inquiry-expectations').textContent = currentSession.expectations || '-';
+      document.getElementById('inquiry-brainstormNotes').textContent = currentSession.brainstormNotes || '-';
       
       // Financial
       document.getElementById('inquiry-budget').textContent = currentSession.budget || '-';
