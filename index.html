@@ -3608,12 +3608,19 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
     async function renderClientDetail() {
       if (!currentSession) return;
       
-      // Hero Box
-      document.getElementById('detail-client-name').textContent = currentSession.client;
-      document.getElementById('detail-session-type').textContent = currentSession.sessionType || 'Session Type';
-      document.getElementById('detail-phase-hero').textContent = (currentSession.status || 'Phase').toUpperCase();
+      // Hero Box (with null checks)
+      const clientNameEl = document.getElementById('detail-client-name');
+      const sessionTypeEl = document.getElementById('detail-session-type');
+      const phaseHeroEl = document.getElementById('detail-phase-hero');
+      
+      if (clientNameEl) clientNameEl.textContent = currentSession.client;
+      if (sessionTypeEl) sessionTypeEl.textContent = currentSession.sessionType || 'Session Type';
+      if (phaseHeroEl) phaseHeroEl.textContent = (currentSession.status || 'Phase').toUpperCase();
       
       // Session Date Countdown Box
+      const countdownEl = document.getElementById('session-countdown');
+      const dateDisplayEl = document.getElementById('session-date-display');
+      
       if (currentSession.sessionDate) {
         const sessionDate = new Date(currentSession.sessionDate);
         const today = new Date();
@@ -3626,17 +3633,23 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
         else if (daysUntil === 0) countdownText = 'Today!';
         else countdownText = `${Math.abs(daysUntil)} day${Math.abs(daysUntil) === 1 ? '' : 's'} ago`;
         
-        document.getElementById('session-countdown').textContent = countdownText;
-        document.getElementById('session-date-display').textContent = formatDate(currentSession.sessionDate);
+        if (countdownEl) countdownEl.textContent = countdownText;
+        if (dateDisplayEl) dateDisplayEl.textContent = formatDate(currentSession.sessionDate);
       } else {
-        document.getElementById('session-countdown').textContent = 'Not Set';
-        document.getElementById('session-date-display').textContent = 'Set date';
+        if (countdownEl) countdownEl.textContent = 'Not Set';
+        if (dateDisplayEl) dateDisplayEl.textContent = 'Set date';
       }
       
-      document.getElementById('detail-project-status').textContent = currentSession.projectStatus || 'Status';
-      document.getElementById('detail-phase').textContent = currentSession.status;
-      document.getElementById('detail-payment').textContent = currentSession.paymentStatus;
-      document.getElementById('detail-date-edit').textContent = formatDate(currentSession.sessionDate);
+      // Detail fields (with null checks)
+      const projectStatusEl = document.getElementById('detail-project-status');
+      const detailPhaseEl = document.getElementById('detail-phase');
+      const detailPaymentEl = document.getElementById('detail-payment');
+      const dateEditEl = document.getElementById('detail-date-edit');
+      
+      if (projectStatusEl) projectStatusEl.textContent = currentSession.projectStatus || 'Status';
+      if (detailPhaseEl) detailPhaseEl.textContent = currentSession.status;
+      if (detailPaymentEl) detailPaymentEl.textContent = currentSession.paymentStatus;
+      if (dateEditEl) dateEditEl.textContent = formatDate(currentSession.sessionDate);
       
       // Show/hide Discovery Call button (only for Phase I & II)
       const discoveryContainer = document.getElementById('discovery-call-container');
