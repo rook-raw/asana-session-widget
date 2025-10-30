@@ -2403,10 +2403,10 @@
       const current = currentSession.notesRequests || 'No';
       const options = ENUM_OPTIONS['1211776219912356'];
       
-      const selectHTML = '<select id="edit-select" class="filter-select" style="width: 100%; margin: 8px 0;" onclick="event.stopPropagation()">' +
+      const selectHTML = '<select id="edit-select" class="filter-select" style="width: 100%; margin: 8px 0;" onclick="event.stopPropagation()" onchange="saveNotesRequests()">' +
         '<option value="">Select Notes/Requests</option>' +
         options.map(opt => `<option value="${opt.gid}" ${opt.name === current ? 'selected' : ''}>${opt.name}</option>`).join('') +
-        '</select><button onclick="saveNotesRequests()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
+        '</select>';
       
       const targetEl = document.getElementById('detail-notes-requests');
       if (targetEl) targetEl.innerHTML = selectHTML;
@@ -2539,7 +2539,7 @@
     function editTextField(label, field, fieldId) {
       if (!currentSession) return;
       const currentValue = currentSession[field] || '';
-      const inputHTML = `<input type="text" id="edit-input" class="form-input" style="width: 100%; margin: 8px 0;" value="${currentValue}" placeholder="Enter ${label}"><button onclick="saveTextField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
+      const inputHTML = `<input type="text" id="edit-input" class="form-input" style="width: 100%; margin: 8px 0;" value="${currentValue}" placeholder="Enter ${label}" onblur="saveTextField('${field}', '${fieldId}')">`;
       
       // Check which element exists (detail vs inquiry)
       const detailEl = document.getElementById(`detail-${field}`);
@@ -2558,7 +2558,7 @@
     function editLongTextField(label, field, fieldId) {
       if (!currentSession) return;
       const currentValue = currentSession[field] || '';
-      const inputHTML = `<textarea id="edit-input" class="form-textarea" style="width: 100%; margin: 8px 0;" placeholder="Enter ${label}">${currentValue}</textarea><button onclick="saveTextField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
+      const inputHTML = `<textarea id="edit-input" class="form-textarea" style="width: 100%; margin: 8px 0;" placeholder="Enter ${label}" onblur="saveTextField('${field}', '${fieldId}')">${currentValue}</textarea>`;
       document.getElementById(`inquiry-${field}`).innerHTML = inputHTML;
       document.getElementById('edit-input').focus();
     }
@@ -2566,7 +2566,7 @@
     function editNumberField(label, field, fieldId) {
       if (!currentSession) return;
       const currentValue = currentSession[field] || '';
-      const inputHTML = `<input type="number" id="edit-input" class="form-input" style="width: 100%; margin: 8px 0;" value="${currentValue}" placeholder="Enter ${label}"><button onclick="saveNumberField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
+      const inputHTML = `<input type="number" id="edit-input" class="form-input" style="width: 100%; margin: 8px 0;" value="${currentValue}" placeholder="Enter ${label}" onblur="saveNumberField('${field}', '${fieldId}')">`;
       
       // Check which element exists (detail vs inquiry)
       const detailEl = document.getElementById(`detail-${field}`);
@@ -2589,9 +2589,9 @@
       // Fallback to ENUM_OPTIONS if options not provided
       const opts = options || ENUM_OPTIONS[fieldId] || [];
       
-const selectHTML = '<select id="edit-select" class="filter-select" style="width: 100%; margin: 8px 0;" onclick="event.stopPropagation()">' +        `<option value="">Select ${label}</option>` +
+const selectHTML = '<select id="edit-select" class="filter-select" style="width: 100%; margin: 8px 0;" onclick="event.stopPropagation()" onchange="saveEnumField(\'' + field + '\', \'' + fieldId + '\')">' +        `<option value="">Select ${label}</option>` +
         opts.map(opt => `<option value="${opt.gid}" ${opt.name === currentValue ? 'selected' : ''}>${opt.name}</option>`).join('') +
-        `</select><button onclick="saveEnumField('${field}', '${fieldId}')" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>`;
+        `</select>`;
       const targetEl = document.getElementById(`detail-${field}`) || document.getElementById(`inquiry-${field}`);
       if (targetEl) targetEl.innerHTML = selectHTML;
     }
@@ -2656,7 +2656,7 @@ if (targetEl) targetEl.textContent = name || '-';
       const currentDate = currentSession.sessionDate || '';
       const container = document.getElementById('detail-date-edit');
       container.onclick = null; // Remove onclick to prevent conflicts
-      const inputHTML = '<input type="date" id="date-input" class="form-input" style="width: 100%; margin: 8px 0;" value="' + currentDate + '" onclick="event.stopPropagation()"><button onclick="saveDate()" class="btn-add" style="width: 100%; margin-top: 8px;">Save</button>';
+      const inputHTML = '<input type="date" id="date-input" class="form-input" style="width: 100%; margin: 8px 0;" value="' + currentDate + '" onclick="event.stopPropagation()" onchange="saveDate()">';
       container.innerHTML = inputHTML;
       setTimeout(() => document.getElementById('date-input').focus(), 100);
     }
@@ -2934,6 +2934,23 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
       document.getElementById('detail-sessionType').textContent = currentSession.sessionType || '-';
       document.getElementById('detail-conceptStyle').textContent = currentSession.conceptStyle || '-';
       document.getElementById('detail-creativeLevel').textContent = currentSession.creativeLevel || '-';
+      
+      // Inquiry fields
+      document.getElementById('inquiry-preferredDate').textContent = currentSession.preferredDate || '-';
+      document.getElementById('inquiry-city').textContent = currentSession.city || '-';
+      document.getElementById('inquiry-sessionLocation').textContent = currentSession.sessionLocation || '-';
+      document.getElementById('inquiry-vision').textContent = currentSession.vision || '-';
+      document.getElementById('inquiry-spicyLevel').textContent = currentSession.spicyLevel || '-';
+      document.getElementById('inquiry-mustHave').textContent = currentSession.mustHave || '-';
+      document.getElementById('inquiry-locationPref').textContent = currentSession.locationPref || '-';
+      document.getElementById('inquiry-lightingPref').textContent = currentSession.lightingPref || '-';
+      document.getElementById('inquiry-howFeel').textContent = currentSession.howFeel || '-';
+      document.getElementById('inquiry-confidence').textContent = currentSession.confidence || '-';
+      document.getElementById('inquiry-expectations').textContent = currentSession.expectations || '-';
+      document.getElementById('inquiry-budget').textContent = currentSession.budget || '-';
+      document.getElementById('inquiry-package').textContent = currentSession.package || '-';
+      document.getElementById('inquiry-prints').textContent = currentSession.prints || '-';
+      document.getElementById('inquiry-video').textContent = currentSession.video || '-';
       
       // Todos
       const todosContainer = document.getElementById('detail-todos');
