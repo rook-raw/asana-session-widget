@@ -2540,12 +2540,8 @@
       
       // Populate old fields
       document.getElementById('deliverable-client-name').textContent = task.name;
-      
-      const sessionDate = task.custom_fields?.find(f => f.gid === FIELD_IDS.SESSION_DATE)?.date_value?.date || 'Not set';
-      document.getElementById('deliverable-session-date').textContent = sessionDate;
-      
-      const galleryStage = task.custom_fields?.find(f => f.gid === FIELD_IDS.GALLERY_STAGE)?.enum_value?.name || 'Not set';
-      document.getElementById('deliverable-gallery-stage').textContent = galleryStage;
+      document.getElementById('deliverable-session-date').textContent = sessionDate || 'Not set';
+      document.getElementById('deliverable-gallery-stage').textContent = galleryStage || 'Not set';
       
       const masteredImages = task.custom_fields?.find(f => f.gid === FIELD_IDS.MASTERED_IMAGES)?.text_value || '0';
       document.getElementById('deliverable-mastered-images').textContent = masteredImages;
