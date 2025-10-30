@@ -54,9 +54,182 @@
       animation: fadeIn 0.4s ease;
     }
     
+    /* Top Navigation Tabs */
+    .top-nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    
+    .top-tab {
+      background: none;
+      border: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      letter-spacing: 2px;
+      color: var(--text-primary);
+      padding: 12px 24px;
+      cursor: pointer;
+      position: relative;
+      transition: opacity 0.3s;
+    }
+    
+    .top-tab:hover {
+      opacity: 0.8;
+    }
+    
+    .top-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -16px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gold);
+    }
+    
+    @media (max-width: 768px) {
+      .top-nav-tabs { gap: 16px; }
+      .top-tab { font-size: 14px; padding: 12px 16px; }
+    }
+    
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
+    }
+    
+    /* Client Hero Box */
+    .client-hero-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 40px 32px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    /* Sub Navigation Tabs */
+    .sub-nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    .sub-tab {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 16px 20px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .sub-tab:hover {
+      color: var(--text-primary);
+      opacity: 0.8;
+    }
+
+    .sub-tab.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    /* Tab Content Containers */
+    .tab-content {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+      opacity: 1;
+    }
+    
+    .client-hero-box .client-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      color: var(--gold);
+      margin: 0 0 12px 0;
+    }
+    
+    .client-hero-box .session-type {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    
+    .client-hero-box .client-phase {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+    }
+    
+    @media (max-width: 768px) {
+      .client-hero-box {
+        padding: 24px;
+      }
+      
+      .client-hero-box .client-name {
+        font-size: 32px;
+      }
+    }
+    
+    /* Session Date Box */
+    .session-date-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      margin: 24px 0;
+    }
+    
+    .session-date-box .countdown-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 300;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    
+    .session-date-box .date-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+    
+    .session-date-box .clickable-date {
+      color: var(--text-primary);
+      text-decoration: underline;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+    
+    .session-date-box .clickable-date:hover {
+      opacity: 0.8;
+    }
+    
+    @media (max-width: 768px) {
+      .session-date-box .countdown-text {
+        font-size: 28px;
+      }
     }
     
     #widget-view {
@@ -325,6 +498,113 @@
       font-weight: 400;
     }
     
+    /* Level Bar Styles */
+    .level-bar {
+      display: flex;
+      gap: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .level-item {
+      flex: 1;
+    }
+    
+    .level-item span {
+      display: block;
+      font-size: 9px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 6px;
+    }
+    
+    .level-indicator {
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .level-indicator::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: var(--level-width, 0%);
+      background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-light));
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    /* Footer Styles */
+    .detail-footer {
+      position: sticky;
+      bottom: 0;
+      padding: 12px;
+      background: var(--bg-primary);
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+      z-index: 10;
+    }
+    
+    /* Todo Panel Styles */
+    .todo-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: var(--bg-card);
+      border-top: 2px solid var(--gold);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+      z-index: 20;
+    }
+    
+    .todo-panel.expanded {
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    
+    .todo-panel-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    
+    .todo-tab {
+      flex: 1;
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .todo-tab.active {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+    }
+    
+    .todo-panel-view {
+      padding: 12px;
+    }
+    
     .info-card {
       background: var(--bg-card);
       border-radius: 4px;
@@ -590,30 +870,34 @@
       transform: scale(0.98);
     }
     
+    /* Top Navigation Tabs - Step 3 */
     .nav-tabs {
       display: flex;
       justify-content: center;
-      gap: 0;
+      gap: 32px;
       background: var(--bg-primary);
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
       z-index: 100;
+      padding: 20px 0;
     }
     
     .nav-tab {
-      flex: 1;
-      padding: 20px;
+      padding: 12px 24px;
       text-align: center;
       font-family: 'Cormorant Garamond', serif;
       font-size: 16px;
       font-weight: 300;
-      letter-spacing: 0.15em;
+      letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--text-secondary);
       cursor: pointer;
       transition: all 0.3s;
       border-bottom: 2px solid transparent;
+      background: none;
+      border: none;
+      position: relative;
     }
     
     .nav-tab.active {
@@ -622,7 +906,90 @@
     }
     
     .nav-tab:hover {
+      opacity: 0.8;
+    }
+    
+    /* Deliverable Hero Box - Step 7 */
+    .deliverable-hero-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 40px 32px;
+      text-align: center;
+      margin: 24px 0;
+    }
+    
+    .deliverable-hero-box .client-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px;
+      font-weight: 300;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    
+    .deliverable-hero-box .session-type {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
       color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    
+    .deliverable-hero-box .deliverable-phase {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+    }
+    
+    /* Deadline Box - Step 7 */
+    .deadline-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      margin: 24px 0;
+    }
+    
+    .deadline-box .countdown-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 300;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    
+    .deadline-box .date-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+    
+    .deadline-box .clickable-date {
+      color: var(--text-primary);
+      text-decoration: underline;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    
+    .deadline-box .clickable-date:hover {
+      opacity: 0.8;
+    }
+    
+    @media (max-width: 768px) {
+      .deliverable-hero-box {
+        padding: 24px;
+      }
+      
+      .deliverable-hero-box .client-name {
+        font-size: 32px;
+      }
+      
+      .deadline-box .countdown-text {
+        font-size: 28px;
+      }
     }
     
     /* ========================================
@@ -886,9 +1253,17 @@
   <div id="deliverable-detail-view" class="view">
     <button class="back-btn" onclick="showDeliverablesTab()">← Back</button>
     
-    <div class="detail-header">
-      <h2 id="deliverable-client-name">Client Name</h2>
-      <div class="date" id="deliverable-session-date">Session Date</div>
+    <!-- Deliverable Hero Box -->
+    <div class="deliverable-hero-box">
+      <h1 class="client-name" id="deliverable-hero-client-name">Client Name</h1>
+      <div class="session-type" id="deliverable-hero-session-type">Session Type</div>
+      <div class="deliverable-phase" id="deliverable-hero-phase">PHASE NAME</div>
+    </div>
+    
+    <!-- Deadline Box -->
+    <div class="deadline-box">
+      <div class="countdown-text" id="deliverable-countdown">Loading...</div>
+      <div class="date-text">due <span class="clickable-date" id="deliverable-deadline-display" onclick="editDeliverableDeadline()">Date</span></div>
     </div>
     
     <div class="section">
@@ -938,10 +1313,34 @@
   <div id="detail-view" class="view">
     <button class="back-btn" onclick="showWidget()">← Back</button>
     
-    <div class="detail-header">
-      <h2 id="detail-client-name">Client Name</h2>
-      <div class="date" id="detail-session-date">Session Date</div>
+    <nav class="top-nav-tabs">
+      <button class="top-tab active" data-view="sessions">SESSIONS</button>
+      <button class="top-tab" data-view="deliverables">DELIVERABLES</button>
+    </nav>
+    
+    <!-- Client Hero Box -->
+    <div class="client-hero-box">
+      <h1 class="client-name" id="detail-client-name">Client Name</h1>
+      <div class="session-type" id="detail-session-type">Session Type</div>
+      <div class="client-phase" id="detail-phase-hero">PHASE NAME</div>
     </div>
+    
+    <!-- Session Date Box -->
+    <div class="session-date-box">
+      <div class="countdown-text" id="session-countdown">Loading...</div>
+      <div class="date-text">on <span class="clickable-date" id="session-date-display" onclick="editDate()">Date</span></div>
+    </div>
+    
+    <!-- Sub Navigation Tabs -->
+    <nav class="sub-nav-tabs">
+      <button class="sub-tab active" data-section="details" onclick="switchClientTab('details')">DETAILS</button>
+      <button class="sub-tab" data-section="contact" onclick="switchClientTab('contact')">CONTACT</button>
+      <button class="sub-tab" data-section="notes" onclick="switchClientTab('notes')">MOODBOARD</button>
+      <button class="sub-tab" data-section="plan" onclick="switchClientTab('plan')">THE PLAN</button>
+    </nav>
+    
+    <!-- DETAILS Tab Content -->
+    <div id="tab-details" class="tab-content active">
     
     <div class="section">
       <div class="section-header">Session Info</div>
@@ -950,13 +1349,9 @@
           <div class="info-label">Status</div>
           <div class="info-value" id="detail-project-status" onclick="showProjectStatusSelector()">Status</div>
         </div>
-        <div class="info-card" style="width: 45%;">
+        <div class="info-card" style="width: 75%;">
           <div class="info-label">Phase</div>
           <div class="info-value" id="detail-phase" onclick="showPhaseSelector()">Phase</div>
-        </div>
-        <div class="info-card" style="width: 30%;">
-          <div class="info-label">Payment</div>
-          <div class="info-value" id="detail-payment" onclick="showPaymentSelector()">Status</div>
         </div>
         <div class="info-card full-width">
           <div class="info-label">Session Date</div>
@@ -966,16 +1361,166 @@
     </div>
     
     
-    <div id="discovery-call-container" style="display: none; margin-bottom: 12px;">
-      <button class="btn-add" style="width: 100%;" onclick="scheduleDiscoveryCall()">
-        📞Schedule Discovery Call📞
-      </button>
-    </div>
-    
     <button class="btn-add" onclick="archiveSession()" 
             style="width: 100%; margin-bottom: 12px; background: var(--critical);">
       🗄️ Archive Session
     </button>
+    </div>
+    <!-- End DETAILS Tab -->
+    
+    <!-- CONTACT Tab Content -->
+    <div id="tab-contact" class="tab-content">
+      <div class="section">
+        <div class="section-header">Contact Information</div>
+        <div class="info-grid">
+          <div class="info-card full-width">
+            <div class="info-label">Email</div>
+            <div class="info-value" id="detail-email-contact" onclick="editTextField('Email', 'email', '1211746957812346')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Phone</div>
+            <div class="info-value" id="detail-phone-contact" onclick="editTextField('Phone', 'phone', '1211746958112303')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Instagram</div>
+            <div class="info-value" id="detail-instagram-contact" onclick="editTextField('Instagram', 'instagram', '1211746957812348')">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End CONTACT Tab -->
+    
+    <!-- THE PLAN Tab Content -->
+    <div id="tab-plan" class="tab-content">
+      <div class="section">
+        <div class="section-header">Coming Soon</div>
+        <p style="text-align: center; color: var(--text-secondary); padding: 40px 20px;">
+          The Plan feature is under development. This section will help you manage session timelines, deliverables, and client communications.
+        </p>
+      </div>
+    </div>
+    <!-- End THE PLAN Tab -->
+    
+    <!-- MOODBOARD Tab Content -->
+    <div id="tab-notes" class="tab-content">
+      
+      <!-- Level Bar -->
+      <div class="level-bar">
+        <div class="level-item">
+          <span>Creative</span>
+          <div class="level-indicator" id="creative-level-bar"></div>
+        </div>
+        <div class="level-item">
+          <span>Spicy</span>
+          <div class="level-indicator" id="spicy-level-bar"></div>
+        </div>
+        <div class="level-item">
+          <span>Confidence</span>
+          <div class="level-indicator" id="confidence-level-bar"></div>
+        </div>
+      </div>
+      
+      <!-- Creative Profile Section -->
+      <div class="section">
+        <div class="section-header">Creative Profile</div>
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-label">Session Type</div>
+            <div class="info-value" id="inquiry-sessionType" onclick="editEnumField('Session Type', 'sessionType', '1211746958112263', ENUM_OPTIONS.sessionType)">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Concept Style</div>
+            <div class="info-value" id="inquiry-conceptStyle" onclick="editEnumField('Concept Style', 'conceptStyle', '1211747518670337', ENUM_OPTIONS.conceptStyle)">-</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Time & Date Preference Section -->
+      <div class="section">
+        <div class="section-header">Time & Date Preference</div>
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-label">Preferred Date</div>
+            <div class="info-value" id="inquiry-preferredDate" onclick="editTextField('Preferred Date', 'preferredDate', '1211746957812354')">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Preferred City</div>
+            <div class="info-value" id="inquiry-city" onclick="editEnumField('City', 'city', '1211746957812356', [{gid:'1211746957812357',name:'Charleston'},{gid:'1211746957812358',name:'NYC'}])">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Location Preference</div>
+            <div class="info-value" id="inquiry-locationPref" onclick="editTextField('Location Preference', 'locationPref', '1211746958112281')">-</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Wants & Needs Section -->
+      <div class="section">
+        <div class="section-header">Wants & Needs</div>
+        <div class="info-grid">
+          <div class="info-card full-width">
+            <div class="info-label">Vision</div>
+            <div class="info-value" id="inquiry-vision" onclick="editLongTextField('Vision', 'vision', '1211746958112273')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Must Have Photos</div>
+            <div class="info-value" id="inquiry-mustHave" onclick="editTextField('Must Have Photos', 'mustHave', '1211746958112279')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Lighting Preference</div>
+            <div class="info-value" id="inquiry-lightingPref" onclick="editTextField('Lighting Preference', 'lightingPref', '1211746958112283')">-</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Vibes Section -->
+      <div class="section">
+        <div class="section-header">Vibes</div>
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-label">Spicy Level (1-10)</div>
+            <div class="info-value" id="inquiry-spicyLevel" onclick="editNumberField('Spicy Level (1-10)', 'spicyLevel', '1211746958112277')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">How Want to Feel</div>
+            <div class="info-value" id="inquiry-howFeel" onclick="editTextField('How Want to Feel', 'howFeel', '1211746958112285')">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Confidence Level (1-10)</div>
+            <div class="info-value" id="inquiry-confidence" onclick="editNumberField('Confidence Level (1-10)', 'confidence', '1211746958112287')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Other Expectations</div>
+            <div class="info-value" id="inquiry-expectations" onclick="editTextField('Other Expectations', 'expectations', '1211746958112289')">-</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Brainstorm Notes -->
+      <div class="notes-section">
+        <div class="notes-header">
+          📝 Brainstorm Notes
+        </div>
+        
+        <!-- Preview State (collapsed) -->
+        <div id="notes-preview-tab" class="notes-preview" onclick="expandBrainstormNotes()" oncontextmenu="openFullscreenNotes(); return false;">
+          <p class="notes-preview-text" id="notes-preview-text-tab">Tap to add notes...</p>
+        </div>
+        
+        <!-- Inline Editor State -->
+        <div id="notes-editor-inline-tab" class="notes-editor-inline" style="display: none;">
+          <div class="notes-editor-header">
+            <span class="notes-editor-title">Brainstorm Notes</span>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span class="notes-status" id="notes-status-tab"></span>
+              <button class="notes-done-btn" onclick="collapseBrainstormNotes()">Done</button>
+            </div>
+          </div>
+          <div id="brainstorm-editor-tab"></div>
+        </div>
+      </div>
+    </div>
+    <!-- End MOODBOARD Tab -->
     
     <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('client-profile')">
       <span>📝Client Profile📝</span>
@@ -986,18 +1531,6 @@
       <div class="section">
         <div class="section-header">Client Profile</div>
         <div class="info-grid">
-        <div class="info-card full-width">
-          <div class="info-label">Email</div>
-          <div class="info-value" id="detail-email" onclick="editTextField('Email', 'email', '1211746957812346')">-</div>
-        </div>
-        <div class="info-card">
-          <div class="info-label">Phone</div>
-          <div class="info-value" id="detail-phone" onclick="editTextField('Phone', 'phone', '1211746958112303')">-</div>
-        </div>
-        <div class="info-card">
-          <div class="info-label">Instagram</div>
-          <div class="info-value" id="detail-instagram" onclick="editTextField('Instagram', 'instagram', '1211746957812348')">-</div>
-        </div>
         <div class="info-card">
           <div class="info-label">Age</div>
           <div class="info-value" id="detail-age" onclick="editNumberField('Age', 'age', '1211746957812352')">-</div>
@@ -1010,16 +1543,31 @@
           <div class="info-label">Client Type</div>
           <div class="info-value" id="detail-client-type">-</div>
         </div>
-        <div class="info-card">
-          <div class="info-label">Session Type</div>
-<div class="info-value" id="detail-sessionType" onclick="editEnumField('Session Type', 'sessionType', '1211746958112263')">-</div>        </div>
-        <div class="info-card full-width">
-          <div class="info-label">Concept Style</div>
-<div class="info-value" id="detail-conceptStyle" onclick="editEnumField('Concept Style', 'conceptStyle', '1211747518670337')">-</div>        </div>
-        <div class="info-card">
-          <div class="info-label">Creative Level</div>
-          <div class="info-value" id="detail-creativeLevel" onclick="editNumberField('Creative Level (1-10)', 'creativeLevel', '1211746958112275')">-</div>
         </div>
+      </div>
+    </div>
+    
+    <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('finance')">
+      <span>💰 Finance 💰</span>
+      <span class="toggle-icon" id="finance-toggle">⬇️</span>
+    </button>
+    
+    <div id="finance-section" class="collapsible-content">
+      <div class="section">
+        <div class="section-header">Payment Information</div>
+        <div class="info-grid">
+          <div class="info-card full-width">
+            <div class="info-label">Payment Status</div>
+            <div class="info-value" id="detail-payment-status" onclick="showPaymentSelector()">Status</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Budget</div>
+            <div class="info-value" id="detail-budget" onclick="editTextField('Budget', 'budget', '1211746958112305')">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Package Interest</div>
+            <div class="info-value" id="detail-package" onclick="editTextField('Package Interest', 'package', '1211746958112293')">-</div>
+          </div>
         </div>
       </div>
     </div>
@@ -1151,39 +1699,6 @@
       </div>
     </div>
     
-    <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('todo')">
-      <span>☑️To-Do☑️</span>
-      <span class="toggle-icon" id="todo-toggle">⬇️</span>
-    </button>
-    
-<div id="todo-section" class="collapsible-content">
-  <div class="section">
-    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
-      <span>☑️To-Do☑️</span>
-      <button onclick="showAddSubtask()" style="background: var(--gold); color: #000; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer;">+</button>
-    </div>
-    <div id="add-subtask-container" style="display: none; margin-bottom: 16px;">
-      <input type="text" id="subtask-name-input" class="form-input" placeholder="Enter sub-task name..." style="width: 100%; margin-bottom: 8px;">
-      <div style="display: flex; gap: 8px;">
-        <button onclick="createNewSubtask()" class="btn-add" style="flex: 1;">Create</button>
-        <button onclick="cancelAddSubtask()" class="btn-add" style="flex: 1; background: transparent; border: 1px solid var(--border);">Cancel</button>
-      </div>
-    </div>
-    <div id="detail-todos"></div>
-  </div>
-</div>
-    
-    <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('completed')">
-      <span>✅Completed✅</span>
-      <span class="toggle-icon" id="completed-toggle">⬇️</span>
-    </button>
-    
-    <div id="completed-section" class="collapsible-content">
-      <div class="section">
-        <div class="section-header">Completed</div>
-        <div id="detail-completed"></div>
-      </div>
-    </div>
     
     <!-- Deliverables Section -->
     <button class="btn-add toggle-btn" id="deliverables-toggle-btn" style="width: 100%; margin-bottom: 12px; display: none;" onclick="toggleSection('deliverables')">
@@ -1234,6 +1749,55 @@
         </div>
       </div>
     </div>
+    
+    <div id="discovery-call-container" style="display: none; margin-bottom: 12px;">
+      <button class="btn-add" style="width: 100%;" onclick="scheduleDiscoveryCall()">
+        📞 Schedule Discovery Call 📞
+      </button>
+    </div>
+    
+    <!-- Footer -->
+    <div class="detail-footer">
+      <button onclick="archiveSession()" style="flex: 1; padding: 12px; background: transparent; border: 1px solid var(--border); color: var(--text-primary); border-radius: 4px; cursor: pointer; font-weight: 500;">Archive Session</button>
+      <button onclick="toggleActiveStatus()" style="flex: 1; padding: 12px; background: transparent; border: 1px solid var(--border); color: var(--text-primary); border-radius: 4px; cursor: pointer; font-weight: 500;">Active Status</button>
+      <button class="todo-footer-btn" onclick="toggleTodoPanel()" style="flex: 1; padding: 12px; background: var(--gold); color: #000; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">☑️ To-Do ▲</button>
+    </div>
+    
+    <!-- Sliding Todo Panel -->
+    <div id="todo-panel" class="todo-panel">
+      <div class="todo-panel-tabs">
+        <button class="todo-tab active" onclick="showTodoList()">Tasks</button>
+        <button class="todo-tab" onclick="showCompletedList()">Completed</button>
+      </div>
+      <div id="todo-panel-content">
+        <!-- Tasks View -->
+        <div id="tasks-view" class="todo-panel-view">
+          <div class="section">
+            <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+              <span>☑️ To-Do</span>
+              <button onclick="showAddSubtask()" style="background: var(--gold); color: #000; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer;">+</button>
+            </div>
+            <div id="add-subtask-container" style="display: none; margin-bottom: 16px;">
+              <input type="text" id="subtask-name-input" class="form-input" placeholder="Enter sub-task name..." style="width: 100%; margin-bottom: 8px;">
+              <div style="display: flex; gap: 8px;">
+                <button onclick="createNewSubtask()" class="btn-add" style="flex: 1;">Create</button>
+                <button onclick="cancelAddSubtask()" class="btn-add" style="flex: 1; background: transparent; border: 1px solid var(--border);">Cancel</button>
+              </div>
+            </div>
+            <div id="detail-todos"></div>
+          </div>
+        </div>
+        
+        <!-- Completed View -->
+        <div id="completed-view" class="todo-panel-view" style="display: none;">
+          <div class="section">
+            <div class="section-header">✅ Completed</div>
+            <div id="detail-completed"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
   </div>
   
   <!-- Inquiry Notes View -->
@@ -1750,6 +2314,114 @@
       renderPhaseSelector();
     }
 
+    // Todo Panel Functions
+    function toggleTodoPanel() {
+      const panel = document.getElementById('todo-panel');
+      const btn = document.querySelector('.todo-footer-btn');
+      panel.classList.toggle('expanded');
+      
+      // Update button arrow
+      if (panel.classList.contains('expanded')) {
+        btn.innerHTML = '☑️ To-Do ▼';
+      } else {
+        btn.innerHTML = '☑️ To-Do ▲';
+      }
+    }
+
+    function showTodoList() {
+      document.getElementById('tasks-view').style.display = 'block';
+      document.getElementById('completed-view').style.display = 'none';
+      
+      // Update tab active state
+      const tabs = document.querySelectorAll('.todo-tab');
+      tabs[0].classList.add('active');
+      tabs[1].classList.remove('active');
+    }
+
+    function showCompletedList() {
+      document.getElementById('tasks-view').style.display = 'none';
+      document.getElementById('completed-view').style.display = 'block';
+      
+      // Update tab active state
+      const tabs = document.querySelectorAll('.todo-tab');
+      tabs[0].classList.remove('active');
+      tabs[1].classList.add('active');
+    }
+
+    async function archiveSession() {
+      if (!currentTask) return;
+      
+      if (confirm('Archive this session? It will be moved to the Archived section.')) {
+        try {
+          // Move task to archived section (section GID will need to be added)
+          const archiveSectionGid = '1211733193402696'; // Update with actual Archive section GID
+          
+          await fetch(
+            proxyUrl(`/tasks/${currentTask.gid}/addProject`),
+            {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${asanaToken}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                data: {
+                  project: CRM_PROJECT_ID,
+                  section: archiveSectionGid
+                }
+              })
+            }
+          );
+          
+          alert('Session archived successfully!');
+          showView('list-view');
+          loadSessions();
+        } catch (error) {
+          console.error('Error archiving session:', error);
+          alert('Error archiving session. Please try again.');
+        }
+      }
+    }
+
+    async function toggleActiveStatus() {
+      if (!currentTask) return;
+      
+      const activeField = currentTask.custom_fields?.find(f => f.gid === FIELD_IDS.ACTIVE_STATUS);
+      const currentValue = activeField?.enum_value?.name || '';
+      
+      // Toggle between Active and Inactive
+      const newValue = currentValue === 'Active' ? 'Inactive' : 'Active';
+      const enumOption = currentValue === 'Active' ? '1211735138096717' : '1211735138096718';
+      
+      try {
+        await fetch(
+          proxyUrl(`/tasks/${currentTask.gid}`),
+          {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${asanaToken}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              data: {
+                custom_fields: {
+                  [FIELD_IDS.ACTIVE_STATUS]: enumOption
+                }
+              }
+            })
+          }
+        );
+        
+        // Reload the current task
+        await loadTaskDetail(currentTask.gid);
+        renderClientDetail();
+        alert(`Status changed to: ${newValue}`);
+      } catch (error) {
+        console.error('Error toggling active status:', error);
+        alert('Error updating status. Please try again.');
+      }
+    }
+
     // Deliverables Functions
     let allDeliverables = [];
     let currentDeliverableTask = null;
@@ -1829,7 +2501,44 @@
       currentDeliverableTask = task;
       showView('deliverable-detail-view');
       
-      // Populate fields
+      // Populate hero box
+      document.getElementById('deliverable-hero-client-name').textContent = task.name;
+      
+      const sessionType = task.custom_fields?.find(f => f.gid === FIELD_IDS.sessionType)?.enum_value?.name || 'Not set';
+      document.getElementById('deliverable-hero-session-type').textContent = sessionType;
+      
+      const galleryStage = task.custom_fields?.find(f => f.gid === FIELD_IDS.galleryStage)?.enum_value?.name || 'Not set';
+      document.getElementById('deliverable-hero-phase').textContent = galleryStage.toUpperCase();
+      
+      // Calculate and display delivery deadline
+      const sessionDate = task.custom_fields?.find(f => f.gid === FIELD_IDS.SESSION_DATE)?.date_value?.date;
+      if (sessionDate) {
+        const deliveryDate = new Date(sessionDate);
+        // Auto-calculate based on session type
+        if (sessionType.toLowerCase().includes('mastered')) {
+          deliveryDate.setDate(deliveryDate.getDate() + 56); // 8 weeks
+        } else {
+          deliveryDate.setDate(deliveryDate.getDate() + 21); // 3 weeks
+        }
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        deliveryDate.setHours(0, 0, 0, 0);
+        const daysUntil = Math.ceil((deliveryDate - today) / (1000 * 60 * 60 * 24));
+        
+        let countdownText;
+        if (daysUntil > 0) countdownText = `${daysUntil} day${daysUntil === 1 ? '' : 's'} until delivery`;
+        else if (daysUntil === 0) countdownText = 'Delivery due today!';
+        else countdownText = `${Math.abs(daysUntil)} day${Math.abs(daysUntil) === 1 ? '' : 's'} overdue`;
+        
+        document.getElementById('deliverable-countdown').textContent = countdownText;
+        document.getElementById('deliverable-deadline-display').textContent = formatDate(deliveryDate.toISOString().split('T')[0]);
+      } else {
+        document.getElementById('deliverable-countdown').textContent = 'Session date not set';
+        document.getElementById('deliverable-deadline-display').textContent = 'Set session date';
+      }
+      
+      // Populate old fields
       document.getElementById('deliverable-client-name').textContent = task.name;
       
       const sessionDate = task.custom_fields?.find(f => f.gid === FIELD_IDS.SESSION_DATE)?.date_value?.date || 'Not set';
@@ -2536,6 +3245,39 @@
     }
     
     // Edit Functions
+    function editDate() {
+      if (!currentSession) return;
+      const currentDate = currentSession.sessionDate || '';
+      const dateInput = `<input type="date" id="date-edit-input" value="${currentDate}" onchange="saveDate()" style="padding: 4px 8px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); border-radius: 2px; font-size: 14px;">`;
+      document.getElementById('session-date-display').innerHTML = dateInput;
+      document.getElementById('date-edit-input').focus();
+    }
+    
+    async function saveDate() {
+      const newDate = document.getElementById('date-edit-input').value;
+      if (!newDate) return;
+      
+      await updateTaskCustomField(currentSession.gid, FIELD_IDS.SESSION_DATE, newDate);
+      currentSession.sessionDate = newDate;
+      
+      // Recalculate countdown
+      const sessionDate = new Date(newDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      sessionDate.setHours(0, 0, 0, 0);
+      const daysUntil = Math.ceil((sessionDate - today) / (1000 * 60 * 60 * 24));
+      
+      let countdownText;
+      if (daysUntil > 0) countdownText = `in ${daysUntil} day${daysUntil === 1 ? '' : 's'}`;
+      else if (daysUntil === 0) countdownText = 'Today!';
+      else countdownText = `${Math.abs(daysUntil)} day${Math.abs(daysUntil) === 1 ? '' : 's'} ago`;
+      
+      document.getElementById('session-countdown').textContent = countdownText;
+      document.getElementById('session-date-display').textContent = formatDate(newDate);
+      document.getElementById('detail-date-edit').textContent = formatDate(newDate);
+      showToast('Date updated');
+    }
+    
     function editTextField(label, field, fieldId) {
       if (!currentSession) return;
       const currentValue = currentSession[field] || '';
@@ -2870,8 +3612,31 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
     async function renderClientDetail() {
       if (!currentSession) return;
       
+      // Hero Box
       document.getElementById('detail-client-name').textContent = currentSession.client;
-      document.getElementById('detail-session-date').textContent = formatDate(currentSession.sessionDate);
+      document.getElementById('detail-session-type').textContent = currentSession.sessionType || 'Session Type';
+      document.getElementById('detail-phase-hero').textContent = (currentSession.status || 'Phase').toUpperCase();
+      
+      // Session Date Countdown Box
+      if (currentSession.sessionDate) {
+        const sessionDate = new Date(currentSession.sessionDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        sessionDate.setHours(0, 0, 0, 0);
+        const daysUntil = Math.ceil((sessionDate - today) / (1000 * 60 * 60 * 24));
+        
+        let countdownText;
+        if (daysUntil > 0) countdownText = `in ${daysUntil} day${daysUntil === 1 ? '' : 's'}`;
+        else if (daysUntil === 0) countdownText = 'Today!';
+        else countdownText = `${Math.abs(daysUntil)} day${Math.abs(daysUntil) === 1 ? '' : 's'} ago`;
+        
+        document.getElementById('session-countdown').textContent = countdownText;
+        document.getElementById('session-date-display').textContent = formatDate(currentSession.sessionDate);
+      } else {
+        document.getElementById('session-countdown').textContent = 'Not Set';
+        document.getElementById('session-date-display').textContent = 'Set date';
+      }
+      
       document.getElementById('detail-project-status').textContent = currentSession.projectStatus || 'Status';
       document.getElementById('detail-phase').textContent = currentSession.status;
       document.getElementById('detail-payment').textContent = currentSession.paymentStatus;
@@ -2910,6 +3675,10 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
       document.getElementById('detail-email').textContent = currentSession.email || '-';
       document.getElementById('detail-phone').textContent = currentSession.phone || '-';
       
+      // Populate Contact tab fields
+      document.getElementById('detail-email-contact').textContent = currentSession.email || '-';
+      document.getElementById('detail-phone-contact').textContent = currentSession.phone || '-';
+      
       // Instagram with link
       const instaEl = document.getElementById('detail-instagram');
       if (currentSession.instagram) {
@@ -2918,6 +3687,20 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
       } else {
         instaEl.textContent = '-';
       }
+      
+      // Instagram in Contact tab
+      const instaContactEl = document.getElementById('detail-instagram-contact');
+      if (currentSession.instagram) {
+        const handle = currentSession.instagram.replace('@', '');
+        instaContactEl.innerHTML = `<a href="https://instagram.com/${handle}" target="_blank">@${handle}</a>`;
+      } else {
+        instaContactEl.textContent = '-';
+      }
+      
+      // Populate Finance tab fields
+      document.getElementById('detail-payment-finance').textContent = currentSession.paymentStatus;
+      document.getElementById('inquiry-budget-finance').textContent = currentSession.budget || '-';
+      document.getElementById('inquiry-package-finance').textContent = currentSession.package || '-';
       
       document.getElementById('detail-age').textContent = currentSession.age || '-';
       
@@ -3225,12 +4008,53 @@ async function archiveAndHideSubtask(subtaskGid, subtaskName) {
       icon.classList.toggle('expanded');
     }
     
+    // Switch between client detail sub-tabs
+    function switchClientTab(tabName) {
+      // Update tab buttons
+      document.querySelectorAll('.sub-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelector(`.sub-tab[data-section="${tabName}"]`).classList.add('active');
+      
+      // Update content visibility
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+      
+      // Optional: Update URL hash
+      window.location.hash = tabName;
+    }
+    
     async function init() {
       if (!asanaToken) {
         showTokenModal();
         return;
       }
       await renderWidget();
+      
+      // Top navigation tabs
+      document.querySelectorAll('.top-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+          // Update active class
+          document.querySelectorAll('.top-tab').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Switch views
+          const view = this.dataset.view;
+          if (view === 'sessions') {
+            document.getElementById('widget-view').style.display = 'block';
+            document.getElementById('deliverables-list-view').style.display = 'none';
+            document.getElementById('detail-view').style.display = 'none';
+            document.getElementById('deliverable-info-view').style.display = 'none';
+          } else if (view === 'deliverables') {
+            document.getElementById('widget-view').style.display = 'none';
+            document.getElementById('deliverables-list-view').style.display = 'block';
+            document.getElementById('detail-view').style.display = 'none';
+            document.getElementById('deliverable-info-view').style.display = 'none';
+          }
+        });
+      });
     }
     
     
