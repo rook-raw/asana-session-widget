@@ -196,9 +196,10 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 24px;
+      padding: 10px 14px;
       text-align: center;
-      margin: 24px 0;
+      margin: 24px auto;
+      max-width: 280px;
     }
     
     .session-date-box .countdown-text {
@@ -206,18 +207,21 @@
       font-size: 36px;
       font-weight: 300;
       color: var(--gold);
-      margin-bottom: 8px;
+      margin-bottom: 4px;
+      text-transform: capitalize;
     }
     
     .session-date-box .date-text {
       font-family: 'Inter', sans-serif;
       font-size: 15px;
       color: var(--text-secondary);
+      margin-top: 0;
+      text-transform: capitalize;
     }
     
     .session-date-box .clickable-date {
       color: var(--text-primary);
-      text-decoration: underline;
+      text-decoration: none;
       cursor: pointer;
       transition: opacity 0.3s;
     }
@@ -379,6 +383,7 @@
       cursor: pointer;
       letter-spacing: 0.1em;
       text-transform: uppercase;
+      text-align: center;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -496,6 +501,7 @@
       text-transform: uppercase;
       margin-bottom: 16px;
       font-weight: 400;
+      text-align: center;
     }
     
     /* Level Bar Styles */
@@ -534,7 +540,7 @@
       top: 0;
       bottom: 0;
       width: var(--level-width, 0%);
-      background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-light));
+      background: linear-gradient(90deg, var(--gold), rgba(232, 213, 183, 0.7));
       border-radius: 4px;
       transition: width 0.3s ease;
     }
@@ -543,33 +549,80 @@
     .detail-footer {
       position: sticky;
       bottom: 0;
-      padding: 12px;
+      padding: 6px;
       background: var(--bg-primary);
       border-top: 1px solid var(--border);
       display: flex;
-      gap: 8px;
+      gap: 4px;
       justify-content: space-between;
+      align-items: center;
       z-index: 10;
     }
     
-    /* Todo Panel Styles */
+    /* Todo Panel Styles - Modern Modal Overlay */
     .todo-panel {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-      background: var(--bg-card);
-      border-top: 2px solid var(--gold);
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-      z-index: 20;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 999999 !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
     
     .todo-panel.expanded {
-      max-height: 60vh;
+      pointer-events: auto;
+      opacity: 1;
+    }
+    
+    .todo-panel-container {
+      position: relative;
+      max-width: 600px;
+      width: 90%;
+      max-height: 85vh;
+      background: rgba(26, 26, 26, 0.98);
+      border: 1px solid rgba(232, 213, 183, 0.35);
+      border-radius: 6px;
+      padding: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
       overflow-y: auto;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    
+    .todo-panel.expanded .todo-panel-container {
+      opacity: 1;
+    }
+    
+    .todo-panel-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: var(--gold);
+      font-size: 28px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 5px 10px;
+      transition: color 0.3s ease;
+      z-index: 1;
+    }
+    
+    .todo-panel-close:hover {
+      color: #f2f2f2;
+    }
+    
+    @media (max-width: 768px) {
+      .todo-panel-container {
+        width: 95%;
+        padding: 20px 15px;
+      }
     }
     
     .todo-panel-tabs {
@@ -634,6 +687,7 @@
       text-transform: uppercase;
       letter-spacing: 0.15em;
       margin-bottom: 6px;
+      text-align: center;
     }
     
     .info-value {
@@ -718,12 +772,14 @@
     }
     
     .toggle-icon {
-      transition: transform 0.3s;
-      font-size: 14px;
+      transition: transform 0.3s ease;
+      font-size: 20px;
+      font-weight: bold;
+      display: inline-block;
     }
     
     .toggle-icon.expanded {
-      transform: rotate(180deg);
+      transform: rotate(90deg);
     }
     
     .collapsible-content {
@@ -762,8 +818,14 @@
     
     .toggle-btn {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
+      position: relative;
+    }
+    
+    .toggle-btn .toggle-icon {
+      position: absolute;
+      right: 16px;
     }
     
     .toast {
@@ -870,6 +932,20 @@
       transform: scale(0.98);
     }
     
+    /* Date Picker Modal */
+    #date-picker-modal .modal-content {
+      max-width: 320px;
+    }
+    
+    #date-picker-modal input[type="date"] {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 12px;
+      font-size: 16px;
+    }
+    
     /* Top Navigation Tabs - Step 3 */
     .nav-tabs {
       display: flex;
@@ -948,22 +1024,29 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 24px;
+      padding: 18px;
       text-align: center;
-      margin: 24px 0;
+      margin: 24px auto;
+      max-width: 280px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    
+    .deadline-box:hover {
+      opacity: 0.9;
     }
     
     .deadline-box .countdown-text {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 36px;
+      font-size: 28px;
       font-weight: 300;
       color: var(--gold);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     
     .deadline-box .date-text {
       font-family: 'Inter', sans-serif;
-      font-size: 15px;
+      font-size: 13px;
       color: var(--text-secondary);
     }
     
@@ -988,7 +1071,12 @@
       }
       
       .deadline-box .countdown-text {
-        font-size: 28px;
+        font-size: 24px;
+      }
+      
+      .deadline-box {
+        max-width: 240px;
+        padding: 16px;
       }
     }
     
@@ -1322,7 +1410,7 @@
     <div class="client-hero-box">
       <h1 class="client-name" id="detail-client-name">Client Name</h1>
       <div class="session-type" id="detail-session-type">Session Type</div>
-      <div class="client-phase" id="detail-phase-hero">PHASE NAME</div>
+      <div class="client-phase" id="detail-phase-hero" onclick="showPhaseSelector()">PHASE NAME</div>
     </div>
     
     <!-- Session Date Box -->
@@ -1334,7 +1422,6 @@
     <!-- Sub Navigation Tabs -->
     <nav class="sub-nav-tabs">
       <button class="sub-tab active" data-section="details" onclick="switchClientTab('details')">DETAILS</button>
-      <button class="sub-tab" data-section="contact" onclick="switchClientTab('contact')">CONTACT</button>
       <button class="sub-tab" data-section="notes" onclick="switchClientTab('notes')">MOODBOARD</button>
       <button class="sub-tab" data-section="plan" onclick="switchClientTab('plan')">THE PLAN</button>
     </nav>
@@ -1342,53 +1429,70 @@
     <!-- DETAILS Tab Content -->
     <div id="tab-details" class="tab-content active">
     
-    <div class="section">
-      <div class="section-header">Session Info</div>
-      <div class="info-grid">
-        <div class="info-card" style="width: 20%;">
-          <div class="info-label">Status</div>
-          <div class="info-value" id="detail-project-status" onclick="showProjectStatusSelector()">Status</div>
-        </div>
-        <div class="info-card" style="width: 75%;">
-          <div class="info-label">Phase</div>
-          <div class="info-value" id="detail-phase" onclick="showPhaseSelector()">Phase</div>
-        </div>
+    
+    <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('client-profile')">
+      <span>Client Profile</span>
+      <span class="toggle-icon" id="client-profile-toggle">−</span>
+    </button>
+    
+    <div id="client-profile-section" class="collapsible-content">
+      <div class="section">
+        <div class="section-header">Client Profile</div>
+        <div class="info-grid">
         <div class="info-card full-width">
-          <div class="info-label">Session Date</div>
-          <div class="info-value" id="detail-date-edit" onclick="editDate()">Date</div>
+          <div class="info-label">Email</div>
+          <div class="info-value" id="detail-email" onclick="editTextField('Email', 'email', '1211746957812346')">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Phone</div>
+          <div class="info-value" id="detail-phone" onclick="editTextField('Phone', 'phone', '1211746958112303')">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Instagram</div>
+          <div class="info-value" id="detail-instagram" onclick="editTextField('Instagram', 'instagram', '1211746957812348')">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Age</div>
+          <div class="info-value" id="detail-age" onclick="editNumberField('Age', 'age', '1211746957812352')">-</div>
+        </div>
+        <div class="info-card" id="detail-parent-card" style="display: none;">
+          <div class="info-label">Parent/Guardian</div>
+          <div class="info-value" id="detail-parent" onclick="editTextField('Parent/Guardian', 'parent', '1211746957812350')">-</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Client Type</div>
+          <div class="info-value" id="detail-client-type">-</div>
+        </div>
         </div>
       </div>
     </div>
     
-    
-    <button class="btn-add" onclick="archiveSession()" 
-            style="width: 100%; margin-bottom: 12px; background: var(--critical);">
-      🗄️ Archive Session
+    <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('finance')">
+      <span>Finance</span>
+      <span class="toggle-icon" id="finance-toggle">−</span>
     </button>
-    </div>
-    <!-- End DETAILS Tab -->
     
-    <!-- CONTACT Tab Content -->
-    <div id="tab-contact" class="tab-content">
+    <div id="finance-section" class="collapsible-content">
       <div class="section">
-        <div class="section-header">Contact Information</div>
+        <div class="section-header">Payment Information</div>
         <div class="info-grid">
           <div class="info-card full-width">
-            <div class="info-label">Email</div>
-            <div class="info-value" id="detail-email-contact" onclick="editTextField('Email', 'email', '1211746957812346')">-</div>
+            <div class="info-label">Payment Status</div>
+            <div class="info-value" id="detail-payment-status" onclick="showPaymentSelector()">Status</div>
           </div>
-          <div class="info-card full-width">
-            <div class="info-label">Phone</div>
-            <div class="info-value" id="detail-phone-contact" onclick="editTextField('Phone', 'phone', '1211746958112303')">-</div>
+          <div class="info-card">
+            <div class="info-label">Budget</div>
+            <div class="info-value" id="detail-budget" onclick="editTextField('Budget', 'budget', '1211746958112305')">-</div>
           </div>
-          <div class="info-card full-width">
-            <div class="info-label">Instagram</div>
-            <div class="info-value" id="detail-instagram-contact" onclick="editTextField('Instagram', 'instagram', '1211746957812348')">-</div>
+          <div class="info-card">
+            <div class="info-label">Package Interest</div>
+            <div class="info-value" id="detail-package" onclick="editTextField('Package Interest', 'package', '1211746958112293')">-</div>
           </div>
         </div>
       </div>
     </div>
-    <!-- End CONTACT Tab -->
+    </div>
+    <!-- End DETAILS Tab -->
     
     <!-- THE PLAN Tab Content -->
     <div id="tab-plan" class="tab-content">
@@ -1406,21 +1510,27 @@
       
       <!-- Level Bar -->
       <div class="level-bar">
-        <div class="level-item">
+        <div class="level-item" onclick="editNumberField('Creative Level', 'creativeLevel', '1211746958112275')" style="cursor: pointer;">
           <span>Creative</span>
           <div class="level-indicator" id="creative-level-bar"></div>
         </div>
-        <div class="level-item">
+        <div class="level-item" onclick="editNumberField('Spicy Level', 'spicyLevel', '1211746958112277')" style="cursor: pointer;">
           <span>Spicy</span>
           <div class="level-indicator" id="spicy-level-bar"></div>
         </div>
-        <div class="level-item">
+        <div class="level-item" onclick="editNumberField('Confidence Level', 'confidence', '1211746958112287')" style="cursor: pointer;">
           <span>Confidence</span>
           <div class="level-indicator" id="confidence-level-bar"></div>
         </div>
       </div>
       
       <!-- Creative Profile Section -->
+      <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('creative-profile')">
+        <span>The Vibe</span>
+        <span class="toggle-icon" id="creative-profile-toggle">−</span>
+      </button>
+      
+      <div id="creative-profile-section" class="collapsible-content">
       <div class="section">
         <div class="section-header">Creative Profile</div>
         <div class="info-grid">
@@ -1432,10 +1542,25 @@
             <div class="info-label">Concept Style</div>
             <div class="info-value" id="inquiry-conceptStyle" onclick="editEnumField('Concept Style', 'conceptStyle', '1211747518670337', ENUM_OPTIONS.conceptStyle)">-</div>
           </div>
+          <div class="info-card full-width">
+            <div class="info-label">How Want to Feel</div>
+            <div class="info-value" id="inquiry-howFeel" onclick="editTextField('How Want to Feel', 'howFeel', '1211746958112285')">-</div>
+          </div>
+          <div class="info-card full-width">
+            <div class="info-label">Other Expectations</div>
+            <div class="info-value" id="inquiry-expectations" onclick="editTextField('Other Expectations', 'expectations', '1211746958112289')">-</div>
+          </div>
         </div>
+      </div>
       </div>
       
       <!-- Time & Date Preference Section -->
+      <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('time-date')">
+        <span>The When & Where</span>
+        <span class="toggle-icon" id="time-date-toggle">−</span>
+      </button>
+      
+      <div id="time-date-section" class="collapsible-content">
       <div class="section">
         <div class="section-header">Time & Date Preference</div>
         <div class="info-grid">
@@ -1453,8 +1578,16 @@
           </div>
         </div>
       </div>
+      </div>
       
       <!-- Wants & Needs Section -->
+      <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('wants-needs')">
+        <span>The Wants & Needs</span>
+        <span class="toggle-icon" id="wants-needs-toggle">−</span>
+      </button>
+      </button>
+      
+      <div id="wants-needs-section" class="collapsible-content">
       <div class="section">
         <div class="section-header">Wants & Needs</div>
         <div class="info-grid">
@@ -1472,28 +1605,6 @@
           </div>
         </div>
       </div>
-      
-      <!-- Vibes Section -->
-      <div class="section">
-        <div class="section-header">Vibes</div>
-        <div class="info-grid">
-          <div class="info-card">
-            <div class="info-label">Spicy Level (1-10)</div>
-            <div class="info-value" id="inquiry-spicyLevel" onclick="editNumberField('Spicy Level (1-10)', 'spicyLevel', '1211746958112277')">-</div>
-          </div>
-          <div class="info-card full-width">
-            <div class="info-label">How Want to Feel</div>
-            <div class="info-value" id="inquiry-howFeel" onclick="editTextField('How Want to Feel', 'howFeel', '1211746958112285')">-</div>
-          </div>
-          <div class="info-card">
-            <div class="info-label">Confidence Level (1-10)</div>
-            <div class="info-value" id="inquiry-confidence" onclick="editNumberField('Confidence Level (1-10)', 'confidence', '1211746958112287')">-</div>
-          </div>
-          <div class="info-card full-width">
-            <div class="info-label">Other Expectations</div>
-            <div class="info-value" id="inquiry-expectations" onclick="editTextField('Other Expectations', 'expectations', '1211746958112289')">-</div>
-          </div>
-        </div>
       </div>
       
       <!-- Brainstorm Notes -->
@@ -1522,188 +1633,10 @@
     </div>
     <!-- End MOODBOARD Tab -->
     
-    <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('client-profile')">
-      <span>📝Client Profile📝</span>
-      <span class="toggle-icon" id="client-profile-toggle">⬇️</span>
-    </button>
-    
-    <div id="client-profile-section" class="collapsible-content">
-      <div class="section">
-        <div class="section-header">Client Profile</div>
-        <div class="info-grid">
-        <div class="info-card">
-          <div class="info-label">Age</div>
-          <div class="info-value" id="detail-age" onclick="editNumberField('Age', 'age', '1211746957812352')">-</div>
-        </div>
-        <div class="info-card" id="detail-parent-card" style="display: none;">
-          <div class="info-label">Parent/Guardian</div>
-          <div class="info-value" id="detail-parent" onclick="editTextField('Parent/Guardian', 'parent', '1211746957812350')">-</div>
-        </div>
-        <div class="info-card">
-          <div class="info-label">Client Type</div>
-          <div class="info-value" id="detail-client-type">-</div>
-        </div>
-        </div>
-      </div>
-    </div>
-    
-    <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 12px;" onclick="toggleSection('finance')">
-      <span>💰 Finance 💰</span>
-      <span class="toggle-icon" id="finance-toggle">⬇️</span>
-    </button>
-    
-    <div id="finance-section" class="collapsible-content">
-      <div class="section">
-        <div class="section-header">Payment Information</div>
-        <div class="info-grid">
-          <div class="info-card full-width">
-            <div class="info-label">Payment Status</div>
-            <div class="info-value" id="detail-payment-status" onclick="showPaymentSelector()">Status</div>
-          </div>
-          <div class="info-card">
-            <div class="info-label">Budget</div>
-            <div class="info-value" id="detail-budget" onclick="editTextField('Budget', 'budget', '1211746958112305')">-</div>
-          </div>
-          <div class="info-card">
-            <div class="info-label">Package Interest</div>
-            <div class="info-value" id="detail-package" onclick="editTextField('Package Interest', 'package', '1211746958112293')">-</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <button class="btn-add toggle-btn" style="width: 100%; margin-bottom: 20px;" onclick="toggleInquiryNotes()">
-      <span>📝Inquiry Notes</span>
-      <span class="toggle-icon" id="inquiry-toggle">⬇️</span>
-    </button>
-    
-    <div id="inquiry-section" class="collapsible-content">
-      <!-- Inquiry content will be here -->
-      <div class="section">
-        <div class="section-header">Inquiry Details</div>
-        <div class="info-grid">
-          <div class="info-card">
-            <div class="info-label">Preferred Date</div>
-            <div class="info-value" id="inquiry-preferredDate" onclick="editTextField('Preferred Date', 'preferredDate', '1211746957812354')">-</div>
-          </div>
-          <div class="info-card">
-            <div class="info-label">Preferred City</div>
-            <div class="info-value" id="inquiry-city" onclick="editEnumField('City', 'city', '1211746957812356', [{gid:'1211746957812357',name:'Charleston'},{gid:'1211746957812358',name:'NYC'}])">-</div>
-          </div>
-          <div class="info-card full-width">
-            <div class="info-label">Session Location</div>
-            <div class="info-value" id="inquiry-sessionLocation" onclick="editTextField('Session Location', 'sessionLocation', '1211746958112261')">-</div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="section">
-        <div class="section-header">Creative Direction</div>
-        <div class="info-grid">
-          <div class="info-card full-width">
-            <div class="info-label">Vision</div>
-            <div class="info-value" id="inquiry-vision" onclick="editLongTextField('Vision', 'vision', '1211746958112273')">-</div>
-          </div>
-          <div class="info-card">
-            <div class="info-label">Spicy Level (1-10)</div>
-            <div class="info-value" id="inquiry-spicyLevel" onclick="editNumberField('Spicy Level (1-10)', 'spicyLevel', '1211746958112277')">-</div>
-          </div>
-          <div class="info-card full-width">
-            <div class="info-label">Must Have Photos</div>
-            <div class="info-value" id="inquiry-mustHave" onclick="editTextField('Must Have Photos', 'mustHave', '1211746958112279')">-</div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="section">
-        <div class="section-header">Preferences</div>
-        <div class="info-grid">
-          <div class="info-card full-width">
-            <div class="info-label">Location Preference</div>
-            <div class="info-value" id="inquiry-locationPref" onclick="editTextField('Location Preference', 'locationPref', '1211746958112281')">-</div>
-          </div>
-          <div class="info-card full-width">
-            <div class="info-label">Lighting Preference</div>
-            <div class="info-value" id="inquiry-lightingPref" onclick="editTextField('Lighting Preference', 'lightingPref', '1211746958112283')">-</div>
-          </div>
-          <div class="info-card full-width">
-            <div class="info-label">How Want to Feel</div>
-            <div class="info-value" id="inquiry-howFeel" onclick="editTextField('How Want to Feel', 'howFeel', '1211746958112285')">-</div>
-          </div>
-          <div class="info-card">
-            <div class="info-label">Confidence Level (1-10)</div>
-            <div class="info-value" id="inquiry-confidence" onclick="editNumberField('Confidence Level (1-10)', 'confidence', '1211746958112287')">-</div>
-          </div>
-          <div class="info-card full-width">
-            <div class="info-label">Other Expectations</div>
-            <div class="info-value" id="inquiry-expectations" onclick="editTextField('Other Expectations', 'expectations', '1211746958112289')">-</div>
-          </div>
-          <!-- Brainstorm Notes - iOS Notes Style -->
-          <div class="notes-section">
-            <div class="notes-header">
-              📝 Brainstorm Notes
-            </div>
-            
-            <!-- Preview State (collapsed) -->
-            <div id="notes-preview" class="notes-preview" onclick="expandBrainstormNotes()" oncontextmenu="openFullscreenNotes(); return false;">
-              <p class="notes-preview-text" id="notes-preview-text">Tap to add notes...</p>
-            </div>
-            
-            <!-- Inline Editor State -->
-            <div id="notes-editor-inline" class="notes-editor-inline" style="display: none;">
-              <div class="notes-editor-header">
-                <span class="notes-editor-title">Brainstorm Notes</span>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                  <span class="notes-status" id="notes-status"></span>
-                  <button class="notes-done-btn" onclick="collapseBrainstormNotes()">Done</button>
-                </div>
-              </div>
-              <div id="brainstorm-editor"></div>
-            </div>
-          </div>
-          
-          <!-- Fullscreen Overlay -->
-          <div id="notes-fullscreen-overlay" class="notes-fullscreen-overlay">
-            <div class="notes-fullscreen-header">
-              <span class="notes-fullscreen-title">Brainstorm Notes</span>
-              <div style="display: flex; align-items: center; gap: 12px;">
-                <span class="notes-status" id="notes-status-fullscreen"></span>
-                <button class="notes-done-btn" onclick="closeFullscreenNotes()">Done</button>
-              </div>
-            </div>
-            <div id="brainstorm-editor-fullscreen" class="notes-fullscreen-editor"></div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="section">
-        <div class="section-header">Financial</div>
-        <div class="info-grid">
-          <div class="info-card">
-            <div class="info-label">Budget</div>
-            <div class="info-value" id="inquiry-budget" onclick="editTextField('Budget', 'budget', '1211746958112305')">-</div>
-          </div>
-          <div class="info-card">
-            <div class="info-label">Package Interest</div>
-            <div class="info-value" id="inquiry-package" onclick="editTextField('Package Interest', 'package', '1211746958112293')">-</div>
-          </div>
-          <div class="info-card">
-            <div class="info-label">Print Interest</div>
-            <div class="info-value" id="inquiry-prints" onclick="editTextField('Print Interest', 'prints', '1211746958112295')">-</div>
-          </div>
-          <div class="info-card">
-            <div class="info-label">Video Interest</div>
-            <div class="info-value" id="inquiry-video" onclick="editTextField('Video Interest', 'video', '1211746958112299')">-</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    
     <!-- Deliverables Section -->
     <button class="btn-add toggle-btn" id="deliverables-toggle-btn" style="width: 100%; margin-bottom: 12px; display: none;" onclick="toggleSection('deliverables')">
-      <span>📦Deliverables📦</span>
-      <span class="toggle-icon" id="deliverables-toggle">⬇️</span>
+      <span>Deliverables</span>
+      <span class="toggle-icon" id="deliverables-toggle">−</span>
     </button>
     
     <div id="deliverables-section" class="collapsible-content">
@@ -1752,47 +1685,51 @@
     
     <div id="discovery-call-container" style="display: none; margin-bottom: 12px;">
       <button class="btn-add" style="width: 100%;" onclick="scheduleDiscoveryCall()">
-        📞 Schedule Discovery Call 📞
+        Schedule Discovery Call
       </button>
     </div>
     
     <!-- Footer -->
     <div class="detail-footer">
-      <button onclick="archiveSession()" style="flex: 1; padding: 12px; background: transparent; border: 1px solid var(--border); color: var(--text-primary); border-radius: 4px; cursor: pointer; font-weight: 500;">Archive Session</button>
-      <button onclick="toggleActiveStatus()" style="flex: 1; padding: 12px; background: transparent; border: 1px solid var(--border); color: var(--text-primary); border-radius: 4px; cursor: pointer; font-weight: 500;">Active Status</button>
-      <button class="todo-footer-btn" onclick="toggleTodoPanel()" style="flex: 1; padding: 12px; background: var(--gold); color: #000; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">☑️ To-Do ▲</button>
+      <button onclick="archiveSession()" style="width: 19px; height: 19px; padding: 0; background: transparent; border: none; color: var(--text-primary); border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 12px;">🗑️</button>
+      <button class="todo-footer-btn" onclick="toggleTodoPanel()" style="position: absolute; left: 50%; transform: translateX(-50%); width: 24px; height: 24px; padding: 0; background: var(--gold); color: #000; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px;">📝</button>
+      <button id="project-status-btn" onclick="toggleActiveStatus()" style="margin-left: auto; width: 19px; height: 19px; padding: 0; background: transparent; border: none; color: var(--text-primary); border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 12px;">🔴</button>
     </div>
     
     <!-- Sliding Todo Panel -->
     <div id="todo-panel" class="todo-panel">
-      <div class="todo-panel-tabs">
-        <button class="todo-tab active" onclick="showTodoList()">Tasks</button>
-        <button class="todo-tab" onclick="showCompletedList()">Completed</button>
-      </div>
-      <div id="todo-panel-content">
-        <!-- Tasks View -->
-        <div id="tasks-view" class="todo-panel-view">
-          <div class="section">
-            <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
-              <span>☑️ To-Do</span>
-              <button onclick="showAddSubtask()" style="background: var(--gold); color: #000; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer;">+</button>
-            </div>
-            <div id="add-subtask-container" style="display: none; margin-bottom: 16px;">
-              <input type="text" id="subtask-name-input" class="form-input" placeholder="Enter sub-task name..." style="width: 100%; margin-bottom: 8px;">
-              <div style="display: flex; gap: 8px;">
-                <button onclick="createNewSubtask()" class="btn-add" style="flex: 1;">Create</button>
-                <button onclick="cancelAddSubtask()" class="btn-add" style="flex: 1; background: transparent; border: 1px solid var(--border);">Cancel</button>
-              </div>
-            </div>
-            <div id="detail-todos"></div>
-          </div>
-        </div>
+      <div class="todo-panel-container" id="todo-panel-container">
+        <button class="todo-panel-close">&times;</button>
         
-        <!-- Completed View -->
-        <div id="completed-view" class="todo-panel-view" style="display: none;">
-          <div class="section">
-            <div class="section-header">✅ Completed</div>
-            <div id="detail-completed"></div>
+        <div class="todo-panel-tabs">
+          <button class="todo-tab active" onclick="showTodoList()">Tasks</button>
+          <button class="todo-tab" onclick="showCompletedList()">Completed</button>
+        </div>
+        <div id="todo-panel-content">
+          <!-- Tasks View -->
+          <div id="tasks-view" class="todo-panel-view">
+            <div class="section">
+              <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>☑️ To-Do</span>
+                <button onclick="showAddSubtask()" style="background: var(--gold); color: #000; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer;">+</button>
+              </div>
+              <div id="add-subtask-container" style="display: none; margin-bottom: 16px;">
+                <input type="text" id="subtask-name-input" class="form-input" placeholder="Enter sub-task name..." style="width: 100%; margin-bottom: 8px;">
+                <div style="display: flex; gap: 8px;">
+                  <button onclick="createNewSubtask()" class="btn-add" style="flex: 1;">Create</button>
+                  <button onclick="cancelAddSubtask()" class="btn-add" style="flex: 1; background: transparent; border: 1px solid var(--border);">Cancel</button>
+                </div>
+              </div>
+              <div id="detail-todos"></div>
+            </div>
+          </div>
+          
+          <!-- Completed View -->
+          <div id="completed-view" class="todo-panel-view" style="display: none;">
+            <div class="section">
+              <div class="section-header">✅ Completed</div>
+              <div id="detail-completed"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -1859,10 +1796,6 @@
         <div class="info-card full-width">
           <div class="info-label">How Want to Feel</div>
           <div class="info-value" id="inquiry-howFeel" onclick="editTextField('How Want to Feel', 'howFeel', '1211746958112285')">-</div>
-        </div>
-        <div class="info-card">
-          <div class="info-label">Confidence Level (1-10)</div>
-          <div class="info-value" id="inquiry-confidence" onclick="editNumberField('Confidence Level (1-10)', 'confidence', '1211746958112287')">-</div>
         </div>
         <div class="info-card full-width">
           <div class="info-label">Other Expectations</div>
@@ -1957,6 +1890,32 @@
     </div>
   </div>
   
+  <!-- Number Field Edit Modal -->
+  <div id="number-field-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header" id="number-field-modal-header">Edit Value</div>
+      <div class="form-group">
+        <input type="number" id="number-field-input" class="form-input" min="1" max="10" placeholder="Enter value (1-10)">
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-secondary" style="flex: 1;" onclick="closeNumberFieldModal()">Cancel</button>
+        <button class="btn btn-primary" style="flex: 1;" onclick="saveNumberFieldModal()">Save</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Date Picker Modal -->
+  <div id="date-picker-modal" class="modal">
+    <div class="modal-content">
+      <h2>Set Session Date</h2>
+      <input type="date" id="modal-date-input" class="form-input" style="width: 100%; margin: 16px 0;">
+      <div class="modal-actions">
+        <button class="btn-primary" onclick="saveModalDate()">Set Date</button>
+        <button class="btn-secondary" onclick="closeDateModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+  
   <!-- Toast Notification -->
   <div id="toast" class="toast"></div>
   
@@ -1967,6 +1926,7 @@
     const CLIENT_PHASE_FIELD_ID = '1211735634914711';
     const SESSION_DATE_FIELD_ID = '1211732464258476';
     const ACTIVE_STATUS_FIELD_ID = '1211735138096716';
+    const PROJECT_STATUS_FIELD_ID = '1211735138096716'; // Project Status (not Deliverable Status)
     const CLIENT_TYPE_FIELD_ID = '1211733359641772'; // Changed from SESSION_TYPE
     const PAYMENT_STATUS_FIELD_ID = '1211733390060955';
     
@@ -2049,6 +2009,12 @@
       '1211776219912356': [ // Notes or Requests
         {gid: '1211776219912357', name: 'Yes'},
         {gid: '1211776219912358', name: 'No'}
+      ],
+      '1211735138096716': [ // Project Status
+        {gid: '1211735138096719', name: '🔴 - Not Booked'},
+        {gid: '1211735138096720', name: '🟢 - Booked'},
+        {gid: '1211776526581111', name: '⚠️ - Reschedule'},
+        {gid: '1211776526581112', name: '✅ - Session Complete'}
       ]
     };
     // State
@@ -2306,6 +2272,22 @@
       if (currentSession) {
         showView('detail-view');
         renderClientDetail();
+        updateProjectStatusButton();
+      }
+    }
+    
+    function updateProjectStatusButton() {
+      if (!currentSession) return;
+      
+      const projectStatusField = currentSession.custom_fields?.find(f => f.gid === PROJECT_STATUS_FIELD_ID);
+      const statusValue = projectStatusField?.enum_value?.name || '🔴 - Not Booked';
+      
+      // Extract only the emoji (everything before " - ")
+      const emoji = statusValue.split(' - ')[0];
+      
+      const button = document.getElementById('project-status-btn');
+      if (button) {
+        button.textContent = emoji;
       }
     }
     
@@ -2314,19 +2296,49 @@
       renderPhaseSelector();
     }
 
-    // Todo Panel Functions
-    function toggleTodoPanel() {
+    // Todo Panel Functions - Modern Modal Mechanics
+    (function() {
       const panel = document.getElementById('todo-panel');
-      const btn = document.querySelector('.todo-footer-btn');
-      panel.classList.toggle('expanded');
+      const container = document.getElementById('todo-panel-container');
+      const closeBtn = panel?.querySelector('.todo-panel-close');
       
-      // Update button arrow
-      if (panel.classList.contains('expanded')) {
-        btn.innerHTML = '☑️ To-Do ▼';
-      } else {
-        btn.innerHTML = '☑️ To-Do ▲';
+      // Move modal to body (fixes container positioning issues)
+      if (panel && panel.parentElement !== document.body) {
+        document.body.appendChild(panel);
       }
-    }
+      
+      // Toggle function (called by button)
+      window.toggleTodoPanel = function() {
+        panel.classList.toggle('expanded');
+      };
+      
+      // CLOSE METHOD #1: Close button
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          panel.classList.remove('expanded');
+        });
+      }
+      
+      // CLOSE METHOD #2: Click outside content
+      panel?.addEventListener('click', function(e) {
+        if (e.target === panel) {
+          panel.classList.remove('expanded');
+        }
+      });
+      
+      // CLOSE METHOD #3: Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && panel?.classList.contains('expanded')) {
+          panel.classList.remove('expanded');
+        }
+      });
+      
+      // PREVENT CLOSE when clicking inside content
+      container?.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+    })();
 
     function showTodoList() {
       document.getElementById('tasks-view').style.display = 'block';
@@ -2383,19 +2395,57 @@
       }
     }
 
-    async function toggleActiveStatus() {
-      if (!currentTask) return;
+    function toggleActiveStatus() {
+      showView('project-status-view');
+      renderProjectStatusSelector();
+    }
+    
+    function renderProjectStatusSelector() {
+      const container = document.getElementById('project-status-list');
       
-      const activeField = currentTask.custom_fields?.find(f => f.gid === FIELD_IDS.ACTIVE_STATUS);
-      const currentValue = activeField?.enum_value?.name || '';
+      if (!container) {
+        console.error('project-status-list element not found');
+        return;
+      }
       
-      // Toggle between Active and Inactive
-      const newValue = currentValue === 'Active' ? 'Inactive' : 'Active';
-      const enumOption = currentValue === 'Active' ? '1211735138096717' : '1211735138096718';
+      const projectStatusField = currentSession?.custom_fields?.find(f => f.gid === PROJECT_STATUS_FIELD_ID);
+      const currentGid = projectStatusField?.enum_value?.gid || '';
+      
+      const statusOptions = ENUM_OPTIONS[PROJECT_STATUS_FIELD_ID];
+      
+      if (!statusOptions) {
+        container.innerHTML = '<p style="padding: 20px; text-align: center;">Status options not found</p>';
+        return;
+      }
+      
+      container.innerHTML = statusOptions.map(status => {
+        const isCurrent = status.gid === currentGid;
+        const emoji = status.name.split(' - ')[0];
+        const label = status.name.split(' - ')[1];
+        return `
+          <div class="list-item" data-status-gid="${status.gid}" data-status-name="${status.name}" onclick="updateProjectStatusFromClick(this)">
+            <div class="list-item-left">
+              <h3 style="color: ${isCurrent ? 'var(--gold)' : 'var(--text-primary)'}">
+                ${isCurrent ? '[*] ' : ''}${emoji} ${label}
+              </h3>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function updateProjectStatusFromClick(element) {
+      const statusGid = element.getAttribute('data-status-gid');
+      const statusName = element.getAttribute('data-status-name');
+      updateProjectStatus(statusGid, statusName);
+    }
+    
+    async function updateProjectStatus(statusGid, statusName) {
+      if (!currentSession) return;
       
       try {
         await fetch(
-          proxyUrl(`/tasks/${currentTask.gid}`),
+          proxyUrl(`/tasks/${currentSession.gid}`),
           {
             method: 'PUT',
             headers: {
@@ -2405,20 +2455,40 @@
             body: JSON.stringify({
               data: {
                 custom_fields: {
-                  [FIELD_IDS.ACTIVE_STATUS]: enumOption
+                  [PROJECT_STATUS_FIELD_ID]: statusGid
                 }
               }
             })
           }
         );
         
-        // Reload the current task
-        await loadTaskDetail(currentTask.gid);
-        renderClientDetail();
-        alert(`Status changed to: ${newValue}`);
+        // Update local session data
+        const projectStatusField = currentSession.custom_fields?.find(f => f.gid === PROJECT_STATUS_FIELD_ID);
+        if (projectStatusField) {
+          projectStatusField.enum_value = {
+            gid: statusGid,
+            name: statusName
+          };
+        } else {
+          if (!currentSession.custom_fields) {
+            currentSession.custom_fields = [];
+          }
+          currentSession.custom_fields.push({
+            gid: PROJECT_STATUS_FIELD_ID,
+            enum_value: {
+              gid: statusGid,
+              name: statusName
+            }
+          });
+        }
+        
+        showToast(`Status: ${statusName.split(' - ')[1]}`);
+        updateProjectStatusButton();
+        
+        setTimeout(backToDetail, 300);
       } catch (error) {
-        console.error('Error toggling active status:', error);
-        alert('Error updating status. Please try again.');
+        console.error('Error updating project status:', error);
+        alert('Error updating project status. Please try again.');
       }
     }
 
@@ -2511,7 +2581,7 @@
       document.getElementById('deliverable-hero-phase').textContent = galleryStage.toUpperCase();
       
       // Calculate and display delivery deadline
-      const sessionDate = task.custom_fields?.find(f => f.gid === FIELD_IDS.SESSION_DATE)?.date_value?.date;
+      const sessionDate = task.custom_fields?.find(f => f.gid === '1211732464258476')?.date_value?.date;
       if (sessionDate) {
         const deliveryDate = new Date(sessionDate);
         // Auto-calculate based on session type
@@ -2942,32 +3012,7 @@
       renderPaymentSelector();
     }
 
-    function renderProjectStatusSelector() {
-      const container = document.getElementById('project-status-list');
-      document.getElementById('project-status-client-name').textContent = currentSession?.client || 'Client';
-      
-      const options = [
-        { gid: '1211735138096719', name: '🔴' },
-        { gid: '1211735138096720', name: '🟢' },
-        { gid: '1211776526581111', name: '⚠️' },
-        { gid: '1211776526581112', name: '✅' }
-      ];
-      
-      const currentProjectStatus = document.getElementById('detail-project-status').textContent;
-      
-      container.innerHTML = options.map(option => {
-        const isCurrent = option.name === currentProjectStatus;
-        return `
-          <div class="list-item" onclick="updateProjectStatus('${option.gid}', '${option.name}')">
-            <div class="list-item-left">
-              <h3 style="color: ${isCurrent ? 'var(--gold)' : 'var(--text-primary)'}">
-                ${isCurrent ? '[*] ' : ''}${option.name}
-              </h3>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
+
 
     function renderPaymentSelector() {
       const container = document.getElementById('payment-list');
@@ -2995,15 +3040,7 @@
       }).join('');
     }
 
-    async function updateProjectStatus(statusGid, statusName) {
-      if (currentSession) {
-        await updateTaskCustomField(currentSession.gid, ACTIVE_STATUS_FIELD_ID, statusGid);
-        currentSession.projectStatus = statusName;
-        showToast(`Project Status: ${statusName}`);
-        
-        setTimeout(backToDetail, 300);
-      }
-    }
+
 
     async function updatePayment(paymentGid, paymentName) {
       if (currentSession) {
@@ -3243,10 +3280,39 @@
     // Edit Functions
     function editDate() {
       if (!currentSession) return;
-      const currentDate = currentSession.sessionDate || '';
-      const dateInput = `<input type="date" id="date-edit-input" value="${currentDate}" onchange="saveDate()" style="padding: 4px 8px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); border-radius: 2px; font-size: 14px;">`;
-      document.getElementById('session-date-display').innerHTML = dateInput;
-      document.getElementById('date-edit-input').focus();
+      document.getElementById('modal-date-input').value = currentSession.sessionDate || '';
+      document.getElementById('date-picker-modal').style.display = 'flex';
+    }
+
+    function closeDateModal() {
+      document.getElementById('date-picker-modal').style.display = 'none';
+    }
+
+    async function saveModalDate() {
+      const newDate = document.getElementById('modal-date-input').value;
+      if (!newDate) return;
+      
+      await updateTaskCustomField(currentSession.gid, FIELD_IDS.SESSION_DATE, newDate);
+      currentSession.sessionDate = newDate;
+      
+      // Update countdown and display
+      const sessionDate = new Date(newDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      sessionDate.setHours(0, 0, 0, 0);
+      const daysUntil = Math.ceil((sessionDate - today) / (1000 * 60 * 60 * 24));
+      
+      let countdownText;
+      if (daysUntil > 0) countdownText = `in ${daysUntil} day${daysUntil === 1 ? '' : 's'}`;
+      else if (daysUntil === 0) countdownText = 'Today!';
+      else countdownText = `${Math.abs(daysUntil)} day${Math.abs(daysUntil) === 1 ? '' : 's'} ago`;
+      
+      document.getElementById('session-countdown').textContent = countdownText;
+      document.getElementById('session-date-display').textContent = formatDate(newDate);
+      document.getElementById('detail-date-edit').textContent = formatDate(newDate);
+      
+      closeDateModal();
+      showToast('Date updated');
     }
     
     async function saveDate() {
@@ -3303,21 +3369,66 @@
     
     function editNumberField(label, field, fieldId) {
       if (!currentSession) return;
-      const currentValue = currentSession[field] || '';
-      const inputHTML = `<input type="number" id="edit-input" class="form-input" style="width: 100%; margin: 8px 0;" value="${currentValue}" placeholder="Enter ${label}" onblur="saveNumberField('${field}', '${fieldId}')">`;
       
-      // Check which element exists (detail vs inquiry)
-      const detailEl = document.getElementById(`detail-${field}`);
-      const inquiryEl = document.getElementById(`inquiry-${field}`);
-      const targetEl = detailEl || inquiryEl;
+      // Store field info in global variables for the modal
+      window.currentNumberField = field;
+      window.currentNumberFieldId = fieldId;
       
-      if (!targetEl) {
-        console.error(`Neither detail-${field} nor inquiry-${field} element found`);
+      // Set modal header and current value
+      document.getElementById('number-field-modal-header').textContent = label;
+      document.getElementById('number-field-input').value = currentSession[field] || '';
+      
+      // Show modal
+      document.getElementById('number-field-modal').classList.add('active');
+      document.getElementById('number-field-input').focus();
+    }
+    
+    function closeNumberFieldModal() {
+      document.getElementById('number-field-modal').classList.remove('active');
+      window.currentNumberField = null;
+      window.currentNumberFieldId = null;
+    }
+    
+    async function saveNumberFieldModal() {
+      const value = parseFloat(document.getElementById('number-field-input').value) || null;
+      const field = window.currentNumberField;
+      const fieldId = window.currentNumberFieldId;
+      
+      if (!field || !fieldId) return;
+      
+      // Validate 1-10 range
+      if (value !== null && (value < 1 || value > 10)) {
+        showToast('Value must be between 1-10');
         return;
       }
       
-      targetEl.innerHTML = inputHTML;
-      document.getElementById('edit-input').focus();
+      await updateTaskCustomField(currentSession.gid, fieldId, value);
+      currentSession[field] = value;
+      showToast('Updated');
+      
+      // Update level bars if editing Creative/Spicy/Confidence
+      if (field === 'creativeLevel') {
+        const bar = document.getElementById('creative-level-bar');
+        if (bar && value) {
+          const percent = Math.min(100, Math.max(0, parseInt(value) * 10));
+          bar.style.setProperty('--level-width', `${percent}%`);
+        }
+      } else if (field === 'spicyLevel') {
+        const bar = document.getElementById('spicy-level-bar');
+        if (bar && value) {
+          const percent = Math.min(100, Math.max(0, parseInt(value) * 10));
+          bar.style.setProperty('--level-width', `${percent}%`);
+        }
+      } else if (field === 'confidence') {
+        const bar = document.getElementById('confidence-level-bar');
+        if (bar && value) {
+          const percent = Math.min(100, Math.max(0, parseInt(value) * 10));
+          bar.style.setProperty('--level-width', `${percent}%`);
+        }
+      }
+      
+      // Close modal
+      closeNumberFieldModal();
     }
     
    function editEnumField(label, field, fieldId, options) {
@@ -3374,6 +3485,27 @@ const selectHTML = '<select id="edit-select" class="filter-select" style="width:
           parentCard.style.display = 'none';
         }
       }
+      
+      // Update level bars if editing Creative/Spicy/Confidence
+      if (field === 'creativeLevel') {
+        const bar = document.getElementById('creative-level-bar');
+        if (bar && value) {
+          const percent = Math.min(100, Math.max(0, parseInt(value) * 10));
+          bar.style.setProperty('--level-width', `${percent}%`);
+        }
+      } else if (field === 'spicyLevel') {
+        const bar = document.getElementById('spicy-level-bar');
+        if (bar && value) {
+          const percent = Math.min(100, Math.max(0, parseInt(value) * 10));
+          bar.style.setProperty('--level-width', `${percent}%`);
+        }
+      } else if (field === 'confidence') {
+        const bar = document.getElementById('confidence-level-bar');
+        if (bar && value) {
+          const percent = Math.min(100, Math.max(0, parseInt(value) * 10));
+          bar.style.setProperty('--level-width', `${percent}%`);
+        }
+      }
     }
     
     async function saveEnumField(field, fieldId) {
@@ -3388,27 +3520,42 @@ const targetEl = document.getElementById(`detail-${field}`) || document.getEleme
 if (targetEl) targetEl.textContent = name || '-';    
     }
     
-    function editDate(event) {
-      if (event) event.stopPropagation();
+    function editDate() {
       if (!currentSession) return;
-      const currentDate = currentSession.sessionDate || '';
-      const container = document.getElementById('detail-date-edit');
-      container.onclick = null; // Remove onclick to prevent conflicts
-      const inputHTML = '<input type="date" id="date-input" class="form-input" style="width: 100%; margin: 8px 0;" value="' + currentDate + '" onclick="event.stopPropagation()" onchange="saveDate()">';
-      container.innerHTML = inputHTML;
-      setTimeout(() => document.getElementById('date-input').focus(), 100);
+      document.getElementById('modal-date-input').value = currentSession.sessionDate || '';
+      document.getElementById('date-picker-modal').style.display = 'flex';
     }
     
-    async function saveDate() {
-      const newDate = document.getElementById('date-input').value;
+    function closeDateModal() {
+      document.getElementById('date-picker-modal').style.display = 'none';
+    }
+    
+    async function saveModalDate() {
+      const newDate = document.getElementById('modal-date-input').value;
+      if (!newDate) return;
+      
       // Asana expects date fields in object format: {"date": "YYYY-MM-DD"}
-      await updateTaskCustomField(currentSession.gid, '1211732464258476', newDate ? { date: newDate } : null);
+      await updateTaskCustomField(currentSession.gid, '1211732464258476', { date: newDate });
       currentSession.sessionDate = newDate;
+      
+      // Update countdown and display
+      const sessionDate = new Date(newDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      sessionDate.setHours(0, 0, 0, 0);
+      const daysUntil = Math.ceil((sessionDate - today) / (1000 * 60 * 60 * 24));
+      
+      let countdownText;
+      if (daysUntil > 0) countdownText = `in ${daysUntil} day${daysUntil === 1 ? '' : 's'}`;
+      else if (daysUntil === 0) countdownText = 'Today!';
+      else countdownText = `${Math.abs(daysUntil)} day${Math.abs(daysUntil) === 1 ? '' : 's'} ago`;
+      
+      document.getElementById('session-countdown').textContent = countdownText;
+      document.getElementById('session-date-display').textContent = formatDate(newDate);
+      document.getElementById('detail-date-edit').textContent = formatDate(newDate);
+      
+      closeDateModal();
       showToast('Date updated');
-      const container = document.getElementById('detail-date-edit');
-      container.textContent = formatDate(newDate);
-      container.onclick = editDate; // Restore onclick
-      document.getElementById('detail-session-date').textContent = formatDate(newDate);
     }
 
     async function scheduleDiscoveryCall() {
@@ -3667,82 +3814,143 @@ await updateTaskCustomField(currentSession.gid, '1211748802050319', formattedTim
         deliverablesToggleBtn.style.display = 'block';
         
         // Populate deliverables fields
-        document.getElementById('detail-gallery-stage').textContent = currentSession.galleryStage || '-';
-        document.getElementById('detail-mastered-images').textContent = currentSession.masteredImages || '-';
-        document.getElementById('detail-heri-images').textContent = currentSession.heriImages || '-';
-        document.getElementById('detail-photo-notes').textContent = currentSession.photoNotes || '-';
-        document.getElementById('detail-video-notes').textContent = currentSession.videoNotes || '-';
-        document.getElementById('detail-client-selection-date').textContent = formatDate(currentSession.clientSelectionDate);
-        document.getElementById('detail-notes-requests').textContent = currentSession.notesRequests || '-';
-        document.getElementById('detail-proofs-gallery').textContent = currentSession.proofsGallery || '-';
-        document.getElementById('detail-final-gallery').textContent = currentSession.finalGallery || '-';
+        const galleryStageEl = document.getElementById('detail-gallery-stage');
+        const masteredImagesEl = document.getElementById('detail-mastered-images');
+        const heriImagesEl = document.getElementById('detail-heri-images');
+        const photoNotesEl = document.getElementById('detail-photo-notes');
+        const videoNotesEl = document.getElementById('detail-video-notes');
+        const clientSelectionEl = document.getElementById('detail-client-selection-date');
+        const notesRequestsEl = document.getElementById('detail-notes-requests');
+        const proofsGalleryEl = document.getElementById('detail-proofs-gallery');
+        const finalGalleryEl = document.getElementById('detail-final-gallery');
+        
+        if (galleryStageEl) galleryStageEl.textContent = currentSession.galleryStage || '-';
+        if (masteredImagesEl) masteredImagesEl.textContent = currentSession.masteredImages || '-';
+        if (heriImagesEl) heriImagesEl.textContent = currentSession.heriImages || '-';
+        if (photoNotesEl) photoNotesEl.textContent = currentSession.photoNotes || '-';
+        if (videoNotesEl) videoNotesEl.textContent = currentSession.videoNotes || '-';
+        if (clientSelectionEl) clientSelectionEl.textContent = formatDate(currentSession.clientSelectionDate);
+        if (notesRequestsEl) notesRequestsEl.textContent = currentSession.notesRequests || '-';
+        if (proofsGalleryEl) proofsGalleryEl.textContent = currentSession.proofsGallery || '-';
+        if (finalGalleryEl) finalGalleryEl.textContent = currentSession.finalGallery || '-';
       } else {
         deliverablesToggleBtn.style.display = 'none';
       }
       
       // Profile fields
-      document.getElementById('detail-email').textContent = currentSession.email || '-';
-      document.getElementById('detail-phone').textContent = currentSession.phone || '-';
+      const detailEmailEl = document.getElementById('detail-email');
+      const detailPhoneEl = document.getElementById('detail-phone');
+      if (detailEmailEl) detailEmailEl.textContent = currentSession.email || '-';
+      if (detailPhoneEl) detailPhoneEl.textContent = currentSession.phone || '-';
       
       // Populate Contact tab fields
-      document.getElementById('detail-email-contact').textContent = currentSession.email || '-';
-      document.getElementById('detail-phone-contact').textContent = currentSession.phone || '-';
+      const detailEmailContactEl = document.getElementById('detail-email-contact');
+      const detailPhoneContactEl = document.getElementById('detail-phone-contact');
+      if (detailEmailContactEl) detailEmailContactEl.textContent = currentSession.email || '-';
+      if (detailPhoneContactEl) detailPhoneContactEl.textContent = currentSession.phone || '-';
       
       // Instagram with link
       const instaEl = document.getElementById('detail-instagram');
-      if (currentSession.instagram) {
-        const handle = currentSession.instagram.replace('@', '');
-        instaEl.innerHTML = `<a href="https://instagram.com/${handle}" target="_blank">@${handle}</a>`;
-      } else {
-        instaEl.textContent = '-';
+      if (instaEl) {
+        if (currentSession.instagram) {
+          const handle = currentSession.instagram.replace('@', '');
+          instaEl.innerHTML = `<a href="https://instagram.com/${handle}" target="_blank">@${handle}</a>`;
+        } else {
+          instaEl.textContent = '-';
+        }
       }
       
       // Instagram in Contact tab
       const instaContactEl = document.getElementById('detail-instagram-contact');
-      if (currentSession.instagram) {
-        const handle = currentSession.instagram.replace('@', '');
-        instaContactEl.innerHTML = `<a href="https://instagram.com/${handle}" target="_blank">@${handle}</a>`;
-      } else {
-        instaContactEl.textContent = '-';
+      if (instaContactEl) {
+        if (currentSession.instagram) {
+          const handle = currentSession.instagram.replace('@', '');
+          instaContactEl.innerHTML = `<a href="https://instagram.com/${handle}" target="_blank">@${handle}</a>`;
+        } else {
+          instaContactEl.textContent = '-';
+        }
       }
       
       // Populate Finance tab fields
-      document.getElementById('detail-payment-finance').textContent = currentSession.paymentStatus;
-      document.getElementById('inquiry-budget-finance').textContent = currentSession.budget || '-';
-      document.getElementById('inquiry-package-finance').textContent = currentSession.package || '-';
+      const paymentFinanceEl = document.getElementById('detail-payment-finance');
+      const budgetFinanceEl = document.getElementById('inquiry-budget-finance');
+      const packageFinanceEl = document.getElementById('inquiry-package-finance');
+      if (paymentFinanceEl) paymentFinanceEl.textContent = currentSession.paymentStatus;
+      if (budgetFinanceEl) budgetFinanceEl.textContent = currentSession.budget || '-';
+      if (packageFinanceEl) packageFinanceEl.textContent = currentSession.package || '-';
       
-      document.getElementById('detail-age').textContent = currentSession.age || '-';
+      const ageEl = document.getElementById('detail-age');
+      if (ageEl) ageEl.textContent = currentSession.age || '-';
       
       // Show/hide parent field based on age
       const parentCard = document.getElementById('detail-parent-card');
-      if (currentSession.age && currentSession.age < 18) {
+      const parentEl = document.getElementById('detail-parent');
+      if (parentCard && currentSession.age && currentSession.age < 18) {
         parentCard.style.display = 'block';
-        document.getElementById('detail-parent').textContent = currentSession.parent || '-';
-      } else {
+        if (parentEl) parentEl.textContent = currentSession.parent || '-';
+      } else if (parentCard) {
         parentCard.style.display = 'none';
       }
       
-      document.getElementById('detail-client-type').textContent = currentSession.clientType || '-';
-      document.getElementById('detail-sessionType').textContent = currentSession.sessionType || '-';
-      document.getElementById('detail-conceptStyle').textContent = currentSession.conceptStyle || '-';
-      document.getElementById('detail-creativeLevel').textContent = currentSession.creativeLevel || '-';
+      const clientTypeEl = document.getElementById('detail-client-type');
+      const sessionTypeEl2 = document.getElementById('detail-sessionType');
+      const conceptStyleEl = document.getElementById('detail-conceptStyle');
+      const creativeLevelEl = document.getElementById('detail-creativeLevel');
+      if (clientTypeEl) clientTypeEl.textContent = currentSession.clientType || '-';
+      if (sessionTypeEl2) sessionTypeEl2.textContent = currentSession.sessionType || '-';
+      if (conceptStyleEl) conceptStyleEl.textContent = currentSession.conceptStyle || '-';
+      if (creativeLevelEl) creativeLevelEl.textContent = currentSession.creativeLevel || '-';
       
       // Inquiry fields
-      document.getElementById('inquiry-preferredDate').textContent = currentSession.preferredDate || '-';
-      document.getElementById('inquiry-city').textContent = currentSession.city || '-';
-      document.getElementById('inquiry-sessionLocation').textContent = currentSession.sessionLocation || '-';
-      document.getElementById('inquiry-vision').textContent = currentSession.vision || '-';
-      document.getElementById('inquiry-spicyLevel').textContent = currentSession.spicyLevel || '-';
-      document.getElementById('inquiry-mustHave').textContent = currentSession.mustHave || '-';
-      document.getElementById('inquiry-locationPref').textContent = currentSession.locationPref || '-';
-      document.getElementById('inquiry-lightingPref').textContent = currentSession.lightingPref || '-';
-      document.getElementById('inquiry-howFeel').textContent = currentSession.howFeel || '-';
-      document.getElementById('inquiry-confidence').textContent = currentSession.confidence || '-';
-      document.getElementById('inquiry-expectations').textContent = currentSession.expectations || '-';
-      document.getElementById('inquiry-budget').textContent = currentSession.budget || '-';
-      document.getElementById('inquiry-package').textContent = currentSession.package || '-';
-      document.getElementById('inquiry-prints').textContent = currentSession.prints || '-';
-      document.getElementById('inquiry-video').textContent = currentSession.video || '-';
+      const preferredDateEl = document.getElementById('inquiry-preferredDate');
+      const cityEl = document.getElementById('inquiry-city');
+      const sessionLocationEl = document.getElementById('inquiry-sessionLocation');
+      const visionEl = document.getElementById('inquiry-vision');
+      const spicyLevelEl = document.getElementById('inquiry-spicyLevel');
+      const mustHaveEl = document.getElementById('inquiry-mustHave');
+      const locationPrefEl = document.getElementById('inquiry-locationPref');
+      if (preferredDateEl) preferredDateEl.textContent = currentSession.preferredDate || '-';
+      if (cityEl) cityEl.textContent = currentSession.city || '-';
+      if (sessionLocationEl) sessionLocationEl.textContent = currentSession.sessionLocation || '-';
+      if (visionEl) visionEl.textContent = currentSession.vision || '-';
+      if (spicyLevelEl) spicyLevelEl.textContent = currentSession.spicyLevel || '-';
+      if (mustHaveEl) mustHaveEl.textContent = currentSession.mustHave || '-';
+      if (locationPrefEl) locationPrefEl.textContent = currentSession.locationPref || '-';
+      
+      const lightingPrefEl = document.getElementById('inquiry-lightingPref');
+      const howFeelEl = document.getElementById('inquiry-howFeel');
+      const confidenceEl = document.getElementById('inquiry-confidence');
+      const expectationsEl = document.getElementById('inquiry-expectations');
+      const budgetEl = document.getElementById('inquiry-budget');
+      const packageEl = document.getElementById('inquiry-package');
+      const printsEl = document.getElementById('inquiry-prints');
+      const videoEl = document.getElementById('inquiry-video');
+      if (lightingPrefEl) lightingPrefEl.textContent = currentSession.lightingPref || '-';
+      if (howFeelEl) howFeelEl.textContent = currentSession.howFeel || '-';
+      if (confidenceEl) confidenceEl.textContent = currentSession.confidence || '-';
+      if (expectationsEl) expectationsEl.textContent = currentSession.expectations || '-';
+      if (budgetEl) budgetEl.textContent = currentSession.budget || '-';
+      if (packageEl) packageEl.textContent = currentSession.package || '-';
+      if (printsEl) printsEl.textContent = currentSession.prints || '-';
+      if (videoEl) videoEl.textContent = currentSession.video || '-';
+      
+      // Update level bars (Creative, Spicy, Confidence)
+      const creativeLevelBar = document.getElementById('creative-level-bar');
+      const spicyLevelBar = document.getElementById('spicy-level-bar');
+      const confidenceLevelBar = document.getElementById('confidence-level-bar');
+      
+      if (creativeLevelBar && currentSession.creativeLevel) {
+        const creativePercent = Math.min(100, Math.max(0, parseInt(currentSession.creativeLevel) * 10));
+        creativeLevelBar.style.setProperty('--level-width', `${creativePercent}%`);
+      }
+      if (spicyLevelBar && currentSession.spicyLevel) {
+        const spicyPercent = Math.min(100, Math.max(0, parseInt(currentSession.spicyLevel) * 10));
+        spicyLevelBar.style.setProperty('--level-width', `${spicyPercent}%`);
+      }
+      if (confidenceLevelBar && currentSession.confidence) {
+        const confidencePercent = Math.min(100, Math.max(0, parseInt(currentSession.confidence) * 10));
+        confidenceLevelBar.style.setProperty('--level-width', `${confidencePercent}%`);
+      }
       
       // Todos
       const todosContainer = document.getElementById('detail-todos');
@@ -4213,20 +4421,23 @@ async function archiveAndHideSubtask(subtaskGid, subtaskName) {
     
     // Optional: Long-press to go fullscreen directly from preview
     let notesLongPressTimer;
+    const notesPreview = document.getElementById('notes-preview');
     
-    document.getElementById('notes-preview').addEventListener('touchstart', (e) => {
-      notesLongPressTimer = setTimeout(() => {
-        openFullscreenNotes();
-      }, 500); // 500ms hold = fullscreen
-    });
-    
-    document.getElementById('notes-preview').addEventListener('touchend', () => {
-      clearTimeout(notesLongPressTimer);
-    });
-    
-    document.getElementById('notes-preview').addEventListener('touchmove', () => {
-      clearTimeout(notesLongPressTimer);
-    });
+    if (notesPreview) {
+      notesPreview.addEventListener('touchstart', (e) => {
+        notesLongPressTimer = setTimeout(() => {
+          openFullscreenNotes();
+        }, 500); // 500ms hold = fullscreen
+      });
+      
+      notesPreview.addEventListener('touchend', () => {
+        clearTimeout(notesLongPressTimer);
+      });
+      
+      notesPreview.addEventListener('touchmove', () => {
+        clearTimeout(notesLongPressTimer);
+      });
+    }
     
     
     init();
